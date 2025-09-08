@@ -1,0 +1,30 @@
+
+
+.tableContainer{
+    width: 100%;
+}
+.table {
+  width: 90%;
+  min-width: 50%;
+  background-color: #122117; 
+  color: #ffffff;
+  border-collapse: collapse;
+}
+
+.tableheader .header {
+  background-color: #122117;
+  color: #ffffff; 
+  font-weight: bold;
+  text-align: center;
+}
+
+.tablebody .data {
+  background-color: #122117; 
+  color: #ffffff; 
+  text-align: center;
+  padding: 8px;
+}
+
+.tablebody tr:hover {
+  background-color: #1c2a22; 
+}
