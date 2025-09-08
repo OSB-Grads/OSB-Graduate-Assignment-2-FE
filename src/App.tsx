@@ -1,26 +1,30 @@
-import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
+import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Hedder from "./pages/Hedder";
+import Leftnavbar from "./pages/Leftnavbar";
+
+import './App.css'
+import Transaction from "./pages/Transaction";
 
 export default function App() {
   return (
-                                                        
-    <div>                                                           {/*--------demo displaying home page and aboutpage----------*/}
-      <nav style={{ display: 'flex', gap: 16, padding: 12 }}>
-        <Link to="/">Home</Link>                                    {/*--------------TO BE CHANGED ------------*/}
-        <Link to="/about">About</Link>
-      </nav>
+    <div className="web-window">
+      <div>
+        <Hedder></Hedder>
+        <div  className="below-window">
 
-      <main style={{ padding: 12 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </main>
+          <Leftnavbar></Leftnavbar>
+            <main className="main-component">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/transactions" element={<Transaction/>}/>
+            </Routes>
+            </main>
+          
+        </div>
+      </div>
     </div>
   );
 }
-
-
-
