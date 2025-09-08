@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
-import InputField  from "../input_Field/inputField";
+import InputField  from "../../components/input_Field/inputField";
 import { apiFetch } from "../../lib/apiClient";
 
 
