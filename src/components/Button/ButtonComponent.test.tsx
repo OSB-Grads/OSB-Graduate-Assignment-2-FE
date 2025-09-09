@@ -1,7 +1,6 @@
 import {render,screen,fireEvent}from "@testing-library/react";
 import ButtonComponent from "./ButtonComponent";
 import styles from'./ButtonComponent.module.css';
-import { describe,  expect,test, vi } from 'vitest'
 describe("Button Component",()=>{
     test("renders with text",()=>{
         render(<ButtonComponent label="Click me"/>);
@@ -24,13 +23,13 @@ describe("Button Component",()=>{
         expect(button.disabled).toBe(true);
     });
     test("calls onClick when clicked",()=>{
-        const handleClick =vi.fn();
+        const handleClick =jest.fn();
         render(<ButtonComponent label="Click" onClick={handleClick}/>);
         fireEvent.click(screen.getByText("Click"));
         expect(handleClick).toHaveBeenCalledTimes(1);
     });
     test(" does not call onClick when disabled",()=>{
-        const handleClick =vi.fn();
+        const handleClick =jest.fn();
         render(<ButtonComponent label="Disabled Click" onClick={handleClick} disabled/>);
         fireEvent.click(screen.getByText("Disabled Click"));
         expect(handleClick).toHaveBeenCalledTimes(0);

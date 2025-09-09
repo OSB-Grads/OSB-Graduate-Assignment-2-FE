@@ -4,15 +4,8 @@
   --line-height: 1.5;
   --font-weight: 400;
   --color-background:#0f1f13;
-  --color-card-bg:#1a2b1f;
-  --color-input-bg:#152c21;
-  --color-input-border:#38e07a;
-  --color-input-text:#ffffff;
-  --color-placeholder:#7f9c8c;
-  --color-button-bg:#38e07a;
-  --color-button-text:#000000;
-  --color-button-secondary-text:#ffffff;
-  --color-link:#38e07a;
+  --color-white:#ffffff;
+  --color-black:#000000;
   --color-primary: #38E07A ;
   --color-secondary: #264533 ;
   --opacity:0.5;
@@ -31,7 +24,6 @@
   --spacing-lg:24px;
 
   /* Button Text Size */
-  --text-width:80px;
   --text-height:21px;
 
   /* Button size and padding  */

@@ -18,17 +18,16 @@
 }
 .primary{
     background-color: var(--color-primary);
-    color:var(--color-button-text)
+    color:var(--color-black)
 }
 .secondary{
     background-color: var(--color-secondary);
-    color:var(--color-button-secondary-text)
+    color:var(--color-white)
 }
 .button-text{
     display:flex;
     align-items: center;
     justify-content: center;
-    width:var(--text-width);
     height: var(--text-height);
     font-size: var(--font-size-small);
     font-family: var(--font-family);
