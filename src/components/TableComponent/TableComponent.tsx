@@ -20,26 +20,25 @@ const TableComponent: React.FC<TableComponentProps> = ({
     tableheader, tabledata
 }) => {
   
-    console.log("Table Component ");
     return (
         <>
-            <TableContainer component={Paper} className="tableContainer">
-                <Table className="table">
-                    <TableHead className="tableheader">
+            <TableContainer component={Paper} className="basicMUITableContainer">
+                <Table className="basicMUITable">
+                    <TableHead className="basicTableHeader">
                         <TableRow >
                             {tableheader.map((header, index) => (
-                                <TableCell key={index} className="header">{header}</TableCell>
+                                <TableCell key={index} className="basicMUITableHeader">{header}</TableCell>
                             )
                             )}
                         </TableRow>
                     </TableHead>
-                    <TableBody className="tablebody">
+                    <TableBody className="basicMUITableBody">
                         {tabledata.map((data, rowIndex) => {
                             return (
                                 <TableRow key={rowIndex} >
                                     {tableheader.map((head, colIndex) => {
                                         return (
-                                        <TableCell key={colIndex} className="data">{data[head]}</TableCell>)
+                                        <TableCell key={colIndex} className="basicMUITableData">{data[head]}</TableCell>)
                                     })}
                                 </TableRow>
                             )
