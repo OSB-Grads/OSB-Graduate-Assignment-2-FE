@@ -13,7 +13,7 @@ interface QuickactionProps{
 }
 
 
-const QuickActionItem:React.FC<QuickactionProps> = ({label,subLabel,icon, })=>{
+const QuickActionItem:React.FC<QuickactionProps> = ({label,subLabel,icon })=>{
 
 
   return (
