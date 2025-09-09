@@ -1,16 +1,19 @@
 import React, { useEffect } from "react";
 import "./Home.css";
-import QuickActionList from "../components/QuickActionList";
 import { Link } from "react-router-dom";
-import type { QuickList } from "../data/QuickActionData";
-import { QuickActionListData } from "../data/QuickActionData";
+
+import {  QuickActionListData, type QuickList } from "../../data/QuickActionData";
 
 
-import  LatestNotificationTransferIcon  from '../assets/Latest-notification-transfer-icon.png';
+import  LatestNotificationTransferIcon  from '../../assets/Latest-notification-transfer-icon.png';
 
-import axiosInstance from "../utils/httpClientUtil";
+import axiosInstance from "../../utils/httpClientUtil";
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import DashBoardAccount from "../components/DashBoardAccount";
+
+
+import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
+import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
+
 
 interface AccountData {
   accountNumber: string;
@@ -162,11 +165,11 @@ export default function Home() {
         <div className="quick-actions">
           {QuickActionListData.map((item: QuickList) => (
             <Link to={item.path} key={item.id}>
-              <QuickActionList
+              <QuickActionItem
                 label={item.label}
                 subLabel={item.subLabel}
                 icon={item.icon}
-              ></QuickActionList>
+              ></QuickActionItem>
             </Link>
           ))}
         </div>
@@ -181,11 +184,12 @@ export default function Home() {
           
           
            { transactions.map((item,index)=>(
-            <QuickActionList
+            <QuickActionItem
+            
               label={`${item.description} : ammount of ${item.amount} is tranferd from ${item.fromAccount} to ${item.toAccount}`}
               subLabel={item.createdAt}
               icon={LatestNotificationTransferIcon}
-            ></QuickActionList>
+            ></QuickActionItem>
            ))}
           
           

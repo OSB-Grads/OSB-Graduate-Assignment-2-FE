@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import '../pages/Home.css'
+
+import './QuickActionItem.css'
 
 
 interface QuickactionProps{
@@ -12,7 +13,7 @@ interface QuickactionProps{
 }
 
 
-const QuickActionList:React.FC<QuickactionProps> = ({label,subLabel,icon})=>{
+const QuickActionItem:React.FC<QuickactionProps> = ({label,subLabel,icon})=>{
 
 
   return (
@@ -32,4 +33,4 @@ const QuickActionList:React.FC<QuickactionProps> = ({label,subLabel,icon})=>{
   )
 }
 
-export default QuickActionList
+export default QuickActionItem

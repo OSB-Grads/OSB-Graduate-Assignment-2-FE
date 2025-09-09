@@ -1,6 +1,7 @@
 import React from 'react'
 
-import '../pages/Home.css'
+
+import '../DashboardAccount/DashboardAccount.css'
 
 interface AccountProp{
   AccountType:string;

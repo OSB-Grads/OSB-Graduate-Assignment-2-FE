@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import logoimage from "../assets/logo.png";
-import bellIcon from "../assets/bell-icon.png";
-import profileImage from "../assets/profile-image.png";
+import logoimage from "../../assets/logo.png";
+import bellIcon from "../../assets/bell-icon.png";
+import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
-import { getUserFromToken } from "../data/GetUserDataFromToken";
-import ButtonComponent from "./Button/ButtonComponent";
+import { getUserFromToken } from "../../data/GetUserDataFromToken";
+import ButtonComponent from "../Button/ButtonComponent";
+
 
 
 

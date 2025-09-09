@@ -1,12 +1,13 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
+
 import About from "./pages/About";
-import Header from "./components/Header";
-import Leftnavbar from "./components/Leftnavbar";
 
 import './App.css'
 import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
+import Home from "./pages/Home/Home";
 
 export default function App() {
   return (
