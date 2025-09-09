@@ -4,6 +4,7 @@ import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
 import { useAuthStore } from "../../Store/authStore";
 
+
 export default function LoginPage() {
   const navigate = useNavigate();
 
@@ -36,6 +37,13 @@ export default function LoginPage() {
             placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={(e) => {
+            if (e.key === "Enter") {
+            e.preventDefault(); // prevent form submission
+            const passwordInput = document.getElementById("password-input");
+            passwordInput?.focus();
+    }
+  }}
           />
 
           {/* Password */}
@@ -60,7 +68,7 @@ export default function LoginPage() {
 
           {/* Button */}
           <button type="submit" className="login-button">
-            Login
+             Login
           </button>
         </form>
       </main>
