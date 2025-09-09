@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login/loginPage";
 
-import DummyAccountPage from "./pages/dummyaccount";
 
 
 export default function App() {
