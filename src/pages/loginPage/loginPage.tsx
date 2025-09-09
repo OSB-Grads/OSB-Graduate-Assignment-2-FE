@@ -2,44 +2,27 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
-import { apiFetch } from "../../lib/apiClient";
-
+import { useAuthStore } from "../../Store/authStore";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
+  // Zustand state & actions
+  const { username, setUsername, login } = useAuthStore();
 
-const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
+  // Local state for password & rememberMe 
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const payload = { username, password };
-
-  try {
-    // Call backend login via central API client
-    const data = await apiFetch<{ token: string }>("/api/v1/auth/login", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-
-
-    // Save token to localStorage based on rememberMe
-    if (rememberMe) {
-      localStorage.setItem("access_token", data.token);
-    } else {
-      sessionStorage.setItem("access_token", data.token);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(username, password, rememberMe);
+      navigate("/dashboard");
+    } catch (error: any) {
+      alert(error.message || "Login failed");
     }
-
-    // Navigate to dashboard
-    navigate("/dashboard");
-
-  } catch (error: any) {
-    alert(error.message || "Login failed");
-  }
-};
-
+  };
 
   return (
     <div className="login-container">
@@ -47,26 +30,15 @@ const handleLogin = async (e: React.FormEvent) => {
         <form onSubmit={handleLogin} className="login-form">
           <h1 className="form-title">Welcome back</h1>
 
-                         {/* Username */}
-
+          {/* Username */}
           <InputField
             label="Username"
             placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                  e.preventDefault(); // prevent form submission without password
-
-                 // Move focus to password field
-                  const passwordInput = document.getElementById("password-input");
-                  passwordInput?.focus();
-                  }
-                }
-    }
           />
 
-                         {/* Password */}
+          {/* Password */}
           <InputField
             id="password-input"
             label="Password"
@@ -76,7 +48,7 @@ const handleLogin = async (e: React.FormEvent) => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-                          {/* Remember me */}
+          {/* Remember me */}
           <label className="remember-me">
             <input
               type="checkbox"
@@ -86,20 +58,10 @@ const handleLogin = async (e: React.FormEvent) => {
             Remember me
           </label>
 
-                              {/* Button */}
+          {/* Button */}
           <button type="submit" className="login-button">
             Login
           </button>
-
-                            {/* Links */}
-          <div className="links">
-            <p>
-              Don’t have an account? <a href="/register">Register</a>
-            </p>
-            <p>
-              <a href="/forgotPassword">Forgot Password?</a>
-            </p>
-          </div>
         </form>
       </main>
     </div>

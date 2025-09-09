@@ -1,5 +1,40 @@
 :root {
   /* Colors */
+  --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --line-height: 1.5;
+  --font-weight: 400;
+  --color-background:#0f1f13;
+  --color-white:#ffffff;
+  --color-black:#000000;
+  --color-primary: #38E07A ;
+  --color-secondary: #264533 ;
+  --opacity:0.5;
+
+  /* Font Sizes */
+  --font-size-small:14px;
+  --font-size-medium:16px;
+  --font-size-large:24px;
+
+  /* Border radius */
+  --border-radius:8px;
+
+  /* Spacing */
+  --spacing-sm:8px;
+  --spacing-md:16px;
+  --spacing-lg:24px;
+
+  /* Button Text Size */
+  --text-height:21px;
+
+  /* Button size and padding  */
+  --button-width: 112px;
+  --button-height: 40px;
+  --button-min-width:84px ;
+  --button-max-width:480px ;
+  --button-padding-left:16px ;
+  --button-padding-right: 16px;
+
+  /* Colors */
   --color-background: #0f1f13; 
   /* --color-card-bg: #1a2b1f;  */
   /* --color-input-bg: #152c21; */
@@ -48,7 +83,6 @@
   --table-padding: 8px;
   --table-width: 100%;
 }
-
 a {
   font-weight: 500;
   color: #646cff;
