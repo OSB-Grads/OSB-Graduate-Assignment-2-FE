@@ -9,7 +9,7 @@
 }
 
 .login-main {
-  background-color: var(--color-card-bg);
+  background-color: var(--color-background);
   padding: var(--spacing-lg);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
@@ -38,7 +38,7 @@
 }
 
 .login-button {
-  background-color: var(--color-button-bg);
+  background-color: var(--color-link);
   color: var(--color-button-text);
   font-size: var(--font-size-medium);
   font-weight: bold;

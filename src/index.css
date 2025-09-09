@@ -1,15 +1,15 @@
 :root {
   /* Colors */
   --color-background: #0f1f13; 
-  --color-card-bg: #1a2b1f; 
-  --color-input-bg: #152c21;
-  --color-input-border: #38e07a; 
-  --color-input-text: #ffffff; 
+  /* --color-card-bg: #1a2b1f;  */
+  /* --color-input-bg: #152c21; */
+/* --color-input-border: #38e07a;  */ 
+   /* --color-input-text: #ffffff;  */ 
   --color-text: #ffffff;
   --color-placeholder: #7f9c8c; 
-  --color-button-bg: #38e07a;
-  --color-button-text: #000000; 
-  --color-link: #38e07a;
+   /* --color-button-bg: #38e07a; */
+   --color-button-text: #000000;  
+  --color-link : #38e07a;
 
   /* Font sizes */
   --font-size-small: 14px;

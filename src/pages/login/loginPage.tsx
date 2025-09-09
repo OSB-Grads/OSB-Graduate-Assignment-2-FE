@@ -23,9 +23,6 @@ const handleLogin = async (e: React.FormEvent) => {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    
-    console.log(username,password);
-    console.log("Login success:", data);
 
 
     // Save token to localStorage based on rememberMe
@@ -39,7 +36,6 @@ const handleLogin = async (e: React.FormEvent) => {
     navigate("/dashboard");
 
   } catch (error: any) {
-    console.error("Login failed:", error.message);
     alert(error.message || "Login failed");
   }
 };
