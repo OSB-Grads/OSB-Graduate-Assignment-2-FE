@@ -1,0 +1,33 @@
+
+
+.basicMUITableContainer {
+  width: var(--table-width);
+}
+
+.basicMUITable {
+  width: var(--table-width);
+  min-width: var(--min-table-width);
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
+  border-collapse: collapse;
+}
+
+.basicTableHeader .basicMUITableHeader {
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
+  font-weight: bolder;
+  font-size: var(--table-header-font-size);
+  text-align: center;
+}
+
+.basicMUITableBody .basicMUITableData {
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
+  font-size: var(--table-body-font-size);
+  text-align: center;
+  padding: var(--table-padding);
+}
+
+.basicMUITableBody tr:hover {
+  background-color: var(--hover-table-bg-color);
+}
