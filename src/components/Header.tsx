@@ -4,10 +4,16 @@ import bellIcon from "../assets/bell-icon.png";
 import profileImage from "../assets/profile-image.png";
 import "./Header.css";
 import { getUserFromToken } from "../data/GetUserDataFromToken";
+import ButtonComponent from "./Button/ButtonComponent";
+
+
 
 const Header = () => {
   const [user, setUser] = React.useState<{ id: string; role: string } | null>(
-    null
+    {
+        id:"1234353545454",
+        role:"USER"
+    }
   );
   React.useEffect(() => {
     const decoded = getUserFromToken();
@@ -34,7 +40,10 @@ const Header = () => {
               </div>
             </>
           ) : (
-            <p>button componet render</p>
+             <ButtonComponent
+             label="Help"
+             type='button'
+             variant='secondary'></ButtonComponent>
           )}
         </div>
       </div>

@@ -7,9 +7,10 @@ import { QuickActionListData } from "../data/QuickActionData";
 
 
 import  LatestNotificationTransferIcon  from '../assets/Latest-notification-transfer-icon.png';
-import DashBoardAccount from "../components/DashboardAccount";
+
 import axiosInstance from "../utils/httpClientUtil";
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import DashBoardAccount from "../components/DashBoardAccount";
 
 interface AccountData {
   accountNumber: string;
