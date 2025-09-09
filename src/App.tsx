@@ -2,8 +2,8 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Hedder from "./pages/Hedder";
-import Leftnavbar from "./pages/Leftnavbar";
+import Header from "./components/Header";
+import Leftnavbar from "./components/Leftnavbar";
 
 import './App.css'
 import Transaction from "./pages/Transaction";
@@ -12,7 +12,7 @@ export default function App() {
   return (
     <div className="web-window">
       <div>
-        <Hedder></Hedder>
+         <Header></Header>
         <div  className="below-window">
 
           <Leftnavbar></Leftnavbar>

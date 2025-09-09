@@ -2,27 +2,11 @@ import React from "react";
 import helpIcon from "../assets/help-icon.png";
 import type { navItem } from "../data/LeftnavData";
 import { LeftnavItems } from "../data/LeftnavData";
+
 import "./Leftnavbar.css";
+import NavBarElements from "./NavBarElements";
 
-function NavBarElements() {
-  return (
-    <div className="left-nav-bar-elements">
-      {LeftnavItems.map((Item: navItem) => (
-        <div className="navbar-element" key={Item.id}>
-          <div className="navbar-element-logo">
-            <div>
-              <img src={Item.icon} alt="" />
-            </div>
-          </div>
 
-          <div className="navbar-element-name">
-            <span>{Item.label}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 const Leftnavbar = () => {
   return (

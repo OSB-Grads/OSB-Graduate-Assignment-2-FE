@@ -1,7 +1,7 @@
 
-import quick1 from  '../assets/quickList-1.png'
-import quick2 from  '../assets/QuickList-2.png'
-import quick3 from  '../assets/QuickList-3.png'
+import quick1 from  '../assets/transfer-quick-action-icon.png'
+import quick2 from  '../assets/payment-quick-action-icon.png'
+import quick3 from  '../assets/account-quick-action-icon.png'
 
 export type QuickList={
     id:number,

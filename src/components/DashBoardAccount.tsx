@@ -2,19 +2,24 @@ import React from 'react'
 
 import '../pages/Home.css'
 
-function DashBoardAccount() {
+interface AccountProp{
+  AccountType:string;
+  AccountNumber:string;
+}
+
+const DashboardAccount:React.FC<AccountProp>=({AccountType,AccountNumber}) =>{
   return (
     <>
-    <div className='account-info'>
+    <div className='dashboard-account-info'>
         <img src="" alt="" />
 
-        <div className='account'>
+        <div className='dashboard-account'>
 
-            <div className='account-name'>
-                <span>Checking Account</span>
+            <div className='dashboard-account-name'>
+                <span>{AccountType} Account</span>
             </div>
-            <div className='account-number'> 
-                <span>...4567</span>
+            <div className='dashboard-account-number'> 
+                <span>{AccountNumber}</span>
             </div>
 
         </div>
@@ -27,4 +32,4 @@ function DashBoardAccount() {
   )
 }
 
-export default DashBoardAccount
+export default DashboardAccount
