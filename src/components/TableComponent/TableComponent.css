@@ -1,43 +1,33 @@
-:root {
-  --primary-bg-color: #122117;
-  --hover-bg-color: #1c2a22;
-  --text-color: #ffffff;
-  --table-width: 90%;
-  --min-table-width: 50%;
-  --table-header-font-size:14px;
-  --table-body-font-size:10px;
-  --padding: 8px;
-  --width:100%;
-}
+
 
 .basicMUITableContainer {
-  width: var(--width);
+  width: var(--table-width);
 }
 
 .basicMUITable {
   width: var(--table-width);
   min-width: var(--min-table-width);
-  background-color: var(--primary-bg-color);
-  color: var(--text-color);
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
   border-collapse: collapse;
 }
 
 .basicTableHeader .basicMUITableHeader {
-  background-color: var(--primary-bg-color);
-  color: var(--text-color);
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
   font-weight: bolder;
   font-size: var(--table-header-font-size);
   text-align: center;
 }
 
 .basicMUITableBody .basicMUITableData {
-  background-color: var(--primary-bg-color);
-  color: var(--text-color);
+  background-color: var(--primary-table-bg-color);
+  color: var(--table-text-color);
   font-size: var(--table-body-font-size);
   text-align: center;
-  padding: var(--padding);
+  padding: var(--table-padding);
 }
 
 .basicMUITableBody tr:hover {
-  background-color: var(--hover-bg-color);
+  background-color: var(--hover-table-bg-color);
 }
