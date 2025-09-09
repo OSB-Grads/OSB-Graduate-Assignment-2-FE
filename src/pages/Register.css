@@ -1,17 +1,23 @@
+ .register-body{
+  background: var(--color-background);
+  width: 100vw;
+  height: 100vh;
+}
+
 .register-container {
   display: flex;
   justify-content: center;
   flex-direction: column ;
   height: 100vh;
   background-color: var(--color-background);
-  color: var(--color-text);
+  color: var(--color-white);
   align-items: center;
- 
 }
 
 .create-heading {
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
   padding: 20px 16px 12px;
   width:  100%;
   text-align: center;
@@ -19,38 +25,53 @@
   color: var(--color-text);
 }
 
-.form-fields{
+/* .form-fields textarea  {
   background-color: var(--color-background);
   padding: var(--spacing-lg);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 12px var(--color-background);
   width: 100%;
   max-width: 400px;
-}
+
+} */
 
 .form-actions{
-  background-color: var(--color-link);
-  color: var(--color-background);
-  font-size: var(--font-size-medium);
-  font-weight: bold;
-  border: none;
-  border-radius: var(--border-radius);
   padding: var(--spacing-md);
-  cursor : pointer;
-  transition: background-color 0.2s ease;
-}
+} 
 
 .login-link {
   text-align: center;
   margin-top: var(--spacing-md);
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-medium);
 }
 
 .login-link a {
-  color: var(--color-link);
+  color: var(--color-text);
   text-decoration: none;
 }
 
 .login-link a:hover {
   text-decoration: underline;
+}
+
+
+.login-link strong{
+
+width: 448px;
+height: 21px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+
+text-align: center;
+
+color: #96C4A8;
+
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
 }
