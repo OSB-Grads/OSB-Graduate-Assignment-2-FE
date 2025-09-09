@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
-<<<<<<< HEAD
 import InputField  from "../../components/input_Field/inputField";
-=======
-import InputField  from "../input_Field/inputField";
->>>>>>> 0c70bf2 (Added Login Page and created a component for inpit field)
 import { apiFetch } from "../../lib/apiClient";
 
 
@@ -27,12 +23,6 @@ const handleLogin = async (e: React.FormEvent) => {
       method: "POST",
       body: JSON.stringify(payload),
     });
-<<<<<<< HEAD
-=======
-    
-    console.log(username,password);
-    console.log("Login success:", data);
->>>>>>> 0c70bf2 (Added Login Page and created a component for inpit field)
 
 
     // Save token to localStorage based on rememberMe
@@ -46,10 +36,6 @@ const handleLogin = async (e: React.FormEvent) => {
     navigate("/dashboard");
 
   } catch (error: any) {
-<<<<<<< HEAD
-=======
-    console.error("Login failed:", error.message);
->>>>>>> 0c70bf2 (Added Login Page and created a component for inpit field)
     alert(error.message || "Login failed");
   }
 };
