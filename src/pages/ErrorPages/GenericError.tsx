@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ButtonComponent from "../components/ButtonComponent";
+import ButtonComponent from "../../components/Button/ButtonComponent";
+
 
 function GenericError() {
   const navigate = useNavigate();

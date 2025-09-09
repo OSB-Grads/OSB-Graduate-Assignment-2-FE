@@ -1,9 +1,10 @@
 import React from "react";
 import "./Register.css";
 import axios from 'axios';
-import ButtonComponent from "../components/Button/ButtonComponent.tsx";
-import InputField from "../components/inputField/inputField.tsx";
+import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
+import InputField from "../../components/inputField/inputField.tsx";
 import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/httpClientUtil.ts";
 //import { useAuthStore } from "../../Store/authStore";
 
 function Register() {
@@ -34,10 +35,8 @@ function Register() {
 
 
 
-    const userDetails = await axios.put("http://localhost:8080/api/v1/users/me", 
-    {name, email, phone},
-    {headers: {Authorization: `Bearer ${token}`,
-},});
+    const userDetails = await axiosInstance.put("/api/v1/users/me", 
+    {name, email, phone});
     //user created
     console.log(userDetails);
     if (userDetails.status === 200 || userDetails .status === 201){
@@ -178,7 +177,7 @@ function Register() {
             <div className="login-link">
               <strong>
                 Already have an account ?{" "}
-                <Link to="/pages/loginPage">Log In</Link>{" "}
+                <Link to="/LoginPage">Log In</Link>{" "}
               </strong>
             </div>
           </div>

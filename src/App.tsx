@@ -1,43 +1,32 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
-// import About from "./pages/About";
-// import ButtonComponent from "./components/Button/ButtonComponent";
-// import LoginPage from "./pages/loginPage/loginPage";
-import Register from "./pages/Register";
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
+
+import About from "./pages/About";
+import "./App.css";
+import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
+import Home from "./pages/Home/Home";
+// import Home from "./pages/Home";
+
+
+import LoginPage from "./pages/loginPage/loginPage";
+import Register from "./pages/Register/Register";
+import WebFlow from "./pages/webFlow/WebFlow";
 
 export default function App() {
   return (
-    <div>
-      {/* <nav style={{ display: 'flex', gap: 16, padding: 12 }}>
-        
-      </nav> */}
-      {/* <Link to="/">Home</Link>                                  
-        <Link to="/about">About</Link>
-        <Link to = "/loginPage"> Login</Link> */}
-        <Link to = "/register">Register</Link>
-      {/* <div style={{ padding: "2rem" }}>
-        <h1>Button Test</h1>
-        <ButtonComponent
-          label="Click me"
-          variant="primary"
-          onClick={() => alert("primary Button Clicked!")}
-        />
-        <ButtonComponent
-          label="Click me"
-          variant="secondary"
-          onClick={() => alert("secondary Button Clicked!")}
-        />
-        <ButtonComponent label="Disabled" variant="primary" disabled={true} />
-      </div> */}
-      <main style={{ padding: 12 }}>
-        <Routes>
-          { <Route path="/" element={<Home />} />
-          /*<Route path="/about" element={<About />} />
-          <Route path="/loginPage" element={<LoginPage />} /> */}
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </main>
-    </div>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/" element={<WebFlow />}>
+        <Route path = "/" element={<Home/>} />
+
+        <Route path="transactions" element={<Transaction />} />
+        <Route path="about" element={<About />} />
+        </Route>
+      </Routes>
+    
   );
 }
