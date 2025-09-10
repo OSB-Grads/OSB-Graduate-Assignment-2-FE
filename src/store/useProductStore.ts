@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import axiosInstance from "../utils/httpClientUtil";
 import { apiAxiosFetchRequest } from "../lib/apiClientAxios";
 
 
@@ -20,18 +21,26 @@ interface ProductStore{
     fetchProductDetails:()=>Promise<void>
 }
 const useProductStore=create<ProductStore>((set)=>({
-    products:[],
+    products:[{productId:"default",
+        productName:"SAVINGS ACCOUNT",
+        interestRate:123,
+        fundingWindow:1,
+        coolingPeriod:2,
+        Tenure:3,
+        description:"Default dummy data"
+    }],
     loading:false,
      error:false,
      fetchProductDetails:async()=>{
         try{
             console.log("Products Details Information Retrieval Started");
-        const response:ProductDTO[]=await apiAxiosFetchRequest(import.meta.env.BANK_API_TO_RETRIEVE_PRODUCT_DETAILS,{
-            method:"GET"
-        });
+            console.log(import.meta.env.BANK_API_TO_RETRIEVE_PRODUCT_DETAILS);
+        const response = await axiosInstance.get(import.meta.env.VITE_API_BASE_URL + '/api/v1/product/fetch');
         console.log("Products Information Successful");
+        console.log(response)
         
-        set(()=>({products:response}));
+        set(()=>({products:response.data}));
+         set(()=>({loading:false}))
        }
        catch(error){
         console.log("Error Has Occured",error);

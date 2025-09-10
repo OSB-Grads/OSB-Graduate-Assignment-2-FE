@@ -18,8 +18,9 @@ export const setToken = function (t: string | null) {
 
 axiosInstance.interceptors.request.use(
     (config) => {
+        console.log(token)
         if (token.token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token.token}`;
         }
         return config
     },
