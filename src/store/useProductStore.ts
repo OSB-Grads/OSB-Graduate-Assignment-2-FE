@@ -1,6 +1,5 @@
 import {create} from "zustand";
 import axiosInstance from "../utils/httpClientUtil";
-import { apiAxiosFetchRequest } from "../lib/apiClientAxios";
 
 
 interface ProductDTO{
