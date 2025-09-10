@@ -85,8 +85,7 @@ export default function Home() {
             phone:item.phone
           }
         ))
-        console.log("format data")
-        console.log(formatData)
+      
         setUser(formatData);
         setUserLoading(false);
       })
@@ -95,7 +94,7 @@ export default function Home() {
         setUserLoading(false);
       });
   }, []);
-  console.log(user)
+
   
 
  

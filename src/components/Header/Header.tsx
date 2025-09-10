@@ -3,22 +3,17 @@ import logoimage from "../../assets/logo.png";
 import bellIcon from "../../assets/bell-icon.png";
 import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
-import { getUserFromToken } from "../../data/GetUserDataFromToken";
+
 import ButtonComponent from "../Button/ButtonComponent";
+import useAuthStore from "../../store/authStore";
 
 
 
 
 const Header = () => {
-  const [user, setUser] = React.useState<{ id: string; role: string } | null>(
-    
-  );
-  React.useEffect(() => {
-    const decoded = getUserFromToken();
-    if (decoded) {
-      setUser({ id: decoded.id, role: decoded.role });
-    }
-  }, []);
+  
+    const { isAuthenticated } = useAuthStore();
+  
   return (
     <>
       <div className="dashborad-headder">
@@ -28,7 +23,7 @@ const Header = () => {
         </div>
 
         <div className="headder-right">
-          {user ? (
+          {isAuthenticated? (
             <>
               <div className="headder-bell-icon">
                 <img src={bellIcon} alt="bell-icon" />
