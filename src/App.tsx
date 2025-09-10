@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import DummyAccountPage from './pages/DummyData';
@@ -9,22 +10,30 @@ import Header from "./components/Header/Header";
 import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
 import Home from "./pages/Home/Home";
 import ButtonComponent from './components/Button/ButtonComponent';
+=======
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import Header from "./components/Header/Header";
+import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
+import Home from './pages/Home/Home';
+import Transaction from "./pages/Transaction";
+>>>>>>> 1762d3db1f248cb4c8415e1b6031af8d3c5479fd
 
 export default function App() {
   return (
     <div className="web-window">
       <div>
-         <Header></Header>
-        <div  className="below-window">
+        <Header></Header>
+        <div className="below-window">
 
           <Leftnavbar></Leftnavbar>
-            <main className="main-component">
+          <main className="main-component">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/transactions" element={<Transaction/>}/>
+              <Route path="/transactions" element={<Transaction />} />
             </Routes>
-            </main>
-          
+          </main>
+
         </div>
       </div>
                                                             {/*--------demo displaying home page and aboutpage----------*/}
@@ -50,6 +59,7 @@ export default function App() {
     disabled={true}
     /> 
     </div>
+<<<<<<< HEAD
       <main style={{ padding: 12 }}>
         <Routes>
           <Route path="//" element={<Home />} />
@@ -58,6 +68,8 @@ export default function App() {
         </Routes>
       </main>
     </div>
+=======
+>>>>>>> 1762d3db1f248cb4c8415e1b6031af8d3c5479fd
 
   );
 }

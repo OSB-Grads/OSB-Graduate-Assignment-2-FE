@@ -2,25 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
+import useAccountStore from "../../store/AccountStore/accountStore";
+import type { AccountDto,TransactionDTO } from "../../store/AccountStore/accountStore.interface";
 import "./accountDetails.css";
 
-interface AccountDto {
-  accountNumber: string;
-  accountType: "SAVINGS" | "FIXED_DEPOSIT";
-  balance: number;
-  accountCreated: string;
-  accountUpdated: string;
-}
-
-interface TransactionDTO {
-  fromAccount: string;
-  toAccount: string;
-  description: string;
-  amount: number;
-  status: "COMPLETED" | "PENDING" | "FAILED";
-  type: "DEPOSIT" | "WITHDRAWAL" | "TRANSFER";
-  createdAt: string;
-}
 
 interface AccountDetailsProps {
   accountNumber: string;
@@ -33,61 +18,55 @@ export default function AccountDetails({
   dummyAccount,
   dummyTransactions,
 }: AccountDetailsProps) {
-  const [account, setAccount] = useState<AccountDto | null>(dummyAccount || null);
-  const [transactions, setTransactions] = useState<TransactionDTO[]>(dummyTransactions || []);
+  const{account , transactions,loading,error,fetchAccount,fetchTransactions} =useAccountStore();
   const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (dummyAccount && dummyTransactions) return;
 
-    async function fetchData() {
-      try {
-        const acc = await fetch(`/api/v1/accounts/${accountNumber}`).then(res => res.json());
-        setAccount(acc);
+    fetchAccount(accountNumber);
+    fetchTransactions(accountNumber);
 
-        const txns = await fetch(`/api/v1/transactions/${accountNumber}`).then(res => res.json());
-        setTransactions(txns.slice(-5).reverse());
-      } catch (err) {
-        console.error("Error fetching account/transactions:", err);
-      }
-    }
+  },[accountNumber,dummyAccount,dummyTransactions]);
 
-    fetchData();
-  }, [accountNumber, dummyAccount, dummyTransactions]);
+  const accountData=dummyAccount || account;
+  const transactionData=dummyTransactions || transactions;
 
-  if (!account) return <div className="loading-message">Loading account...</div>;
+  if(loading && !dummyAccount) return <div className="loading-message">Loading account...</div>;
+  if(error && !dummyAccount) return <div className="error-message">{error}</div>;
+  if (!accountData) return <div className="loading-message"> account Not Found...</div>;
 
-  const maskedAccountNumber = "**** **** **** " + account.accountNumber.slice(-4);
+  const maskedAccountNumber = "**** **** **** " + accountData.accountNumber.slice(-4);
 
   // Prepare table data for TableComponent
 
   const tableHeaders = ["Date", "Description", "Amount", "Balance"];
-  const tableData = transactions.map(txn => ({
+  const tableData = transactionData.map(txn => ({
     Date: txn.createdAt,
     Description: txn.description,
     Amount: txn.amount < 0 ? `-$${Math.abs(txn.amount)}` : `+$${txn.amount}`,
-    Balance: `$${account.balance.toFixed(2)}`,
+    Balance: `$${accountData.balance.toFixed(2)}`,
   }));
 
   return (
     <div className="account-details-container">
       <div className="account-header">
-        <h1 className="account-title">{account.accountType} ACCOUNT</h1>
+        <h1 className="account-title">{accountData.accountType} ACCOUNT</h1>
         <p className="masked-account-number">Account Number: {maskedAccountNumber}</p>
-        <p className="account-balance">Balance: ${account.balance.toFixed(2)}</p>
+        <p className="account-balance">Balance: ${accountData.balance.toFixed(2)}</p>
         <div className="action-buttons">
           <ButtonComponent
             label="Transfer"
             onClick={() =>
-              navigate("/transfer", { state: { accountNumber: account.accountNumber } })
+              navigate("/transfer", { state: { accountNumber: accountData.accountNumber } })
             }
             variant="primary"
           />
           <ButtonComponent
             label="Initiate Payment"
             onClick={() =>
-              navigate("/initiate-payment", { state: { accountNumber: account.accountNumber } })
+              navigate("/initiate-payment", { state: { accountNumber: accountData.accountNumber } })
             }
             variant="secondary"
           />
@@ -104,7 +83,7 @@ export default function AccountDetails({
   <div
     className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
     onClick={() =>
-      navigate("/transactions", { state: { accountNumber: account.accountNumber } })
+      navigate("/transactions", { state: { accountNumber: accountData.accountNumber } })
     }
   >
     Transactions
@@ -116,7 +95,7 @@ export default function AccountDetails({
           <h2 className="account-overview-header">Account details</h2>
           <div className="account-type">
             <p>Account Type</p>
-            <strong>{account.accountType}</strong>
+            <strong>{accountData.accountType}</strong>
           </div>
           <div className="masked-account-number">
             <p>Account Number</p>
@@ -124,15 +103,15 @@ export default function AccountDetails({
           </div>
           <div className="account-created-date">
             <p>Created At</p>
-            <strong>{account.accountCreated}</strong>
+            <strong>{accountData.accountCreated}</strong>
           </div>
           <div className="account-updated-date">
             <p>Last Updated</p>
-            <strong>{account.accountUpdated}</strong>
+            <strong>{accountData.accountUpdated}</strong>
           </div>
           <div className="account-balance">
             <p>Balance</p>
-            <strong>${account.balance.toFixed(2)}</strong>
+            <strong>${accountData.balance.toFixed(2)}</strong>
           </div>
         </div>
       )}
