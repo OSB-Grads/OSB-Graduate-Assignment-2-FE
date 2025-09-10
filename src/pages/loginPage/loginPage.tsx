@@ -33,7 +33,7 @@ const handleLogin = async (e: React.FormEvent) => {
     }
 
     // Navigate to dashboard
-    navigate("/dashboard");
+    navigate("/");
 
   } catch (error: any) {
     alert(error.message || "Login failed");
