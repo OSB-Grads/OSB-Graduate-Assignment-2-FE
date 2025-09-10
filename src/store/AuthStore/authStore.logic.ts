@@ -1,10 +1,23 @@
-import { setToken } from "../utils/httpClientUtil";
-import { loginApi } from "./authstore.api";
+import { setToken } from "../../utils/httpClientUtil";
+import { loginApi, registerApi } from "./authstore.api";
 
 export const authenticate = (set: any, toAuthenticate: boolean) => {
     set({
-        isAuthenticated: toAuthenticate,
+        authenticate: toAuthenticate,
     })
+}
+
+export const signup = async (set: any, username: string, password: string) => {
+    try {
+        const token = await registerApi(username, password);
+        
+        set({
+            isAuthenticated: true,
+        })
+        setToken(token);
+    } catch (e) {
+        console.log("error occurred", e);
+    }
 }
 
 export const login = async (set: any, username: string, password: string, rememberMe: boolean) => {

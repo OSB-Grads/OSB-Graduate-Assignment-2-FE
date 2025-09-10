@@ -7,9 +7,9 @@
   --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   --line-height: 1.5;
   --font-weight: 400;
-  --color-background:#0f1f13;
-  --color-white:#ffffff;
-  --color-black:#000000;
+  --color-background:#122117;
+  --color-white:#EEEEEE;
+  --color-black:#333333;
   --color-primary: #38E07A ;
   --color-secondary: #264533 ;
   --opacity:0.5;
@@ -34,7 +34,7 @@
   --button-width: 112px;
   --button-height: 40px;
   --button-min-width:84px ;
-  --button-max-width:480px ;
+  --button-max-width:1480px ;
   --button-padding-left:16px ;
   --button-padding-right: 16px;
 
