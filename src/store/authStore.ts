@@ -1,31 +1,16 @@
-import {create} from "zustand";
-import {persist} from "zustand/middleware";
-//AuthState
-type AuthState={
-    token:string |null;       //JWT Token returned from backend
-    isAuthenticated:boolean;
-    login:(token:string)=>void; 
-    logout:()=>void;
-};
+import { create } from "zustand";
+import type { AuthState } from "./authStore.interface";
+import { login, logout } from "./authStore.logic";
+
 //AuthStore
-export const useAuthStore=create<AuthState>()(
-    persist(
-        (set)=>({
-            token:null,
-            isAuthenticated:false,
-            //Login
-            login:(token)=>
-                set({
-                    token,
-                    isAuthenticated:true,
-                }),
-            //Logout
-            logout:()=>
-                 set({
-                    token:null,
-                    isAuthenticated:false,
-                }),
-        }),
-        {name:"auth-storage"}
-    )
+const useAuthStore = create<AuthState>()(
+    (set) => ({
+        isAuthenticated: false,
+        //Login
+        login: (username, password, rememberMe) => login(set, username, password, rememberMe),
+        //Logout
+        logout: () => logout(set),
+    })
 );
+
+export default useAuthStore;
