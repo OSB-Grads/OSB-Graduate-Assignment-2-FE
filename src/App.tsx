@@ -1,71 +1,32 @@
 import React, { type ReactNode } from 'react';
 import { BrowserRouter ,Routes, Route, Link, Navigate, Router } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import About from './pages/About';
 import ButtonComponent from './components/Button/ButtonComponent';
 import { useAuthStore } from './store/authStore';
-
-//testing for protected routes 
+import './App.css'
+import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
 
 export default function App() {
-  const { token, isAuthenticated, login, logout } = useAuthStore();
   return (
+    <div className="web-window">
+      <div>
+         <Header></Header>
+        <div  className="below-window">
 
-     <div style={{ padding: 20 }}>
-      <h2>Auth Zustand Store Test</h2>
-      <p><strong>Token:</strong> {token || "No token"}</p>
-      <p><strong>Authenticated:</strong> {isAuthenticated ? "Yes" : "No"}</p>
-
-      {!isAuthenticated ? (
-        <ButtonComponent
-          label="Login"
-          variant="primary"
-          onClick={() => login("example-jwt-token-123")}
-        />
-      ) : (
-        <ButtonComponent
-          label="Logout"
-          variant="secondary"
-          onClick={logout}
-        />
-      )}
+          <Leftnavbar></Leftnavbar>
+            <main className="main-component">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/transactions" element={<Transaction/>}/>
+            </Routes>
+            </main>
+          
+        </div>
+      </div>
     </div>
-  )
-}
-                                                        
-//     // <div>                                                           {/*--------demo displaying home page and aboutpage----------*/}
-//     //   <nav style={{ display: 'flex', gap: 16, padding: 12 }}>
-//     //     <Link to="/">Home</Link>                                    {/*--------------TO BE CHANGED ------------*/}
-//     //     <Link to="/about">About</Link>
-//     //   </nav>
-//     //   <div style={{padding :'2rem'}}>
-//     //   <h1>Button Test</h1> 
-//     //   <ButtonComponent 
-//     // label="Click me"
-//     // variant="primary"
-//     // onClick={()=>alert('primary Button Clicked!')}
-//     // />
-//     // <ButtonComponent 
-//     // label="Click me"
-//     // variant="secondary"
-//     // onClick={()=>alert('secondary Button Clicked!')}
-//     // />
-//     // <ButtonComponent 
-//     // label="Disabled"
-//     // variant="primary"
-//     // disabled={true}
-//     // /> 
-//     // </div>
-//     //   <main style={{ padding: 12 }}>
-//     //     <Routes>
-//     //       <Route path="/" element={<Home />} />
-//     //       <Route path="/about" element={<About />} />
-//     //     </Routes>
-//     //   </main>
-//     // </div>
     
-//   );
-// }
-
-
-
+  );
+}
