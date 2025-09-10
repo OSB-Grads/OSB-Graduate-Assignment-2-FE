@@ -16,6 +16,7 @@ import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
 
 
 
+
 interface AccountData {
   accountNumber: string;
   accountType: string;
@@ -85,8 +86,7 @@ export default function Home() {
             phone:item.phone
           }
         ))
-        console.log("format data")
-        console.log(formatData)
+      
         setUser(formatData);
         setUserLoading(false);
       })
@@ -95,7 +95,7 @@ export default function Home() {
         setUserLoading(false);
       });
   }, []);
-  console.log(user)
+
   
 
  
@@ -112,6 +112,8 @@ export default function Home() {
         setAccountsLoading(false);
       });
   }, []);
+
+  
 
   
 
