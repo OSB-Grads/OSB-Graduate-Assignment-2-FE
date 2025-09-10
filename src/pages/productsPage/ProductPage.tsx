@@ -14,7 +14,7 @@ const ProductPage: React.FC = () => {
     return (
         <>
             <h2>Products</h2>
-            {!loading ?
+            {!loading &&!error ?
                 (
                     <>
                         <Box className="productBoxCssClass">
@@ -39,7 +39,7 @@ const ProductPage: React.FC = () => {
                         </Box>
                     </>
                 )
-                : (<></>)}
+                : (<> <p>Error Has Occured While fetching Product Details</p></>)}
         </>
     )
 }

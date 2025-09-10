@@ -34,16 +34,15 @@ const useProductStore=create<ProductStore>((set)=>({
      fetchProductDetails:async()=>{
         try{
             console.log("Products Details Information Retrieval Started");
-            console.log(import.meta.env.BANK_API_TO_RETRIEVE_PRODUCT_DETAILS);
+            set(()=>({loading:true}));
         const response = await axiosInstance.get(import.meta.env.VITE_API_BASE_URL + '/api/v1/product/fetch');
         console.log("Products Information Successful");
-        console.log(response)
-        
         set(()=>({products:response.data}));
          set(()=>({loading:false}))
        }
        catch(error){
         console.log("Error Has Occured",error);
+        set(()=>({error:true}));
          
        }
      }
