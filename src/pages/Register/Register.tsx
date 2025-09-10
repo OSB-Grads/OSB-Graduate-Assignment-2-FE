@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Register.css";
-import axios from 'axios';
 import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/httpClientUtil.ts";
-//import { useAuthStore } from "../../Store/authStore";
+import { getAuthStore, isAuthenticated } from "../../store/AuthStoreGetters.ts";
+import useAuthStore from "../../store/authStore.ts";
 
 function Register() {
   const [username, setUsername] = React.useState("");
@@ -18,38 +18,34 @@ function Register() {
 
   const navigate = useNavigate();
 
+  const { isAuthenticated, signup } = useAuthStore();
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-  if (password != confirmPassword) {
-    alert("The password doesnt match");
-    return;
-  }
- 
-  try{
-    
-    const authDetails = await axios.post("http://localhost:8080/api/v1/auth/register", {username,password});
-  
-    const token = authDetails.data.token;
-    localStorage.setItem("access_token", token); 
-
-
-
-    const userDetails = await axiosInstance.put("/api/v1/users/me", 
-    {name, email, phone});
-    //user created
-    // console.log(userDetails);
-    if (userDetails.status === 200 || userDetails .status === 201){
-        
-        alert("Successful"); // will be updated with toast
-        
-        navigate("/")
+    if (password != confirmPassword) {
+      console.log("The password doesnt match");
+      return;
     }
-  }
-  catch(error){
-    alert("Error");
-    // error page
-  }};
+
+    try {
+      await signup(username, password);
+      const userDetails = await axiosInstance.put("/api/v1/users/me", {
+        name,
+        email,
+        phone,
+      });
+
+      if (userDetails.status === 200 || userDetails.status === 201) {
+        console.log("Successful"); // will be updated with toast
+      }
+
+      navigate('/')
+    } catch (error) {
+      console.log("Register Error");
+      // error page
+    }
+  };
 
   return (
     <div className="register-body">
@@ -171,16 +167,14 @@ function Register() {
               label="Create User"
               type="submit"
               variant="primary"
-          
             />
-            </div>
+          </div>
 
-            <div className="login-link">
-              <strong>
-                Already have an account ?{" "}
-                <Link to="/LoginPage">Log In</Link>{" "}
-              </strong>
-            </div>
+          <div className="login-link">
+            <strong>
+              Already have an account ? <Link to="/LoginPage">Log In</Link>{" "}
+            </strong>
+          </div>
         </form>
       </div>
     </div>

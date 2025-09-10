@@ -4,6 +4,10 @@
   height: 100vh;
 }
 
+.register-form{
+  width: 27%;
+}
+
 .register-container {
   display: flex;
   justify-content: center;
@@ -21,7 +25,7 @@
   padding: 20px 16px 12px;
   width:  100%;
   text-align: center;
-  height: 67px;
+  height: 20px;
   color: var(--color-text);
 }
 

@@ -16,9 +16,12 @@ export const setToken = function (t: string | null) {
     token.token = t
 }
 
+const getToken = () => token.token
+
 axiosInstance.interceptors.request.use(
     (config)=>{
-        const token=localStorage.getItem('access_token')
+        const token = getToken()
+
         if(token){
           config.headers.Authorization=`Bearer ${token}`;  
         }

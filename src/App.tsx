@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 
 import About from "./pages/About";
@@ -13,8 +13,19 @@ import Home from "./pages/Home/Home";
 import LoginPage from "./pages/loginPage/loginPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
+import { setToken } from "./utils/httpClientUtil";
+import useAuthStore from "./store/authStore";
 
 export default function App() {
+  const {authenticate} = useAuthStore();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token){
+      setToken(token);
+      authenticate(true);
+    }
+  }, [])
+
   return (
       <Routes>
         <Route path="/login" element={<LoginPage />} />

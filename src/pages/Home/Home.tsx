@@ -62,7 +62,7 @@ const defaultAccounts: AccountData[] = [
   }]
 
 export default function Home() {
-  const [user, setUser] = React.useState<UserData>(defaultUser);
+  const [user, setUser] = React.useState<UserData>();
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string |null>(null);
 
@@ -85,6 +85,8 @@ export default function Home() {
             phone:item.phone
           }
         ))
+        console.log("format data")
+        console.log(formatData)
         setUser(formatData);
         setUserLoading(false);
       })
@@ -93,6 +95,7 @@ export default function Home() {
         setUserLoading(false);
       });
   }, []);
+  console.log(user)
   
 
  
@@ -140,7 +143,7 @@ export default function Home() {
     <div className="dashboard">
       <div className="dashboard-welcome-note">
         <div>
-          <span>{user?`Welcome back, ${user.name}`:'Loading user...'}</span>
+          <span>{`Welcome back, ${user?.name}`}</span>
         </div>
       </div>
 

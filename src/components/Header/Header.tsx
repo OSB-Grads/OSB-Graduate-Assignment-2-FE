@@ -11,10 +11,7 @@ import ButtonComponent from "../Button/ButtonComponent";
 
 const Header = () => {
   const [user, setUser] = React.useState<{ id: string; role: string } | null>(
-    {
-        id:"1234353545454",
-        role:"USER"
-    }
+    
   );
   React.useEffect(() => {
     const decoded = getUserFromToken();
