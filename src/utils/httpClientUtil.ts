@@ -1,10 +1,20 @@
-import axios  from "axios"
+import axios from "axios";
 
-
-
-const axiosInstance=axios.create({
-    baseURL:'http://localhost:8080',
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:8080',
 })
+
+interface IToken {
+    token: string | null,
+}
+
+const token: IToken = {
+    token: null,
+}
+
+export const setToken = function (t: string | null) {
+    token.token = t
+}
 
 axiosInstance.interceptors.request.use(
     (config)=>{
@@ -14,9 +24,9 @@ axiosInstance.interceptors.request.use(
         }
         return config
     },
-    (err)=>{
+    (err) => {
         return Promise.reject(err)
     }
 )
-    
+
 export default axiosInstance
