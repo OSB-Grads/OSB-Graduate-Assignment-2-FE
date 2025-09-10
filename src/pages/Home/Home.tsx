@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import "./Home.css";
 import { Link } from "react-router-dom";
+import "./Home.css";
 
-import {  QuickActionListData, type QuickList } from "../../data/QuickActionData";
+import { QuickActionListData, type QuickList } from "../../data/QuickActionData";
 
 
-import  LatestNotificationTransferIcon  from '../../assets/Latest-notification-transfer-icon.png';
+import LatestNotificationTransferIcon from '../../assets/Latest-notification-transfer-icon.png';
 
-import axiosInstance from "../../utils/httpClientUtil";
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import axiosInstance from "../../utils/httpClientUtil";
 
 
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
@@ -30,13 +30,13 @@ interface UserData {
   phone: String;
 }
 
-interface TransactionData{
-   fromAccount:string;
-   toAccount:string;
-   description:string ;
-   amount:number;
-   createdAt:string;
-  
+interface TransactionData {
+  fromAccount: string;
+  toAccount: string;
+  description: string;
+  amount: number;
+  createdAt: string;
+
 }
 const defaultUser: UserData = {
   name: "John Doe",
@@ -52,7 +52,7 @@ const defaultAccounts: AccountData[] = [
     accountUpdated: "2025-09-09T12:30:00"
   }]
 
-  const defaultTransactions: TransactionData[] = [
+const defaultTransactions: TransactionData[] = [
   {
     fromAccount: "1234567890",
     toAccount: "9876543210",
@@ -64,28 +64,30 @@ const defaultAccounts: AccountData[] = [
 export default function Home() {
   const [user, setUser] = React.useState<UserData>();
   const [userLoading, setUserLoading] = React.useState(true);
-  const [userError, setUserError] = React.useState<string |null>(null);
+  const [userError, setUserError] = React.useState<string | null>(null);
 
   const [accounts, setAccounts] = React.useState<AccountData[]>(defaultAccounts);
   const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
   const [accountsError, setAccountsError] = React.useState<string | null>(null);
 
-  const[transactions,setTransactions]=React.useState<TransactionData[]>(defaultTransactions);
+  const [transactions, setTransactions] = React.useState<TransactionData[]>(defaultTransactions);
   const [transactionsLoading, setTransactionsLoading] = React.useState<boolean>(true);
   const [transactionsError, setTransactionsError] = React.useState<string | null>(null);
+
+
 
   useEffect(() => {
     axiosInstance
       .get("api/v1/users/me")
       .then((res) => {
-        const formatData=res.data.map((item:any)=>(
+        const formatData = res.data.map((item: any) => (
           {
-            name:item.name,
-            email:item.email,
-            phone:item.phone
+            name: item.name,
+            email: item.email,
+            phone: item.phone
           }
         ))
-      
+
         setUser(formatData);
         setUserLoading(false);
       })
@@ -95,9 +97,9 @@ export default function Home() {
       });
   }, []);
 
-  
 
- 
+
+
 
   useEffect(() => {
     axiosInstance
@@ -112,19 +114,19 @@ export default function Home() {
       });
   }, []);
 
-  
+
 
   useEffect(() => {
     axiosInstance
       .get("/api/v1/transactions")
       .then((res) => {
-        const formatData=res.data.map((item:any)=>(
+        const formatData = res.data.map((item: any) => (
           {
-             fromAccount:item.fromAccount,
-             toAccount:item.toAccount,
-             description:item.description,
-             amount:item.amount,
-             createdAt:formatDistanceToNow(parseISO(item.createdAt),{addSuffix:true})
+            fromAccount: item.fromAccount,
+            toAccount: item.toAccount,
+            description: item.description,
+            amount: item.amount,
+            createdAt: formatDistanceToNow(parseISO(item.createdAt), { addSuffix: true })
           }
         ))
         setTransactions(formatData);
@@ -142,7 +144,7 @@ export default function Home() {
     <div className="dashboard">
       <div className="dashboard-welcome-note">
         <div>
-          <span>{`Welcome back, ${user?.name}`}</span>
+          <span>{user ? `Welcome back, ${user.name}` : 'Loading user...'}</span>
         </div>
       </div>
 
@@ -152,10 +154,10 @@ export default function Home() {
 
       <div className="account-details">
         <div>
-         
+
           {/* {accountsError && <p>{accountsError}</p>}  */}
           {
-            
+
             accounts.map((account, index) => (
               <DashBoardAccount
                 key={index}
@@ -190,18 +192,18 @@ export default function Home() {
 
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
-          
-          
-           { transactions.map((item,index)=>(
+
+
+          {transactions.map((item, index) => (
             <QuickActionItem
-              key = {index}
+              key={index}
               label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
               subLabel={item.createdAt}
               icon={LatestNotificationTransferIcon}
             ></QuickActionItem>
-           ))}
-          
-          
+          ))}
+
+
         </div>
       </div>
     </div>

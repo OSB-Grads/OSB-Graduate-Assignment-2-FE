@@ -1,0 +1,16 @@
+.toast {
+    display: flex;
+    position: relative;
+    gap: 4px;
+    border-radius: var(--border-radius);
+    padding-left: var(--button-padding-left);
+    padding-right: var(--button-padding-right);
+    /* color stays inline, so no color here */
+}
+
+.toast-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}

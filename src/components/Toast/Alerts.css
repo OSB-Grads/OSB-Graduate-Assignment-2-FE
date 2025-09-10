@@ -1,0 +1,10 @@
+.toast-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 9999;
+    padding: 16px;
+    gap: 12px;
+}

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { notify } from "../components/Toast/Alerts";
+import { ToastTypes } from "../components/Toast/interfaces";
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080',
@@ -19,17 +21,45 @@ export const setToken = function (t: string | null) {
 const getToken = () => token.token
 
 axiosInstance.interceptors.request.use(
-    (config)=>{
+    (config) => {
         const token = getToken()
 
-        if(token){
-          config.headers.Authorization=`Bearer ${token}`;  
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
         }
         return config
-    },
-    (err) => {
-        return Promise.reject(err)
     }
 )
+axiosInstance.interceptors.response.use(
+    (response) => response.data,
+    (error) => {
+        if (error.message === 'Network Error') {
+            notify({
+                type: ToastTypes.ERROR as keyof typeof ToastTypes,
+                message: 'Backend is not connected ',
+            });
+        } else {
+            notify({
+                type: ToastTypes.ERROR as keyof typeof ToastTypes,
+                message: 'An error occurred while receiving response',
+            });
+        }
+
+        return Promise.reject(error);
+    }
+);
+axiosInstance.interceptors.response.use(
+    (response) => response.data,
+    (error) => {
+        if (error.message === 'Network Error') {
+            notify({
+                type: ToastTypes.ERROR as keyof typeof ToastTypes,
+                message: 'Backend is not connected',
+            });
+        }
+        return Promise.reject(error);
+    }
+);
+
 
 export default axiosInstance
