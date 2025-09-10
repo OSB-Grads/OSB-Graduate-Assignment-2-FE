@@ -1,29 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
-import { useAuthStore } from "../../Store/authStore";
-
+import { getAuthStore } from "../../Store/AuthStoreGetters";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
-  // Zustand state & actions
-  const { username, setUsername, login } = useAuthStore();
-
-  // Local state for password & rememberMe 
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  const navigate = useNavigate();
+  const { isAuthenticated, login } = getAuthStore(); 
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
+      // Call login via Zustand store 
       await login(username, password, rememberMe);
-      navigate("/dashboard");
+
     } catch (error: any) {
       alert(error.message || "Login failed");
     }
   };
+
+  useEffect(() => {
+    navigate('/dashboard')
+  }, [isAuthenticated])
 
   return (
     <div className="login-container">
@@ -38,12 +41,11 @@ export default function LoginPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => {
-            if (e.key === "Enter") {
-            e.preventDefault(); // prevent form submission
-            const passwordInput = document.getElementById("password-input");
-            passwordInput?.focus();
-    }
-  }}
+              if (e.key === "Enter") {
+                e.preventDefault(); // prevent form submission without password
+                document.getElementById("password-input")?.focus();
+              }
+            }}
           />
 
           {/* Password */}
@@ -68,8 +70,18 @@ export default function LoginPage() {
 
           {/* Button */}
           <button type="submit" className="login-button">
-             Login
+            Login
           </button>
+
+          {/* Links */}
+          <div className="links">
+            <p>
+              Don’t have an account? <a href="/register">Register</a>
+            </p>
+            <p>
+              <a href="/forgotPassword">Forgot Password?</a>
+            </p>
+          </div>
         </form>
       </main>
     </div>
