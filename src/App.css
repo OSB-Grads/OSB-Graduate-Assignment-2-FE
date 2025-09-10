@@ -40,3 +40,96 @@
 .read-the-docs {
   color: #888;
 } */
+<<<<<<< HEAD
+=======
+
+/* #root {
+  width: 1280;
+height: 1136;
+min-height: 800px;
+angle: 0 deg;
+opacity: 1;
+
+  
+} */
+
+.web-window{
+  /* Depth 0, Frame 0 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+width: 1508px;
+height: 1136px;
+min-height: 800px;
+
+background: #122117;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+}
+
+.web-window >div{
+  /* Depth 1, Frame 0 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+width: 1280px;
+height: 1136px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+}
+.below-window{
+  /* Depth 2, Frame 1 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: flex-start;
+padding: 0px;
+
+gap: 4px;
+
+width: 1508px;
+height: 1071px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+}
+.main-component{
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+ 
+}
+
+
+
+
+
+
+>>>>>>> bdc1303283928d1e252397e29907dc87e0a29679

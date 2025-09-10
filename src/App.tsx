@@ -1,12 +1,33 @@
-import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
+import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import DummyAccountPage from './pages/DummyData';
+import About from "./pages/About";
+
+import './App.css'
+import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
+import Home from "./pages/Home/Home";
 import ButtonComponent from './components/Button/ButtonComponent';
+
 export default function App() {
   return (
-    <div>                                                           {/*--------demo displaying home page and aboutpage----------*/}
+    <div className="web-window">
+      <div>
+         <Header></Header>
+        <div  className="below-window">
+
+          <Leftnavbar></Leftnavbar>
+            <main className="main-component">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/transactions" element={<Transaction/>}/>
+            </Routes>
+            </main>
+          
+        </div>
+      </div>
+                                                            {/*--------demo displaying home page and aboutpage----------*/}
       <nav style={{ display: 'flex', gap: 16, padding: 12 }}>
         <Link to="//">Home</Link>                                    {/*--------------TO BE CHANGED ------------*/}
         <Link to="/about">About</Link>
