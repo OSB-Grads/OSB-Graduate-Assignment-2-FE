@@ -25,18 +25,18 @@
   color: var(--color-text);
 }
 
-/* .form-fields textarea  {
-  background-color: var(--color-background);
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 12px var(--color-background);
-  width: 100%;
-  max-width: 400px;
-
-} */
-
 .form-actions{
+  padding-top : 15px;
+  width: 100%;
+}
+.form-actions button{
   padding: var(--spacing-md);
+  padding-left: 60px;
+  width: 100%;
+  padding-right: 60px;
+  text-align: center;
+  margin-left: 10px;
+
 } 
 
 .login-link {

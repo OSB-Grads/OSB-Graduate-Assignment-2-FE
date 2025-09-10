@@ -27,9 +27,9 @@ function Register() {
   }
  
   try{
-    console.log("start")
+    
     const authDetails = await axios.post("http://localhost:8080/api/v1/auth/register", {username,password});
-    console.log("post register");
+  
     const token = authDetails.data.token;
     localStorage.setItem("access_token", token); 
 
@@ -38,7 +38,7 @@ function Register() {
     const userDetails = await axiosInstance.put("/api/v1/users/me", 
     {name, email, phone});
     //user created
-    console.log(userDetails);
+    // console.log(userDetails);
     if (userDetails.status === 200 || userDetails .status === 201){
         
         alert("Successful"); // will be updated with toast
@@ -171,8 +171,9 @@ function Register() {
               label="Create User"
               type="submit"
               variant="primary"
-            //   onClick={() => navigate("/")}
+          
             />
+            </div>
 
             <div className="login-link">
               <strong>
@@ -180,7 +181,6 @@ function Register() {
                 <Link to="/LoginPage">Log In</Link>{" "}
               </strong>
             </div>
-          </div>
         </form>
       </div>
     </div>

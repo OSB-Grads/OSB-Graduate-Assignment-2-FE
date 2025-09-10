@@ -15,6 +15,7 @@ import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
 
 
+
 interface AccountData {
   accountNumber: string;
   accountType: string;
@@ -92,6 +93,9 @@ export default function Home() {
         setUserLoading(false);
       });
   }, []);
+  
+
+ 
 
   useEffect(() => {
     axiosInstance
@@ -105,6 +109,8 @@ export default function Home() {
         setAccountsLoading(false);
       });
   }, []);
+
+  
 
   useEffect(() => {
     axiosInstance
@@ -144,9 +150,10 @@ export default function Home() {
 
       <div className="account-details">
         <div>
-          
+         
           {/* {accountsError && <p>{accountsError}</p>}  */}
           {
+            
             accounts.map((account, index) => (
               <DashBoardAccount
                 key={index}
