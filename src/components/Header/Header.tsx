@@ -12,7 +12,7 @@ import useAuthStore from "../../store/authStore";
 
 const Header = () => {
   
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated,authenticate } = useAuthStore();
   
   return (
     <>
@@ -23,7 +23,7 @@ const Header = () => {
         </div>
 
         <div className="headder-right">
-          {isAuthenticated? (
+          {isAuthenticated ? (
             <>
               <div className="headder-bell-icon">
                 <img src={bellIcon} alt="bell-icon" />
