@@ -49,6 +49,7 @@
     "jest-environment-jsdom": "^30.1.2",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
+    "text-encoding": "^0.7.0",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
