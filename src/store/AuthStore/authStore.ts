@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import type { AuthState } from "./authStore.interface";
-import { login, logout } from "./authStore.logic";
+import { login, signup, logout, authenticate } from "./authStore.logic";
 
 //AuthStore
 const useAuthStore = create<AuthState>()(
     (set) => ({
         isAuthenticated: false,
+        authenticate: (toAuthenticate: boolean) => authenticate(set, toAuthenticate),
         //Login
         login: (username, password, rememberMe) => login(set, username, password, rememberMe),
+        signup : (username, password)  => signup(set, username, password),
         //Logout
         logout: () => logout(set),
     })

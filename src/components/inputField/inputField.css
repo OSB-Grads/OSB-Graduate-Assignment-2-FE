@@ -1,10 +1,9 @@
 /* InputField Component CSS */
-
-
 .form-group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  padding: 4px;
 }
 
 .form-group label {
@@ -13,13 +12,17 @@
 }
 
 .form-group input {
-  padding: var(--spacing-md);
+  padding: 10px;
+  width: 100%;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-input-border);
-  background-color: var(--color-background);
+  border: 1px solid var(--color-input-white);
+  background-color: var(--color-secondary);
+  border-radius: 4px; 
   color: var(--color-text);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+
 
 .form-group input:focus {
   outline: none;

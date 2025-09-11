@@ -16,10 +16,14 @@ export const setToken = function (t: string | null) {
     token.token = t
 }
 
+const getToken = () => token.token
+
 axiosInstance.interceptors.request.use(
-    (config) => {
-        if (token.token) {
-            config.headers.Authorization = `Bearer ${token}`;
+    (config)=>{
+        const token = getToken()
+
+        if(token){
+          config.headers.Authorization=`Bearer ${token}`;  
         }
         return config
     },

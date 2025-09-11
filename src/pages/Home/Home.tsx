@@ -15,6 +15,7 @@ import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
 
 
+
 interface AccountData {
   accountNumber: string;
   accountType: string;
@@ -55,13 +56,13 @@ const defaultAccounts: AccountData[] = [
   {
     fromAccount: "1234567890",
     toAccount: "9876543210",
-    description: "Transaction dun sucessfully",
-    amount: 100.5,
+    description: "Transaction done successfully",
+    amount: 100001,
     createdAt: "2 hours"
   }]
 
 export default function Home() {
-  const [user, setUser] = React.useState<UserData>(defaultUser);
+  const [user, setUser] = React.useState<UserData>();
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string |null>(null);
 
@@ -84,6 +85,7 @@ export default function Home() {
             phone:item.phone
           }
         ))
+      
         setUser(formatData);
         setUserLoading(false);
       })
@@ -92,6 +94,10 @@ export default function Home() {
         setUserLoading(false);
       });
   }, []);
+
+  
+
+ 
 
   useEffect(() => {
     axiosInstance
@@ -105,6 +111,8 @@ export default function Home() {
         setAccountsLoading(false);
       });
   }, []);
+
+  
 
   useEffect(() => {
     axiosInstance
@@ -134,7 +142,7 @@ export default function Home() {
     <div className="dashboard">
       <div className="dashboard-welcome-note">
         <div>
-          <span>{user?`Welcome back, ${user.name}`:'Loading user...'}</span>
+          <span>{`Welcome back, ${user?.name}`}</span>
         </div>
       </div>
 
@@ -144,9 +152,10 @@ export default function Home() {
 
       <div className="account-details">
         <div>
-          
+         
           {/* {accountsError && <p>{accountsError}</p>}  */}
           {
+            
             accounts.map((account, index) => (
               <DashBoardAccount
                 key={index}
@@ -185,8 +194,8 @@ export default function Home() {
           
            { transactions.map((item,index)=>(
             <QuickActionItem
-            
-              label={`${item.description} : ammount of ${item.amount} is tranferd from ${item.fromAccount} to ${item.toAccount}`}
+              key = {index}
+              label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
               subLabel={item.createdAt}
               icon={LatestNotificationTransferIcon}
             ></QuickActionItem>

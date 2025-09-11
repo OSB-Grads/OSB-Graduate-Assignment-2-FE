@@ -2,7 +2,7 @@
     display:inline-flex;
     align-items :center;
     justify-content: center;
-    width :var(--button-width);
+    width :auto;
     min-width:var(--button-min-width);
     max-width:var(--button-max-width);
     height:var(--button-height);
