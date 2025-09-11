@@ -2,12 +2,18 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import Header from "./components/Header/Header";
-import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
-import Alerts from './components/Toast/Alerts';
-import Home from './pages/Home/Home';
+import About from "./pages/About";
+import Home from "./pages/Home/Home";
 import Transaction from "./pages/Transaction";
-import useAuthStore from "./store/authStore";
+// import Home from "./pages/Home";
+
+
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
+import LoginPage from "./pages/loginPage/loginPage";
+import ProductPage from "./pages/productsPage/ProductPage";
+import Register from "./pages/Register/Register";
+import WebFlow from "./pages/webFlow/WebFlow";
+import useAuthStore from "./store/AuthStore/authStore";
 import { setToken } from "./utils/httpClientUtil";
 
 export default function App() {
@@ -21,22 +27,21 @@ export default function App() {
   }, [])
 
   return (
-    <div className="web-window">
-      <div>
-        <Header></Header>
-        <Alerts />
-        <div className="below-window">
 
-          <Leftnavbar></Leftnavbar>
-          <main className="main-component">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/transactions" element={<Transaction />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+
+        <Route path="transactions" element={<Transaction />} />
+        <Route path="about" element={<About />} />
+
+        <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
+      </Route>
+    </Routes>
+
 
   );
 }
