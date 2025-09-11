@@ -10,10 +10,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuth) {
+    if (!isAuthenticated) {
       navigate('/login');
     }
-  }, [isAuth]);
+  }, [isAuthenticated]);
 
   return <>{children}</>;
 };
