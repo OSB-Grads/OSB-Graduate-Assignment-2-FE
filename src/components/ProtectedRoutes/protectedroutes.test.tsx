@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { useAuthStore } from "../../store/AuthStore/authStore";
+import { useAuthStore } from "../../Store/AuthStore/authStore";
 import ProtectedRoute from "./protectedroutes";
 
 const Dashboard = () => <div>Dashboard Page</div>

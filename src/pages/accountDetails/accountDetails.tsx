@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
-import useAccountStore from "../../store/AccountStore/accountStore";
-import type { AccountDto,TransactionDTO } from "../../store/AccountStore/accountStore.interface";
-import "./accountDetails.css";
+import useAccountStore from "../../Store/AccountStore/AccountStore";
+import type { AccountDto,TransactionDTO } from "../../Store/AccountStore/AccountStore.interface";
+import "./AccountDetails.css";
 
 
 interface AccountDetailsProps {

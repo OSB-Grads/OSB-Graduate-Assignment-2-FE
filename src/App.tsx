@@ -14,7 +14,9 @@ import LoginPage from "./pages/loginPage/loginPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
 import { setToken } from "./utils/httpClientUtil";
-import useAuthStore from "./store/AuthStore/authStore";
+import useAuthStore from "./Store/AuthStore/authStore";
+import ProductPage from "./pages/productsPage/ProductPage";
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 
 export default function App() {
   const {authenticate} = useAuthStore();
@@ -27,17 +29,21 @@ export default function App() {
   }, [])
 
   return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
+    
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={<WebFlow />}>
-        <Route path = "/" element={<Home/>} />
+              <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+              <Route path = "/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
 
-        <Route path="transactions" element={<Transaction />} />
-        <Route path="about" element={<About />} />
-        </Route>
-      </Routes>
+              <Route path="transactions" element={<Transaction />} />
+              <Route path="about" element={<About />} />
+
+              <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}/>
+              </Route>
+            </Routes>
+         
     
   );
 }

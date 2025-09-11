@@ -1,5 +1,5 @@
 import React from "react";
-import AccountDetails from "./accountDetails/accountDetails";
+import AccountDetails from "./AccountDetails/AccountDetails";
 
 export default function DummyAccountPage() {
   const dummyAccount = {

@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import type { AccountState } from "../../store/AccountStore/accountStore.interface";
-import { getAccount,getTransactions } from "../../store/AccountStore/accountStore.api";
-import { getRecentTransactions } from "../../store/AccountStore/accountStore.logic";
+import type { AccountState } from "./AccountStore.interface";
+import { getAccount,getTransactions } from "./AccountStore.api";
+import { getRecentTransactions } from "./AccountStore.logic";
 // --- Store ---
 const useAccountStore = create<AccountState>((set) => ({
   account: null,
