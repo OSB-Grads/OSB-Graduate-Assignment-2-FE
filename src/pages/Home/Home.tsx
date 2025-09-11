@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import "./Home.css";
 import { Link } from "react-router-dom";
+import "./Home.css";
 
 import {
   QuickActionListData,
@@ -9,12 +9,12 @@ import {
 
 import LatestNotificationTransferIcon from "../../assets/Latest-notification-transfer-icon.png";
 
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import axiosInstance from "../../utils/httpClientUtil";
-import { formatDistanceToNow, parseISO } from "date-fns";
+
 
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
-import UserStore from "../../store/userstore/userstore";
 import { getUserStore } from "../../store/userstore/userstoreGetters";
 
 interface AccountData {
@@ -54,9 +54,10 @@ const defaultTransactions: TransactionData[] = [
 ];
 
 export default function Home() {
-  
+
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string | null>(null);
+
 
   const [accounts, setAccounts] =
     React.useState<AccountData[]>(defaultAccounts);
@@ -172,14 +173,15 @@ export default function Home() {
 
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
-          {transactions.map((item, index) => (
-            <QuickActionItem
-              key={index}
-              label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
-              subLabel={item.createdAt}
-              icon={LatestNotificationTransferIcon}
-            ></QuickActionItem>
-          ))}
+          {
+            transactions.map((item, index) => (
+              <QuickActionItem
+                key={index}
+                label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
+                subLabel={item.createdAt}
+                icon={LatestNotificationTransferIcon}
+              ></QuickActionItem>
+            ))}
         </div>
       </div>
     </div>
