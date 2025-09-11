@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import helpIcon from "../../assets/help-icon.png";
 
 
@@ -7,14 +7,12 @@ import "./Leftnavbar.css";
 import NavItem from "../NavItem/NavItem";
 import type { navItem } from "../../data/LeftnavData";
 import { LeftnavItems } from "../../data/LeftnavData";
-import { Link } from "react-router-dom";
-
-
-
+import { Link, useLocation } from "react-router-dom";
 
 const Leftnavbar = () => {
+  const location = useLocation();
+
   return (
-    <>
       <nav className="left-nav-bar">
         <div className="left-nav-bar-list">
           <div className="left-nav-bar-headding">
@@ -24,7 +22,10 @@ const Leftnavbar = () => {
           <div className="left-nav-bar-elements">
 
             {LeftnavItems.map((item:navItem)=>(
-              <Link to={item.path} key={item.id}>
+              <Link to={item.path} key={item.id} style={{
+                backgroundColor: item.path === location.pathname ? 'var(--color-secondary)' : 'transparent',
+                paddingLeft: item.path === location.pathname ? '12px' : '',
+              }} >
               <NavItem
               label={item.label}
               icon={item.icon}
@@ -43,7 +44,6 @@ const Leftnavbar = () => {
           </Link>
         </div>
       </nav>
-    </>
   );
 };
 
