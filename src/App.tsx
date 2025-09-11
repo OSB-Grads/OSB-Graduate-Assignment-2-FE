@@ -19,7 +19,7 @@ import useAuthStore from "./store/authStore";
 export default function App() {
   const {authenticate} = useAuthStore();
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('token');
     if(token){
       setToken(token);
       authenticate(true);

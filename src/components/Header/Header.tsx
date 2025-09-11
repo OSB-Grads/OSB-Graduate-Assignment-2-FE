@@ -12,7 +12,7 @@ import useAuthStore from "../../store/authStore";
 
 const Header = () => {
   
-    const { isAuthenticated,authenticate } = useAuthStore();
+    const { isAuthenticated } = useAuthStore();
   
   return (
     <>
