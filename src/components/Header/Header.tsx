@@ -5,7 +5,7 @@ import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
 
 import ButtonComponent from "../Button/ButtonComponent";
-import useAuthStore from "../../store/authStore";
+import useAuthStore from "../../store/AuthStore/authStore";
 
 
 
@@ -23,7 +23,7 @@ const Header = () => {
         </div>
 
         <div className="headder-right">
-          {isAuthenticated? (
+          {isAuthenticated ? (
             <>
               <div className="headder-bell-icon">
                 <img src={bellIcon} alt="bell-icon" />

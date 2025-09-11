@@ -1,47 +1,47 @@
-import React, { useEffect } from "react";
-import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
-import About from "./pages/About";
 import "./App.css";
-
-import Header from "./components/Header/Header";
-import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
+import About from "./pages/About";
 import Home from "./pages/Home/Home";
+import Transaction from "./pages/Transaction";
 // import Home from "./pages/Home";
 
 
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 import LoginPage from "./pages/loginPage/loginPage";
+import ProductPage from "./pages/productsPage/ProductPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
+import useAuthStore from "./store/AuthStore/authStore";
 import { setToken } from "./utils/httpClientUtil";
-import useAuthStore from "./store/authStore";
-import Error404 from "./pages/ErrorPages/Error404";
-import TransactionPage from "./pages/TransactionPage/TransactionPage";
 
 export default function App() {
-  const {authenticate} = useAuthStore();
+  const { authenticate } = useAuthStore();
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if(token){
+    const token = localStorage.getItem('token');
+    if (token) {
       setToken(token);
       authenticate(true);
     }
   }, [])
 
   return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={<WebFlow />}>
-        <Route path = "/" element={<Home/>} />
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
         <Route path="/transactions" element={< TransactionPage />}/>
         <Route path="about" element={<About />} />
-        <Route path ="/err" element = {<Error404/>} />
 
-        </Route>
-      </Routes>
-    
+        <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
+      </Route>
+    </Routes>
+
+
   );
 }
