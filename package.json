@@ -10,7 +10,6 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,md}'",
     "test": "jest",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
-    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,md}'"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

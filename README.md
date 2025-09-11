@@ -1,69 +1,49 @@
-# React + TypeScript + Vite
+# Banking Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This Banking Application is built with a modern technology stack, featuring a frontend developed using React with TypeScript and a backend implemented in Java with Spring Boot. It simulates the core operations of a real banking system, including user authentication, account creation, self and external account transactions, deposits, and withdrawals. To run the frontend application, Node.js (version 20 or higher, including npm) is required. For backend setup and execution, please refer to the detailed instructions available in the backend’s GitHub repository.
 
-Currently, two official plugins are available:
+## Requirements for the Bank Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+`Front end`
 
-## Expanding the ESLint configuration
+Requirements To run the Front end application 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- <b>Node version (20v+)</b> (includes npm (node package manager))
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+`Backend`
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Please refer and follow the instructions to the github page of Backend to run do the  backend 
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+https://github.com/OSB-Grads/OSB-Graduate-Assignment-2-BE
+
+
+
+
+## Steps to Run the Frontend Application
+
+First install the all dependencies for the Project by using the following command 
+
+```
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To Connect with the Backend application change the .env variable normally 
+```
+VITE_API_BASE_URL="YOUR_BACK_END_BASE_URL"
+```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+
+
+To Run the Front end Application
+
+```
+npm run dev 
+```
+
+
+To Run the Testcases in the Application
+
+```
+npm run test
 ```
