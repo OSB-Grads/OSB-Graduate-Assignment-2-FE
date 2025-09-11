@@ -1,4 +1,3 @@
-
 import homeIcon from '../assets/Home-icon.png'
 import accountIcon from '../assets/Accounts.png'
 
@@ -9,6 +8,7 @@ export type navItem={
     path:string,
 
 };
+
 export const LeftnavItems:navItem[]=[
 
     {
@@ -24,6 +24,12 @@ export const LeftnavItems:navItem[]=[
         icon:accountIcon,
         path:'/accountsPage'
 
+    },
+    {
+        id:3,
+        label:"Products",
+        icon:accountIcon,
+        path:'/products'
     }
 
     
