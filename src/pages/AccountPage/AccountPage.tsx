@@ -25,20 +25,23 @@ const defaultAccounts: AccountData[] = [
 
 const AccountPage = () => {
 
-  const tableheader = ["Name", "Email", "Action"];
+  const [accounts, setAccounts] =
+      React.useState<AccountData[]>(defaultAccounts);
+    const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
+    const [accountsError, setAccountsError] = React.useState<string | null>(null);
 
-const tabledata = [
-  {
-    Name: "John Doe",
-    Email: "john@example.com",
-    Action: <button onClick={() => alert("Clicked John")}>View</button>,
-  },
-  {
-    Name: "Jane Smith",
-    Email: "jane@example.com",
-    Action: <button onClick={() => alert("Clicked Jane")}>View</button>,
-  },
-];
+  // useEffect(() => {
+  //     axiosInstance
+  //       .get("/api/v1/accounts")
+  //       .then((res) => {
+  //         setAccounts(res.data);
+  //         setAccountsLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         setAccountsError("failed to fetch the accounts");
+  //         setAccountsLoading(false);
+  //       });
+  //   }, []);
 
   return (
     <>
@@ -57,10 +60,10 @@ const tabledata = [
         </div>
 
         <div className="accounts-dispaly-page">
-          <TableComponent
+          {/* <TableComponent
           tableheader={tableheader}
           tabledata={tabledata}
-          ></TableComponent>
+          ></TableComponent> */}
 
 
         </div>

@@ -23,7 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 export default function App() {
   const {authenticate} = useAuthStore();
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if(token){
       setToken(token);
       authenticate(true);
@@ -36,8 +36,8 @@ export default function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Register />} />
 
-              <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-              <Route path = "/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
+              <Route path="/" element={<WebFlow />}>
+              <Route path = "/" element={<Home/>} />
 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
