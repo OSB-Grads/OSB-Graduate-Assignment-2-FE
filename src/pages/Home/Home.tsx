@@ -74,7 +74,11 @@ export default function Home() {
   const [transactionsLoading, setTransactionsLoading] = React.useState<boolean>(true);
   const [transactionsError, setTransactionsError] = React.useState<string | null>(null);
 
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 72881b3096f364111ca5be9de9fe5f674381ef21
 
   useEffect(() => {
     axiosInstance
@@ -113,6 +117,7 @@ export default function Home() {
         setAccountsLoading(false);
       });
   }, []);
+ 
 
 
 
@@ -137,6 +142,7 @@ export default function Home() {
         setTransactionsLoading(false);
       });
   }, []);
+  console.log(`trans size ${transactions.length}`)
 
 
 
@@ -192,12 +198,23 @@ export default function Home() {
 
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
+<<<<<<< HEAD
 
 
           {transactions.map((item, index) => (
             <QuickActionItem
               key={index}
               label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
+=======
+          
+          
+           { 
+           
+           transactions.map((item,index)=>(
+            <QuickActionItem
+               
+              label={`Transferred ${item.amount} ${item.fromAccount?`from ${item.fromAccount}`:''} ${item.toAccount?`to ${item.toAccount}`:''}`}
+>>>>>>> 72881b3096f364111ca5be9de9fe5f674381ef21
               subLabel={item.createdAt}
               icon={LatestNotificationTransferIcon}
             ></QuickActionItem>

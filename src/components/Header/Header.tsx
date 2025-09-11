@@ -5,7 +5,7 @@ import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
 
 import ButtonComponent from "../Button/ButtonComponent";
-import useAuthStore from "../../store/authStore";
+import useAuthStore from "../../store/AuthStore/authStore";
 
 
 

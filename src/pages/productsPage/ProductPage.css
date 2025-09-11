@@ -1,0 +1,37 @@
+
+
+.productBoxCssClass{
+     padding: 5px;
+     display: flex;
+     gap: 16px;
+     flex-direction: column;
+}
+
+.productPaperCss{
+    background-color: var(--color-secondary) !important;
+    color: var(--color-white) !important;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.productPaperCss p {
+    margin: 0;
+}
+
+.productContentCss{
+    flex: 1;
+}
+
+.productInterestContentCss {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.productPaperCss >p:last-child {
+    font-size: 24px;
+}
