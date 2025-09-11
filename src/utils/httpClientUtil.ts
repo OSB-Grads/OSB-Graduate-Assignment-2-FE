@@ -48,18 +48,4 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-axiosInstance.interceptors.response.use(
-    (response) => response.data,
-    (error) => {
-        if (error.message === 'Network Error') {
-            notify({
-                type: ToastTypes.ERROR as keyof typeof ToastTypes,
-                message: 'Backend is not connected',
-            });
-        }
-        return Promise.reject(error);
-    }
-);
-
-
 export default axiosInstance
