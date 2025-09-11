@@ -1,4 +1,4 @@
-import * as httpClientUtil from '../utils/httpClientUtil';
+import * as httpClientUtil from '../../utils/httpClientUtil';
 import { authenticate, login, logout, signup } from './authStore.logic';
 import * as api from './authstore.api';
 
