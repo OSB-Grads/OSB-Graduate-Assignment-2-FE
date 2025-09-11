@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { useAuthStore } from "../../Store/AuthStore/authStore";
 import ProtectedRoute from "./protectedroutes";
 //mock
 jest.mock("../../store/AuthStoreGetters", () => ({

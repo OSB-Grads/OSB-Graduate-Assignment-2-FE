@@ -1,20 +1,21 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-
-import "./App.css";
+import React, { useEffect } from "react";
+import ButtonComponent from './components/Button/ButtonComponent';
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import About from "./pages/About";
-import Home from "./pages/Home/Home";
+import "./App.css";
 import Transaction from "./pages/Transaction";
 // import Home from "./pages/Home";
 
 
-import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
+
 import LoginPage from "./pages/loginPage/loginPage";
-import ProductPage from "./pages/productsPage/ProductPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
-import useAuthStore from "./store/AuthStore/authStore";
 import { setToken } from "./utils/httpClientUtil";
+import useAuthStore from "./Store/AuthStore/authStore";
+import ProductPage from "./pages/productsPage/ProductPage";
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
+import Home from "./pages/Home/Home";
 
 export default function App() {
   const { authenticate } = useAuthStore();
