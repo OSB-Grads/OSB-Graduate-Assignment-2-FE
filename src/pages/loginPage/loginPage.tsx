@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
-import { getAuthStore } from "../../Store/AuthStoreGetters";
+import { getAuthStore } from "../../store/AuthStoreGetters";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");

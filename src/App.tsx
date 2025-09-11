@@ -1,28 +1,43 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
+import React, { useEffect } from "react";
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
+
+import About from "./pages/About";
+import "./App.css";
+import Transaction from "./pages/Transaction";
 import Header from "./components/Header/Header";
 import Leftnavbar from "./components/Leftnavbar/Leftnavbar";
-import Home from './pages/Home/Home';
-import Transaction from "./pages/Transaction";
+import Home from "./pages/Home/Home";
+// import Home from "./pages/Home";
+
+
+import LoginPage from "./pages/loginPage/loginPage";
+import Register from "./pages/Register/Register";
+import WebFlow from "./pages/webFlow/WebFlow";
+import { setToken } from "./utils/httpClientUtil";
+import useAuthStore from "./store/authStore";
 
 export default function App() {
+  const {authenticate} = useAuthStore();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token){
+      setToken(token);
+      authenticate(true);
+    }
+  }, [])
+
   return (
-    <div className="web-window">
-      <div>
-        <Header></Header>
-        <div className="below-window">
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
 
-          <Leftnavbar></Leftnavbar>
-          <main className="main-component">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/transactions" element={<Transaction />} />
-            </Routes>
-          </main>
+        <Route path="/" element={<WebFlow />}>
+        <Route path = "/" element={<Home/>} />
 
-        </div>
-      </div>
-    </div>
-
+        <Route path="transactions" element={<Transaction />} />
+        <Route path="about" element={<About />} />
+        </Route>
+      </Routes>
+    
   );
 }
