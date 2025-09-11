@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
-import { getAuthStore } from "../../store/AuthStoreGetters";
+import useAuthStore from "../../store/authStore";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
-  const { isAuthenticated, login } = getAuthStore(); 
+  const { isAuthenticated, login } = useAuthStore(); 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
