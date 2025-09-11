@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { v4 as uuid } from 'uuid';
+import './Alerts.css';
 import type { IToastProps } from "./interfaces";
 import Toast from "./ToastComponent";
 
@@ -13,10 +14,12 @@ const Alerts = () => {
     }
 
     notify = (instance: IToastProps) => {
+        const TTL = 5;
         instance.id = uuid();
         instance.handleClose = () => remove(instance.id!);
+        instance.TTL = TTL;
         setAlerts(prev => ([...prev, instance]));
-        setTimeout(() => remove(instance.id!), 5000);
+        setTimeout(() => remove(instance.id!), TTL * 1000 + 1);
     }
 
     return (
