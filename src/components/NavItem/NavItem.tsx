@@ -8,6 +8,7 @@ interface NavItemProp{
 }
 
 const  NavItem:React.FC<NavItemProp>=({label,icon}) =>{
+  
   return (
     <>
       <div className="navbar-element" >
