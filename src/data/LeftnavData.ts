@@ -22,7 +22,7 @@ export const LeftnavItems:navItem[]=[
         id:2,
         label:"Accounts",
         icon:accountIcon,
-        path:''
+        path:'/accountsPage'
 
     }
 

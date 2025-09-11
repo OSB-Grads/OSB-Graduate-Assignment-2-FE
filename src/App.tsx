@@ -15,6 +15,8 @@ import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
 import { setToken } from "./utils/httpClientUtil";
 import useAuthStore from "./store/authStore";
+import AccountPage from "./pages/AccountPage/AccountPage";
+
 
 export default function App() {
   const {authenticate} = useAuthStore();
@@ -36,6 +38,7 @@ export default function App() {
 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
+        <Route path='/accountsPage' element={<AccountPage/>}></Route>
         </Route>
       </Routes>
     
