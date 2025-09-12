@@ -47,11 +47,11 @@
   padding: var(--spacing-md);
   cursor: pointer;
   transition: background 0.2s;
-}
+} 
 
-.login-button:hover {
+ .login-button:hover {
   background-color: #2fd469;
-}
+} 
 
 .links {
   text-align: center;
