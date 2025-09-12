@@ -28,12 +28,6 @@ npm install
 ```
 
 
-To Connect with the Backend application change the .env variable normally 
-```
-VITE_API_BASE_URL="YOUR_BACK_END_BASE_URL"
-```
-
-
 
 To Run the Front end Application
 
@@ -46,4 +40,55 @@ To Run the Testcases in the Application
 
 ```
 npm run test
+```
+
+
+To Build the application 
+
+```
+npm run build
+```
+
+
+To deploy the apllication 
+
+```
+npx serve -s dist
+```
+
+
+## Directory Structure of The Application
+``` bash
+OSB-Graduate-Assignment-2-FE
+        ├── public/                                   # Static assets (favicon, index.html, etc.)
+        │
+        ├── src/                                      # Main source code
+        │     ├── assets/                             # Project-specific images, fonts, styles
+        │     ├── components/                         # Reusable UI components
+        │     ├──     ├──component.tsx                # Defining the React Component
+        │     ├──     ├──component.css                # React Component CSS
+        │     ├── pages/                              # Page-level components (routed views)
+        │     ├──     ├──page.tsx                     # Defining the React Page
+        │     ├──     ├──page.css                     # React Page CSS
+        │     ├── data/                               # Left-Navigation bar data along with paths
+        │     ├── store/                              # Zustand Store elements 
+        |     ├──     ├── dirStore/  
+        |     ├──           ├──dirStore.ts/           # Definining the Zustand Store
+        |     ├──           ├──dir.api.ts/            # Calling the API if needed to retrieve data
+        |     ├──           ├──dir.logic.ts/          # Logic for the Updation of Zustand Component
+        |     ├──           ├──dir.interface.ts/      # Definining the Expected type from API
+        │     ├── utils/                              # Utility/helper functions
+        │     ├── App.tsx                             # Root component
+        │     ├── main.tsx                            # Application entry point
+        │     └── index.css                           # Global styles
+        │── test                                      # End to End testing                                 
+        ├── .env                                      # Environment variables
+        ├── package.json                              # Dependencies and npm scripts
+        ├── tsconfig.json                             # TypeScript configuration
+        ├── tsconfig.app.json                         # TypeScript application configuration
+        ├── tsconfig.node.json                        # TypeScript node configuration
+        ├── vite.config.ts                            # Vite configuration
+        └── README.md                                 # Project documentation
+
+
 ```
