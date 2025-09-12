@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :root {
   /* Colors */
   --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -83,6 +87,7 @@
   --table-padding: 8px;
   --table-width: 100%;
 }
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -99,6 +104,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 h1 {
