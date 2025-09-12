@@ -9,7 +9,7 @@ const WebFlow: FC = () => {
   return (
     <div className="web-window">
       <div>
-         <Header></Header>
+         
         <div  className="below-window">
 
 

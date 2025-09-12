@@ -14,7 +14,14 @@ import ProductPage from "./pages/productsPage/ProductPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
+import AccountPage from "./pages/AccountPage/AccountPage";
+
+
+
+import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
+import Header from "./components/Header/Header";
+
 
 export default function App() {
   const { authenticate } = useAuthStore();
@@ -23,11 +30,14 @@ export default function App() {
     if (token) {
       setToken(token);
       authenticate(true);
+    } else {
+      authenticate(false);
     }
   }, [])
 
   return (
-
+    <>
+      <Header></Header>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
@@ -37,11 +47,12 @@ export default function App() {
 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
-
-        <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
-      </Route>
-    </Routes>
-
-
+        <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
+        <Route path='/accountsPage' element={<AccountPage/>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
+        </Route>
+      </Routes>
+      </>
+    
   );
 }

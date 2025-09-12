@@ -303,6 +303,12 @@ flex-grow: 0;
 
 
 }
+.left-nav-bottom{
+    display: flex;
+    flex-direction: column;
+    align-items:flex-end;
+   
+}
 
 
 

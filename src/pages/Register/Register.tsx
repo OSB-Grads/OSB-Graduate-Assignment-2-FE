@@ -7,7 +7,7 @@ import axiosInstance from "../../utils/httpClientUtil.ts";
 
 import { getUserStore } from "../../store/userstore/userstoreGetters.ts";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
-
+import useUserStore from "../../store/userstore/userstore.ts";
 
 function Register() {
   const [username, setUsername] = React.useState("");
@@ -21,7 +21,7 @@ function Register() {
   const navigate = useNavigate();
 
   const { isAuthenticated, signup } = useAuthStore();
-  const{createUser}=getUserStore();
+  const { createUser } = useUserStore();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,18 +33,17 @@ function Register() {
 
     try {
       await signup(username, password);
-      const status = await createUser(name,email,phone);
-
-      if (status === 200 || status === 201) {
-        console.log("Successful"); // will be updated with toast
-      }
-
-      navigate('/')
+      await createUser(name, email, phone);
+     
     } catch (error) {
       console.log("Register Error");
       // error page
     }
   };
+
+  useEffect(() => {
+    if(isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
 
   return (
     <div className="register-body">

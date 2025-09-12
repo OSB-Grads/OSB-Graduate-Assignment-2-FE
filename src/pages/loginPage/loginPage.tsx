@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
 import InputField from "../../components/inputField/inputField";
-import useAuthStore from "../../store/authStore";
+import axiosInstance from "../../utils/httpClientUtil";
+import useAuthStore from "../../store/AuthStore/authStore";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
+  const { isAuthenticated, login } = useAuthStore();
   const navigate = useNavigate();
-  const { isAuthenticated, login } = useAuthStore(); 
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +26,8 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    navigate('/dashboard')
-  }, [isAuthenticated])
+    if(isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
 
   return (
     <div className="login-container">
@@ -35,6 +36,7 @@ export default function LoginPage() {
           <h1 className="form-title">Welcome back</h1>
 
           {/* Username */}
+
           <InputField
             label="Username"
             placeholder="Enter your username"
