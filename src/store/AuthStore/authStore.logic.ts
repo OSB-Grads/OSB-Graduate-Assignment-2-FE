@@ -3,7 +3,7 @@ import { loginApi, registerApi } from "./authstore.api";
 
 export const authenticate = (set: any, toAuthenticate: boolean) => {
     set({
-        authenticate: toAuthenticate,
+        isAuthenticated: toAuthenticate,
     })
 }
 
