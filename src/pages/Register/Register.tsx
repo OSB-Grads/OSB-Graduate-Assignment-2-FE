@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import "./Register.css";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
-import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/httpClientUtil.ts";
-
-import { getUserStore } from "../../store/userstore/userstoreGetters.ts";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
+import "./Register.css";
+import useUserStore from "../../store/userstore/userstore.ts";
 
 
 function Register() {
@@ -21,7 +19,7 @@ function Register() {
   const navigate = useNavigate();
 
   const { isAuthenticated, signup } = useAuthStore();
-  const{createUser}=getUserStore();
+  const { createUser } = useUserStore();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +31,7 @@ function Register() {
 
     try {
       await signup(username, password);
-      const status = await createUser(name,email,phone);
+      const status = await createUser(name, email, phone);
 
       if (status === 200 || status === 201) {
         console.log("Successful"); // will be updated with toast

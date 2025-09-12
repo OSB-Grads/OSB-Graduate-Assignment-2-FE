@@ -14,18 +14,14 @@
 .form-group input {
   padding: 10px;
   width: 100%;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-input-white);
-  background-color: var(--color-secondary);
-  border-radius: 4px; 
+  border-radius: var(--border-radius);
+  border-color: var(--color-secondary);
+  border: 1px solid;
+  background-color: transparent;
   color: var(--color-text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-
-
-.form-group input:focus {
-  outline: none;
-  border-color: var(--color-link);
-  box-shadow: 0 0 0 2px var(--color-link);
+.form-group.secondary input {
+  border: none;
+  border-bottom: 1px solid var(--color-input-white)
 }
