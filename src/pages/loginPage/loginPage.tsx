@@ -11,12 +11,15 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const { isAuthenticated, login } = useAuthStore();
   const navigate = useNavigate();
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      // Call backend login via central API client
+      // Call login via Zustand store 
       await login(username, password, rememberMe);
+
     } catch (error: any) {
       alert(error.message || "Login failed");
     }
@@ -42,10 +45,7 @@ export default function LoginPage() {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault(); // prevent form submission without password
-
-                // Move focus to password field
-                const passwordInput = document.getElementById("password-input");
-                passwordInput?.focus();
+                document.getElementById("password-input")?.focus();
               }
             }}
           />
