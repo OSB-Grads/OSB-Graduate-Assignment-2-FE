@@ -38,12 +38,12 @@ export default function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Register />} />
 
-              <Route path="/" element={<WebFlow />}>
-              <Route path = "/" element={<Home/>} />
+              <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+              <Route path = "/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
-        <Route path="/products" element={<ProductPage></ProductPage>}></Route>
+        <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
         <Route path='/accountsPage' element={<AccountPage/>}></Route>
         <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
         </Route>
