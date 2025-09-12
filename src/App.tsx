@@ -29,6 +29,8 @@ export default function App() {
     if (token) {
       setToken(token);
       authenticate(true);
+    } else {
+      authenticate(false);
     }
   }, [])
 
