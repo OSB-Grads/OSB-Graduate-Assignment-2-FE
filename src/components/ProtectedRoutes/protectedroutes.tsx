@@ -6,14 +6,14 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const {isAuthenticated}=useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!isAuthenticated){
+    if (!isAuthenticated) {
       navigate('/login');
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   return <>{children}</>;
 };
