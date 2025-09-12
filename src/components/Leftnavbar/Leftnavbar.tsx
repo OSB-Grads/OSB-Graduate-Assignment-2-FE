@@ -8,58 +8,49 @@ import "./Leftnavbar.css";
 import NavItem from "../NavItem/NavItem";
 import type { navItem } from "../../data/LeftnavData";
 import { LeftnavItems } from "../../data/LeftnavData";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/AuthStore/authStore";
+import { authenticate } from "../../store/AuthStore/authStore.logic";
 
 const Leftnavbar = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { logout} = useAuthStore();
+  const { logout } = useAuthStore();
 
-  const handleLogin=()=>{
-     logout()
+  const handleNavigate = (path: string) => {
+    navigate(path)
   }
 
   return (
       <nav className="left-nav-bar">
         <div className="left-nav-bar-list">
-          {/* <div className="left-nav-bar-headding">
-            <span>FinanceFirst</span>
-          </div> */}
 
           <div className="left-nav-bar-elements">
 
             {LeftnavItems.map((item:navItem)=>(
-              <Link to={item.path} key={item.id} style={{
-                backgroundColor: item.path === location.pathname ? 'var(--color-secondary)' : 'transparent',
-                paddingLeft: item.path === location.pathname ? '12px' : '',
-              }} >
+              <Link to={item.path} key={item.id}  >
               <NavItem
               label={item.label}
               icon={item.icon}
-            ></NavItem></Link>))}
+              active={item.path === location.pathname}
+              handleClick={() => handleNavigate(item.path)}
+            /></Link>))}
           </div>
  
           
         </div>
         
         <div className="left-nav-bottom">
-        <div className="left-nav-bar-help">
-          <Link to=''>
+          <NavItem
+              label={"Logout"}
+              icon={LogoutIcon}
+              handleClick={logout}
+            />
          <NavItem
               label={"Help and Support"}
               icon={helpIcon}
-            ></NavItem>
-          </Link>
-        </div>
-
-        <div className="left-nav-bar-help" onClick={handleLogin}>
-           <Link to=''>
-         <NavItem
-              label={"Logout"}
-              icon={LogoutIcon}
-            ></NavItem>
-          </Link>
-        </div>
+              handleClick={() => handleNavigate('/help')}
+            />
         </div>
       </nav>
   );

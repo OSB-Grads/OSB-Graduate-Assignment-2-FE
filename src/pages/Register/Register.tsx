@@ -39,7 +39,11 @@ function Register() {
         console.log("Successful"); // will be updated with toast
       }
 
-      navigate("/");
+      useEffect(()=>{
+        navigate("/");
+      },[isAuthenticated])
+
+     
     } catch (error) {
       console.log("Register Error");
       // error page

@@ -20,6 +20,7 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
+import Header from "./components/Header/Header";
 
 
 export default function App() {
@@ -35,7 +36,8 @@ export default function App() {
   }, [])
 
   return (
-
+    <>
+      <Header></Header>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
@@ -50,6 +52,7 @@ export default function App() {
         <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
         </Route>
       </Routes>
+      </>
     
   );
 }
