@@ -33,22 +33,17 @@ function Register() {
 
     try {
       await signup(username, password);
-      const status = await createUser(name, email, phone);
-
-      if (status === 200 || status === 201) {
-        console.log("Successful"); // will be updated with toast
-      }
-
-      useEffect(()=>{
-        navigate("/");
-      },[isAuthenticated])
-
+      await createUser(name, email, phone);
      
     } catch (error) {
       console.log("Register Error");
       // error page
     }
   };
+
+  useEffect(() => {
+    if(isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
 
   return (
     <div className="register-body">

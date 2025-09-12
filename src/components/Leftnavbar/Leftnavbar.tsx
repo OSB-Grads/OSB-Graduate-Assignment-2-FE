@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import helpIcon from "../../assets/help-icon.png";
 import LogoutIcon from "../../assets/Logout-icon.png"
 
@@ -10,16 +9,11 @@ import type { navItem } from "../../data/LeftnavData";
 import { LeftnavItems } from "../../data/LeftnavData";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/AuthStore/authStore";
-import { authenticate } from "../../store/AuthStore/authStore.logic";
 
 const Leftnavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuthStore();
-
-  const handleNavigate = (path: string) => {
-    navigate(path)
-  }
 
   return (
       <nav className="left-nav-bar">
@@ -33,7 +27,7 @@ const Leftnavbar = () => {
               label={item.label}
               icon={item.icon}
               active={item.path === location.pathname}
-              handleClick={() => handleNavigate(item.path)}
+              handleClick={() => navigate(item.path)}
             /></Link>))}
           </div>
  
@@ -49,7 +43,7 @@ const Leftnavbar = () => {
          <NavItem
               label={"Help and Support"}
               icon={helpIcon}
-              handleClick={() => handleNavigate('/help')}
+              handleClick={() => navigate('/help')}
             />
         </div>
       </nav>
