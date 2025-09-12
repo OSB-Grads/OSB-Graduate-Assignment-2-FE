@@ -3,7 +3,7 @@ import "./ErrorPages.css";
 
 function Maintenance() {
   return (
-    <div className="main-container">
+    <div className="error-container">
       <div className="heading">
         <h2>We're Under Maintenance</h2>
         <p className="error-message">

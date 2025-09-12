@@ -50,7 +50,7 @@ function Register() {
     <div className="register-body">
       <div className="register-container">
         <form onSubmit={handleRegister} className="register-form">
-          <h2 className="create-heading">Create New User</h2>
+          <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
             <InputField
@@ -171,7 +171,7 @@ function Register() {
 
           <div className="login-link">
             <strong>
-              Already have an account ? <Link to="/LoginPage">Log In</Link>{" "}
+              Already have an account ? <Link to="/login">Log In</Link>{" "}
             </strong>
           </div>
         </form>
