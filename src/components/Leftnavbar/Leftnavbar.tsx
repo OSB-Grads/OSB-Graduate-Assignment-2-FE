@@ -15,9 +15,9 @@ const Leftnavbar = () => {
   return (
       <nav className="left-nav-bar">
         <div className="left-nav-bar-list">
-          <div className="left-nav-bar-headding">
+          {/* <div className="left-nav-bar-headding">
             <span>FinanceFirst</span>
-          </div>
+          </div> */}
 
           <div className="left-nav-bar-elements">
 

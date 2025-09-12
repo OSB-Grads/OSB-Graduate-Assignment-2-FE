@@ -18,6 +18,8 @@ import useAuthStore from "./store/AuthStore/authStore";
 import AccountPage from "./pages/AccountPage/AccountPage";
 
 import ProductPage from "./pages/productsPage/ProductPage";
+
+import AccountDetailPage from './pages/AccountDetailsPage'
 import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 
 export default function App() {
@@ -41,7 +43,9 @@ export default function App() {
 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
+        <Route path="/products" element={<ProductPage></ProductPage>}></Route>
         <Route path='/accountsPage' element={<AccountPage/>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
         </Route>
       </Routes>
     

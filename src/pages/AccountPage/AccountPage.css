@@ -196,3 +196,26 @@ align-self: stretch;
 flex-grow: 0;
 
 }
+.table-link{
+    /* View Details */
+
+width: 101px;
+height: 21px;
+
+font-family: 'Spline Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height, or 150% */
+
+color: #8FCCB8;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+}
