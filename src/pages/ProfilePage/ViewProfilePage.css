@@ -1,16 +1,16 @@
- .update-body {
+ .profile-body {
      background: var(--color-background);
      width: 800vw;
      height: 1000vh;
  }
 
- .update-container {
+ .profile-container {
      display: flex;
      flex-direction: column;
      gap: 20px;
  }
 
- .form-fields {
+ .profile-form-fields {
      display: flex;
      flex-direction: column;
      gap: 50px;
@@ -18,7 +18,7 @@
 
 
 
- .form-header {
+ .profile-form-header {
      display: flex;
      justify-content: space-between;
      align-items: center;
@@ -39,12 +39,12 @@
      font-size: xx-large;
  }
 
- .form-actions {
+ .profile-form-actions {
      padding-top: 15px;
      width: 100%;
  }
 
- .form-actions button {
+ .profile-form-actions button {
      width: var(--button-width);
      padding-right: 60px;
      text-align: center;
@@ -55,14 +55,15 @@
      margin-left: 10px;
      border-radius: var(--border-radius);
      background-color: var(--color-secondary);
+     color: var(--color-white);
  }
 
- .form-actions {
+ .profile-form-actions {
      padding-top: 15px;
      width: 100%;
  }
 
- .Names {
+ .profile-Names {
      display: flex;
      flex-direction: row;
      align-items: flex-start;
@@ -72,7 +73,7 @@
      height: 57px;
  }
 
- .Names input {
+ .profile-Names input {
      border: none;
      border-bottom: 2px solid var(--color-secondary);
      width: 500px;
@@ -82,7 +83,7 @@
      border-radius: 0%;
  }
 
- .PhandEmail {
+ .profile-PhandEmail {
      display: flex;
      flex-direction: row;
      align-items: flex-start;
@@ -92,7 +93,7 @@
      height: 57px;
  }
 
- .PhandEmail input {
+ .profile-PhandEmail input {
      border: none;
      border-bottom: 2px solid var(--color-secondary);
      width: 500px;
@@ -102,7 +103,7 @@
      background-color: var(--color-background);
  }
 
- .Address input {
+ .profile-Address input {
      display: flex;
      flex-direction: row;
      text-align: left;

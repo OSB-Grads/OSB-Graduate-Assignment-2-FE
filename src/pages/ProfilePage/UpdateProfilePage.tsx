@@ -10,20 +10,20 @@ function UpdateUserProfile() {
     const [UpdatedPhone, setUpdatedPhone] = React.useState("");
     const [UpdateEmail, setUpdatedEmail] = React.useState("");
     const [UpdatedAddress, setUpdatedAddress] = React.useState("");
-    const FullName = UpdatedFirstName +" "+ UpdatedLastName;
-    const { updateUser,user } = useUserStore();
+    const FullName = UpdatedFirstName + " " + UpdatedLastName;
+    const { updateUser, user } = useUserStore();
 
     useEffect(() => {
-    const fullname = user?.name || "";
-    const parts = fullname.trim().split(" ");
-    const firstname = parts[0] || "";
-    const lastname = parts.length > 1 ? parts.slice(1).toString() : "";
-    setUpdatedFirstName(firstname);
-    setUpdatedLastName(lastname);
-    setUpdatedPhone(user?.phone ? user.phone.toString() : "");
-    setUpdatedEmail(user?.email ? user.email.toString() : "");
-    setUpdatedAddress(user?.address || "");
-}, [user])
+        const fullname = user?.name || "";
+        const parts = fullname.trim().split(" ");
+        const firstname = parts[0] || "";
+        const lastname = parts.length > 1 ? parts.slice(1).toString() : "";
+        setUpdatedFirstName(firstname);
+        setUpdatedLastName(lastname);
+        setUpdatedPhone(user?.phone ? user.phone.toString() : "");
+        setUpdatedEmail(user?.email ? user.email.toString() : "");
+        setUpdatedAddress(user?.address || "");
+    }, [user])
     const handleUpdateUser = async (e: React.FormEvent) => {
         e.preventDefault();
 

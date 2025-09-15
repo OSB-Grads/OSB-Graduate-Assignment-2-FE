@@ -44,12 +44,12 @@ function ViewUserProfile() {
         setAddress(user?.address || "");
     }, [user])
     return (
-        <div className="update-body">
-            <div className="update-container">
-                <form onClick={handleClick} className="update-form">
-                    <div className="form-header">
+        <div className="profile-body">
+            <div className="profile-container">
+                <form onClick={handleClick} className="profile-form">
+                    <div className="profile-form-header">
                         <h2 className="profile-heading">Profile</h2>
-                        <div className="form-actions">
+                        <div className="profile-form-actions">
                             <ButtonComponent
                                 label="Edit"
                                 type="button"
@@ -57,8 +57,8 @@ function ViewUserProfile() {
                             />
                         </div>
                     </div>
-                    <div className="form-fields">
-                        <div className="Names">
+                    <div className="profile-form-fields">
+                        <div className="profile-Names">
                             <InputField
                                 id="firstname"
                                 label=""
@@ -66,7 +66,7 @@ function ViewUserProfile() {
                                 value={load ? "Loading..." : FirstName}
                                 onChange={(e) => { if (!load) setFirstName(e.target.value) }}
                                 disabled
-                                kind='SECONDARY'
+                            // kind='SECONDARY'
                             />
                             <InputField
                                 id="lastname"
@@ -75,10 +75,10 @@ function ViewUserProfile() {
                                 value={load ? "Loading..." : LastName}
                                 onChange={(e) => { if (!load) setLastName(e.target.value) }}
                                 disabled
-                                kind='SECONDARY'
+                            // kind='SECONDARY'
                             />
                         </div>
-                        <div className="PhandEmail">
+                        <div className="profile-PhandEmail">
                             <InputField
                                 id="Phone"
                                 label=""
@@ -86,7 +86,7 @@ function ViewUserProfile() {
                                 value={load ? "Loading..." : Phone}
                                 onChange={(e) => { if (!load) setPhone(e.target.value) }}
                                 disabled
-                                kind='SECONDARY'
+                            // kind='SECONDARY'
                             />
                             <InputField
                                 id="Email"
@@ -95,10 +95,10 @@ function ViewUserProfile() {
                                 value={load ? "Loading..." : Email}
                                 onChange={(e) => { if (!load) setEmail(e.target.value) }}
                                 disabled
-                                kind='SECONDARY'
+                            // kind='SECONDARY'
                             />
                         </div>
-                        <div className="Address">
+                        <div className="profile-Address">
                             <InputField
                                 id="address"
                                 label=""
@@ -106,7 +106,7 @@ function ViewUserProfile() {
                                 value={load ? "Loading..." : Address}
                                 onChange={(e) => { if (!load) setAddress(e.target.value) }}
                                 disabled
-                                kind='SECONDARY'
+                            // kind='SECONDARY'
                             />
                         </div>
                     </div>
