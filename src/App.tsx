@@ -1,46 +1,46 @@
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import About from "./pages/About";
-import Home from "./pages/Home/Home";
-import Transaction from "./pages/Transaction";
 // import Home from "./pages/Home";
 
 
-import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
-import LoginPage from "./pages/loginPage/loginPage";
-import ProductPage from "./pages/productsPage/ProductPage";
-import Register from "./pages/Register/Register";
+import UpdateUserProfile from "./pages/ProfilePage/UpdateProfilePage";
 import WebFlow from "./pages/webFlow/WebFlow";
-import useAuthStore from "./store/AuthStore/authStore";
-import { setToken } from "./utils/httpClientUtil";
+import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
 
 export default function App() {
-  const { authenticate } = useAuthStore();
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setToken(token);
-      authenticate(true);
-    }
-  }, [])
+  // const { authenticate } = useAuthStore();
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     setToken(token);
+  //     authenticate(true);
+  //   }
+  // }, [])
 
   return (
-
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<Register />} />
-
-      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-
-        <Route path="transactions" element={<Transaction />} />
-        <Route path="about" element={<About />} />
-
-        <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
+      <Route path="/" element={<WebFlow />}>
+        <Route path="Edit"
+          element={<UpdateUserProfile />} />
+          <Route path="Profile"
+          element={<ViewUserProfile/>} />
       </Route>
     </Routes>
+
+    // <Routes>
+    //   <Route path="/login" element={<LoginPage />} />
+    //   <Route path="/register" element={<Register />} />
+
+    //   <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+    //     <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+
+    //     <Route path="transactions" element={<Transaction />} />
+    //     <Route path="about" element={<About />} />
+
+    //     <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
+    //   </Route>
+    // </Routes>
 
 
   );

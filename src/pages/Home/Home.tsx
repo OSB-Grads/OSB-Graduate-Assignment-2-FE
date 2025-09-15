@@ -15,7 +15,8 @@ import axiosInstance from "../../utils/httpClientUtil";
 
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
-import { getUserStore } from "../../store/userstore/userstoreGetters";
+import useUserStore from "../../store/userstore/userstore";
+// import { getUserStore } from "../../store/userstore/userstoreGetters";
 
 interface AccountData {
   accountNumber: string;
@@ -72,7 +73,7 @@ export default function Home() {
     string | null
   >(null);
 
-  const { user, getUser } = getUserStore();
+  const { user, getUser } = useUserStore();
   useEffect(() => {
     try {
       if (user == null) {

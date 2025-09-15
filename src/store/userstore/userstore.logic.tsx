@@ -21,10 +21,9 @@ export const getUser = async (set: any) => {
 
     }
 }
-export const updateUser = async (set: any, name: string, email: string, phone: string, address: string) => {
+export const updateUser = async (set: any, name: string, email: string, phone: string, address: string): Promise<void> => {
     try {
-        const updateUserData = await updateUserApi(name, email, phone, address);
-        return updateUserData;
+        await updateUserApi(name, email, phone, address);
     } catch (error) {
         console.log("error occured", error);
         
