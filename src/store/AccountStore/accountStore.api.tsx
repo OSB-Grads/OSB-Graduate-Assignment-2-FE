@@ -1,5 +1,5 @@
 import axiosInstance from "../../utils/httpClientUtil";
-import type { AccountDto,TransactionDTO} from "./AccountStore.interface";
+import type { AccountDto,TransactionDTO } from "./accountStore.interface";
 
 export  const getAccount=async(accountNumber : String):Promise<AccountDto> =>{
     const res = await axiosInstance.get(`/accounts/${accountNumber}`); 

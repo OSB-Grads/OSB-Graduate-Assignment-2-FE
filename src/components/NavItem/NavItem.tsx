@@ -1,17 +1,22 @@
 import React from "react";
 import '../NavItem/NavItem.css'
 
-interface NavItemProp{
-    
+interface INavItemProp{
     label:string;
     icon:string;
+    active?: boolean;
+    handleClick: () => void;
 }
 
-const  NavItem:React.FC<NavItemProp>=({label,icon}) =>{
+const NavItem = ({label,icon, active=false, handleClick}: INavItemProp) =>{
   
   return (
-    <>
-      <div className="navbar-element" >
+      <div className="navbar-element" onClick={handleClick} style={{
+                      backgroundColor: active ? 'var(--color-secondary)' : 'transparent',
+                      paddingLeft: active ? '12px' : '',
+                      cursor: 'pointer',
+                      transition: '0.1s linear all'
+                    }}>
         <div className="navbar-element-logo">
           <div>
             <img src={icon} alt="" />
@@ -22,7 +27,6 @@ const  NavItem:React.FC<NavItemProp>=({label,icon}) =>{
           <span>{label}</span>
         </div>
       </div>
-    </>
   );
 }
 

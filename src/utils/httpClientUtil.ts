@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
     }
 )
 axiosInstance.interceptors.response.use(
-    (response) => response.data,
+    (response) => response,
     (error) => {
         if (error.message === 'Network Error') {
             notify({

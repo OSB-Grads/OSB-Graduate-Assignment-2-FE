@@ -1,5 +1,5 @@
 import React from "react";
-import AccountDetails from "./AccountDetails/AccountDetails";
+import AccountDetails from "./accountDetails/accountDetails";
 
 export default function DummyAccountPage() {
   const dummyAccount = {
@@ -42,7 +42,7 @@ export default function DummyAccountPage() {
 
   return (
     <AccountDetails
-      accountNumber={dummyAccount.accountNumber}
+      // accountNumber={dummyAccount.accountNumber}
       dummyAccount={dummyAccount}
       dummyTransactions={dummyTransactions}
     />

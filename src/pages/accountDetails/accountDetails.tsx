@@ -1,53 +1,90 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
-import useAccountStore from "../../Store/AccountStore/AccountStore";
-import type { AccountDto,TransactionDTO } from "../../Store/AccountStore/AccountStore.interface";
+import useAccountStore from "../../store/AccountStore/accountStore";
+import type { AccountDto,TransactionDTO } from "../../store/AccountStore/accountStore.interface";
 import "./AccountDetails.css";
 
 
 interface AccountDetailsProps {
-  accountNumber: string;
   dummyAccount?: AccountDto;
   dummyTransactions?: TransactionDTO[];
 }
 
-export default function AccountDetails({
-  accountNumber,
+export default function AccountDetails(
+  {
+  
   dummyAccount,
   dummyTransactions,
 }: AccountDetailsProps) {
-  const{account , transactions,loading,error,fetchAccount,fetchTransactions} =useAccountStore();
-  const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
-  const navigate = useNavigate();
+   
+   const { accountNumber:paramAccountNumber } = useParams<{ accountNumber: string }>();
+   console.log(paramAccountNumber);
+   const accountNumber = paramAccountNumber || dummyAccount?.accountNumber;
+   const{account , transactions,loading,error,fetchAccount,fetchTransactions} =useAccountStore();
+   const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
+   const navigate = useNavigate();
 
   useEffect(() => {
     if (dummyAccount && dummyTransactions) return;
-
+    if(!accountNumber)return;
+    
     fetchAccount(accountNumber);
     fetchTransactions(accountNumber);
+    
 
   },[accountNumber,dummyAccount,dummyTransactions]);
 
   const accountData=dummyAccount || account;
   const transactionData=dummyTransactions || transactions;
 
+  
   if(loading && !dummyAccount) return <div className="loading-message">Loading account...</div>;
-  if(error && !dummyAccount) return <div className="error-message">{error}</div>;
-  if (!accountData) return <div className="loading-message"> account Not Found...</div>;
 
+  useEffect(() => {
+  if (error && !dummyAccount) {
+    navigate('/GenericError', { state: { message: error } });
+  }
+}, [error, dummyAccount, navigate]);
+
+  useEffect(() => {
+  if (!loading && !accountData && !dummyAccount) {
+    navigate('/GenericError', { state: { message: "Account Not Found" } });
+  }
+}, [loading, accountData, dummyAccount, navigate]);
+ 
+
+  if (!accountData) {
+  // Can render loading or a "No account found" message
+  return <div>Account details not available</div>;
+}
   const maskedAccountNumber = "**** **** **** " + accountData.accountNumber.slice(-4);
 
   // Prepare table data for TableComponent
 
+ const sortedTransactions = [...transactionData].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
+  // Calculate starting balance before any transactions
+  const totalTransactionAmount = sortedTransactions.reduce((sum, txn) => sum + txn.amount, 0);
+  const startingBalance = accountData.balance - totalTransactionAmount;
+
+  // Calculate running balances
+  let runningBalance = startingBalance;
+
   const tableHeaders = ["Date", "Description", "Amount", "Balance"];
-  const tableData = transactionData.map(txn => ({
-    Date: txn.createdAt,
-    Description: txn.description,
-    Amount: txn.amount < 0 ? `-$${Math.abs(txn.amount)}` : `+$${txn.amount}`,
-    Balance: `$${accountData.balance.toFixed(2)}`,
-  }));
+
+  const tableData = sortedTransactions.map(txn => {
+    runningBalance += txn.amount; // update running balance after this txn
+    return {
+      Date: new Date(txn.createdAt).toLocaleDateString(),
+      Description: txn.description,
+      Amount: txn.amount < 0 ? `-$${Math.abs(txn.amount).toFixed(2)}` : `+$${txn.amount.toFixed(2)}`,
+      Balance: `$${runningBalance.toFixed(2)}`,
+    };
+  });
 
   return (
     <div className="account-details-container">
