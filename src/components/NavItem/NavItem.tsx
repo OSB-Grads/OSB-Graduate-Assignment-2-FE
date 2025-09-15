@@ -19,7 +19,7 @@ const NavItem = ({label,icon, active=false, handleClick}: INavItemProp) =>{
                     }}>
         <div className="navbar-element-logo">
           <div>
-            <img src={icon} alt="" />
+            <img src={icon} alt="nav-element-logo" />
           </div>
         </div>
 
