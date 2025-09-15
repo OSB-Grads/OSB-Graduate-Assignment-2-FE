@@ -6,6 +6,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'; 
 import DashboardAccount from './DashBoardAccount';
 
+
 describe('DashboardAccount component', () => {
   const mockProps = {
     AccountType: 'Savings',

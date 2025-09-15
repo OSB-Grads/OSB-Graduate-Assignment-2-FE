@@ -9,6 +9,7 @@ interface IAccountProp{
   AccountNumber:string;
 }
 
+
 const DashboardAccount:React.FC<IAccountProp>=({AccountType,AccountNumber}) =>{
   return (
     <>
