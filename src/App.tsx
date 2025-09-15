@@ -5,8 +5,8 @@ import "./App.css";
 
 
 import UpdateUserProfile from "./pages/ProfilePage/UpdateProfilePage";
-import WebFlow from "./pages/webFlow/WebFlow";
 import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
+import WebFlow from "./pages/webFlow/WebFlow";
 
 export default function App() {
   // const { authenticate } = useAuthStore();
@@ -23,8 +23,8 @@ export default function App() {
       <Route path="/" element={<WebFlow />}>
         <Route path="Edit"
           element={<UpdateUserProfile />} />
-          <Route path="Profile"
-          element={<ViewUserProfile/>} />
+        <Route path="Profile"
+          element={<ViewUserProfile />} />
       </Route>
     </Routes>
 

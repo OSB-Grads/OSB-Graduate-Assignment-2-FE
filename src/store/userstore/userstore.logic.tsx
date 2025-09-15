@@ -1,4 +1,4 @@
-import { createUserApi, getUserApi, updateUserApi } from "./usestore.api";
+import { createUserApi, updateUserApi } from "./usestore.api";
 
 export const createUser = async (set: any, name: string, email: string, phone: string) => {
     try {
@@ -13,8 +13,15 @@ export const createUser = async (set: any, name: string, email: string, phone: s
 
 export const getUser = async (set: any) => {
     try {
-        const userData = await getUserApi();
-        set({ user: userData });
+        // const userData = await getUserApi();
+        // set({ user: userData });
+        const dummyUser = {
+            name: "John Doe",
+            email: "john@example.com",
+            phone: "1234567890",
+            address: "123 Main St",
+        };
+        set({ user: dummyUser });
 
     } catch (error) {
         console.log("error occurred", error);
@@ -26,6 +33,6 @@ export const updateUser = async (set: any, name: string, email: string, phone: s
         await updateUserApi(name, email, phone, address);
     } catch (error) {
         console.log("error occured", error);
-        
+
     }
 }

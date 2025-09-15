@@ -5,44 +5,44 @@ import InputField from "../../components/inputField/inputField";
 import useUserStore from "../../store/userstore/userstore";
 import './ViewProfilePage.css';
 
-const { user, getUser } = useUserStore();
-const [FirstName, setFirstName] = React.useState("");
-const [LastName, setLastName] = React.useState("");
-const [Phone, setPhone] = React.useState("");
-const [Email, setEmail] = React.useState("");
-const [Address, setAddress] = React.useState("");
-const [load, setload] = React.useState(true);
-const navigate = useNavigate();
-const handleClick = () => {
-    navigate("/Edit");
-}
-useEffect(() => {
-    const fetch = async () => {
-        try {
-            if (!user) {
-                await getUser();
-            }
-        } catch (err) {
-            console.error(err);
-        }
-        finally {
-            setload(false);
-        }
-    };
-    fetch();
-}, []);
-useEffect(() => {
-    const fullname = user?.name || "";
-    const parts = fullname.trim().split(" ");
-    const firstname = parts[0] || "";
-    const lastname = parts.length > 1 ? parts.slice(1).toString() : "";
-    setFirstName(firstname);
-    setLastName(lastname);
-    setPhone(user?.phone ? user.phone.toString() : "");
-    setEmail(user?.email ? user.email.toString() : "");
-    setAddress(user?.address || "");
-}, [user])
 function ViewUserProfile() {
+    const [FirstName, setFirstName] = React.useState("");
+    const [LastName, setLastName] = React.useState("");
+    const [Phone, setPhone] = React.useState("");
+    const [Email, setEmail] = React.useState("");
+    const [Address, setAddress] = React.useState("");
+    const [load, setload] = React.useState(true);
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate("/Edit");
+    }
+    const { user, getUser } = useUserStore();
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                if (!user) {
+                    await getUser();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+            finally {
+                setload(false);
+            }
+        };
+        fetch();
+    }, []);
+    useEffect(() => {
+        const fullname = user?.name || "";
+        const parts = fullname.trim().split(" ");
+        const firstname = parts[0] || "";
+        const lastname = parts.length > 1 ? parts.slice(1).toString() : "";
+        setFirstName(firstname);
+        setLastName(lastname);
+        setPhone(user?.phone ? user.phone.toString() : "");
+        setEmail(user?.email ? user.email.toString() : "");
+        setAddress(user?.address || "");
+    }, [user])
     return (
         <div className="update-body">
             <div className="update-container">
