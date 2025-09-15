@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { createUser, getUser } from "./userstore.logic";
 import type { UserState } from "./userstore.interface";
 
-const UserStore=create<UserState>()(
+const useUserStore=create<UserState>()(
     (set)=>({
         user:undefined,
         createUser:(name,email,phone)=>createUser(set,name,email,phone),
@@ -11,4 +11,4 @@ const UserStore=create<UserState>()(
 
     })
 )
-export default UserStore;
+export default useUserStore;

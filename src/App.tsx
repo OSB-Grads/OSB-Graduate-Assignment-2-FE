@@ -14,12 +14,18 @@ import ProductPage from "./pages/productsPage/ProductPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
+import AccountPage from "./pages/AccountPage/AccountPage";
+
+
+
+import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
+import Header from "./components/Header/Header";
 import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
-import Header from "./components/Header/Header";
 import Maintenance from "./pages/ErrorPages/Maintenance";
+
 
 export default function App() {
   const { authenticate ,isAuthenticated} = useAuthStore();
@@ -28,12 +34,14 @@ export default function App() {
     if (token) {
       setToken(token);
       authenticate(true);
+    } else {
+      authenticate(false);
     }
   }, [])
 
   return (
     <>
-     {!isAuthenticated?<Header></Header>:null}
+      <Header></Header>
     <Routes>
       
       <Route path="/login" element={<LoginPage />} />
@@ -45,8 +53,10 @@ export default function App() {
         <Route path="/transactions" element={< TransactionPage />}/>
         
         <Route path="about" element={<About />} />
-
-        <Route path="/products" element={<ProductPage />} />
+        <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
+        <Route path='/accountsPage' element={<AccountPage/>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
+  
       </Route>
       <Route path = "/error404" element = {< Error404/>}></Route>
       <Route path = "/genericError" element = {< GenericError/>}></Route>
