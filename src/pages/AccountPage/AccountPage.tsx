@@ -4,7 +4,7 @@ import ButtonComponent from "../../components/Button/ButtonComponent";
 import "./AccountPage.css";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import axiosInstance from "../../utils/httpClientUtil";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import Error404 from "../ErrorPages/Error404";
 
@@ -32,6 +32,7 @@ const tableheader = [
 ];
 
 const AccountPage = () => {
+  const navigate = useNavigate();
   const [accounts, setAccounts] =
     React.useState<AccountData[]>(defaultAccounts);
   const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
@@ -74,6 +75,7 @@ const AccountPage = () => {
         </div>
         <ButtonComponent
           label="Create Account"
+          onClick={()=> navigate("/createAccount")}
           type="button"
           variant="secondary"
         />

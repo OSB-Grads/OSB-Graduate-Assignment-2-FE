@@ -1,0 +1,61 @@
+.createAccount-mainContainer{
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 320px;
+    align-items:flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-: 20px;
+}
+
+.accountInputs{
+    padding: 20px;
+    width: 90%;
+}
+
+.button-element{
+  background-color: var(--color-link);
+  color: var(--color-background);
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+  text-align: center;
+  margin: 10px; 
+}
+
+.basicMUIText {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 10px;
+  gap: 31px;
+  background: var(--color-secondary); 
+}
+
+/* Style the input box inside */
+.basicMUIText .MuiInputBase-root {
+  color: var(--color-primary) 
+  font-size : 14px;
+}
+
+/* Label text */
+.basicMUIText .MuiInputLabel-root {
+  color: var(--color-white)
+}
+
+/* Dropdown arrow */
+.basicMUIText .MuiSvgIcon-root {
+  color: var(--color-primary); 
+}
+
+/* Menu items dropdown */
+.MuiMenuItem-root {
+  font-size: 14px;
+  padding: 10px 16px;
+}
+.MuiMenuItem-root:hover {
+  background-color: var(--color-secondary);
+}

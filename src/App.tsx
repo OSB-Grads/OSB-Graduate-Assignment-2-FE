@@ -25,6 +25,7 @@ import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
+import CreateAccountModal from "./pages/CreateAccountModal/CreateAccountModal";
 
 
 export default function App() {
@@ -49,7 +50,7 @@ export default function App() {
 
       <Route path="/" element={<WebFlow />}>
         <Route path="/" element={<Home />} />
-
+        <Route path = "/createAccount" element = {< CreateAccountModal/>}></Route>
         <Route path="/transactions" element={< TransactionPage />}/>
         
         <Route path="about" element={<About />} />
@@ -61,9 +62,9 @@ export default function App() {
       <Route path = "/error404" element = {< Error404/>}></Route>
       <Route path = "/genericError" element = {< GenericError/>}></Route>
       <Route path = "/maintenance" element = {< Maintenance/>}></Route>
+      
     </Routes>
     </>
-
 
   );
 }
