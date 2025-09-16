@@ -1,0 +1,21 @@
+.paymentPageContainer{
+    width:100%
+}
+
+.paymentsInputFieldContainer{
+    width:480px;
+    height:100%;
+}
+
+
+#paymentsInputField{
+    width:480px !important; 
+    height:300px !important;
+    background-color: beige  !important;
+}
+
+.paymentsUserAccountDiv{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

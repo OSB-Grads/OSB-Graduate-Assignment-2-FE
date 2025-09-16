@@ -21,6 +21,7 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
 import Header from "./components/Header/Header";
+import PaymentPage from "./pages/PaymentPage/PaymentPage";
 
 
 export default function App() {
@@ -42,14 +43,16 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
 
-      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}></Route> 
         <Route path="transactions" element={<Transaction />} />
         <Route path="about" element={<About />} />
-        <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
+        <Route path="/products" element={<ProductPage/>}></Route>
         <Route path='/accountsPage' element={<AccountPage/>}></Route>
         <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
+     
         </Route>
       </Routes>
       </>
