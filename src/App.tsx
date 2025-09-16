@@ -10,7 +10,6 @@ import About from "./pages/About";
 import Home from "./pages/Home/Home";
 import LoginPage from "./pages/loginPage/loginPage";
 import ProductPage from "./pages/productsPage/ProductPage";
-import UpdateUserProfile from "./pages/ProfilePage/UpdateProfilePage";
 import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
 import Register from "./pages/Register/Register";
 // import Transaction from "./pages/Transaction";
@@ -45,10 +44,9 @@ export default function App() {
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-          {/* <Route path="transactions" element={<IDBTransaction />} /> */}
-          <Route path="about" element={<About />} />
-          <Route path="edit" element={<UpdateUserProfile />} />
-          <Route path="profile" element={<ViewUserProfile />} />
+          {/* <Route path="/transactions" element={<IDBTransaction />} /> */}
+          <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<ViewUserProfile />} />
           <Route path='/accountsPage' element={<AccountPage />}></Route>
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
         </Route>
