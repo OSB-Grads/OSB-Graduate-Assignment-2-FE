@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
-import "./Register.css";
 import useUserStore from "../../store/userstore/userstore.ts";
+import "./Register.css";
 
 
 function Register() {
@@ -31,24 +31,23 @@ function Register() {
 
     try {
       await signup(username, password);
-      const status = await createUser(name, email, phone);
+      await createUser(name, email, phone);
 
-      if (status === 200 || status === 201) {
-        console.log("Successful"); // will be updated with toast
-      }
-
-      navigate('/')
     } catch (error) {
       console.log("Register Error");
       // error page
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
+
   return (
     <div className="register-body">
       <div className="register-container">
         <form onSubmit={handleRegister} className="register-form">
-          <h2 className="create-heading">Create New User</h2>
+          <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
             <InputField
@@ -169,7 +168,7 @@ function Register() {
 
           <div className="login-link">
             <strong>
-              Already have an account ? <Link to="/LoginPage">Log In</Link>{" "}
+              Already have an account ? <Link to="/login">Log In</Link>{" "}
             </strong>
           </div>
         </form>

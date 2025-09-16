@@ -11,4 +11,5 @@ const useUserStore = create<IUserState>()(
         updateUser: (name, email, phone, address) => updateUser(set, name, email, phone, address)
     })
 )
+
 export default useUserStore;

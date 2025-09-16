@@ -1,7 +1,7 @@
 
 
 .basicMUITableContainer {
-  width: var(--table-width);
+  width: 100%;
 }
 
 .basicMUITable {
@@ -15,17 +15,17 @@
 .basicTableHeader .basicMUITableHeader {
   background-color: var(--primary-table-bg-color);
   color: var(--table-text-color);
-  font-weight: bolder;
-  font-size: var(--table-header-font-size);
+  font-weight:bold ;
+  font-size: calc(var(--table-header-font-size) + 5px);
   text-align: center;
 }
 
 .basicMUITableBody .basicMUITableData {
   background-color: var(--primary-table-bg-color);
-  color: var(--table-text-color);
-  font-size: var(--table-body-font-size);
+  color: var(--color-primary);
+  font-size: calc(var(--table-body-font-size)+ 5px);
   text-align: center;
-  padding: var(--table-padding);
+  padding-bottom: var(--table-padding) ;
 }
 
 .basicMUITableBody tr:hover {

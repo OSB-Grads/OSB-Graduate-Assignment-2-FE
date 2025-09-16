@@ -38,6 +38,33 @@
   --button-padding-left:16px ;
   --button-padding-right: 16px;
 
+  /* Colors */
+  --color-background: #0f1f13; 
+  /* --color-card-bg: #1a2b1f;  */
+  /* --color-input-bg: #152c21; */
+--color-input-border: #38e07a; 
+   /* --color-input-text: #ffffff;  */ 
+  --color-text: #ffffff;
+  --color-placeholder: #7f9c8c; 
+   /* --color-button-bg: #38e07a; */
+   /* --color-button-text: #000000;   */
+   --color-link : #38e07a;
+
+  /* Font sizes */
+  --font-size-small: 14px;
+  --font-size-medium: 16px;
+  --font-size-large: 24px;
+
+  /* Border radius */
+  --border-radius: 8px;
+
+  /* Spacing */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+   --radius-md: 0.5rem;
+  --spacing-xs: 0.25rem;
+  --spacing-md: 0.75rem;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
