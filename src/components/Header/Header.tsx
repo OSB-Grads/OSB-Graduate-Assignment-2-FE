@@ -3,7 +3,7 @@ import logoimage from "../../assets/logo.png";
 import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/AuthStore/authStore";
 import ButtonComponent from "../Button/ButtonComponent";
 
@@ -13,7 +13,7 @@ import ButtonComponent from "../Button/ButtonComponent";
 const Header = () => {
 
   const { isAuthenticated } = useAuthStore();
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="dashborad-headder">
@@ -38,7 +38,9 @@ const Header = () => {
             <ButtonComponent
               label="Help"
               type='button'
-              variant='secondary'></ButtonComponent>
+              variant='secondary'
+              onClick={() => navigate('/help')}
+            ></ButtonComponent>
           )}
         </div>
       </div>

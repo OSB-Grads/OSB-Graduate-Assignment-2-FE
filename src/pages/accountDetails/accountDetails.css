@@ -1,0 +1,130 @@
+/* Container */
+.account-details-container {
+  background-color: var(--color-background);
+  color: var(--color-white);
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+
+.account-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.account-title {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm);
+}
+
+.masked-account-number,
+.account-balance {
+  font-size: var(--font-size-medium);
+  margin: 4px 0;
+}
+
+
+.action-buttons {
+  margin-top: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+
+.tab-navigation {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-white);
+}
+
+.tab {
+  padding: 8px 16px;
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+  cursor: pointer;
+  color: var(--color-white);
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+.tab-active {
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Account Overview */
+.account-overview {
+  background-color: var(--primary-table-bg-color);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.account-overview-header {
+  grid-column: span 2;
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-white);
+  padding-bottom: 4px;
+}
+
+.account-overview div {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-white);
+}
+
+.account-overview div:last-child {
+  border-bottom: none;
+}
+
+.account-overview p {
+  font-size: var(--font-size-small);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.account-overview strong {
+  font-size: var(--font-size-medium);
+  color: var(--color-white);
+}
+
+/* Recent Transactions Container */
+.recent-transactions {
+  background-color: var(--primary-table-bg-color);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  border: 1px solid #7f9c8c;
+}
+
+.transactions-title {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: 4px;
+}
+
+/* Loading */
+.loading-message {
+  font-size: var(--font-size-large);
+  text-align: center;
+  margin-top: var(--spacing-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .account-overview {
+    grid-template-columns: 1fr;
+  }
+  .tab-navigation {
+    flex-direction: column;
+  }
+}

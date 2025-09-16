@@ -1,22 +1,24 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import InputField from "../../components/inputField/inputField";
 import useUserStore from "../../store/userstore/userstore";
 import './ViewProfilePage.css';
 
 function ViewUserProfile() {
-    const [FirstName, setFirstName] = React.useState("");
-    const [LastName, setLastName] = React.useState("");
-    const [Phone, setPhone] = React.useState("");
-    const [Email, setEmail] = React.useState("");
-    const [Address, setAddress] = React.useState("");
-    const [load, setload] = React.useState(true);
-    const navigate = useNavigate();
-    const handleClick = () => {
-        navigate("/Edit");
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [FirstName, setFirstName] = useState("loading...");
+    const [LastName, setLastName] = useState("loading...");
+    const [Phone, setPhone] = useState("loading...");
+    const [Email, setEmail] = useState("loading...");
+    const [Address, setAddress] = useState("loading...");
+    const [load, setload] = useState(true);
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        if (editMode) handleUpdateUser();
+        setEditMode(prev => !prev);
     }
-    const { user, getUser } = useUserStore();
+    const { user, getUser, updateUser } = useUserStore();
     useEffect(() => {
         const fetch = async () => {
             try {
@@ -32,6 +34,10 @@ function ViewUserProfile() {
         };
         fetch();
     }, []);
+
+    const handleUpdateUser = async () => {
+        await updateUser(`${FirstName} ${LastName}`, Email, Phone, Address);
+    };
     useEffect(() => {
         const fullname = user?.name || "";
         const parts = fullname.trim().split(" ");
@@ -46,13 +52,21 @@ function ViewUserProfile() {
     return (
         <div className="profile-body">
             <div className="profile-container">
-                <form onClick={handleClick} className="profile-form">
+                <form onSubmit={handleSubmit} className="profile-form">
                     <div className="profile-form-header">
                         <h2 className="profile-heading">Profile</h2>
                         <div className="profile-form-actions">
-                            <ButtonComponent
-                                label="Edit"
-                            />
+                            {
+                                editMode
+                                    ? <ButtonComponent
+                                        label="Save"
+                                        type="submit"
+                                    />
+                                    : <ButtonComponent
+                                        label="Edit"
+                                        type="submit"
+                                    />
+                            }
                         </div>
                     </div>
                     <div className="profile-form-fields">
@@ -62,8 +76,9 @@ function ViewUserProfile() {
                                 label=""
                                 type="text"
                                 value={load ? "Loading..." : FirstName}
-                                onChange={(e) => { if (!load) setFirstName(e.target.value) }}
-                                disabled
+                                placeholder="Firstname"
+                                onChange={(e) => { setFirstName(e.target.value) }}
+                                disabled={!editMode}
                             // kind='SECONDARY'
                             />
                             <InputField
@@ -71,8 +86,9 @@ function ViewUserProfile() {
                                 label=""
                                 type="text"
                                 value={load ? "Loading..." : LastName}
-                                onChange={(e) => { if (!load) setLastName(e.target.value) }}
-                                disabled
+                                placeholder="Lastname"
+                                onChange={(e) => { setLastName(e.target.value) }}
+                                disabled={!editMode}
                             // kind='SECONDARY'
                             />
                         </div>
@@ -82,8 +98,9 @@ function ViewUserProfile() {
                                 label=""
                                 type="email"
                                 value={load ? "Loading..." : Email}
-                                onChange={(e) => { if (!load) setEmail(e.target.value) }}
-                                disabled
+                                placeholder="Email"
+                                onChange={(e) => { setEmail(e.target.value) }}
+                                disabled={!editMode}
                             // kind='SECONDARY'
                             />
                             <InputField
@@ -91,11 +108,11 @@ function ViewUserProfile() {
                                 label=""
                                 type="tel"
                                 value={load ? "Loading..." : Phone}
-                                onChange={(e) => { if (!load) setPhone(e.target.value) }}
-                                disabled
+                                placeholder="phone"
+                                onChange={(e) => { setPhone(e.target.value) }}
+                                disabled={!editMode}
                             // kind='SECONDARY'
                             />
-
 
                         </div>
                         <div className="profile-Address">
@@ -104,8 +121,9 @@ function ViewUserProfile() {
                                 label=""
                                 type="textarea"
                                 value={load ? "Loading..." : Address}
-                                onChange={(e) => { if (!load) setAddress(e.target.value) }}
-                                disabled
+                                placeholder="Address"
+                                onChange={(e) => { setAddress(e.target.value) }}
+                                disabled={!editMode}
                             // kind='SECONDARY'
                             />
                         </div>

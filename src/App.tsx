@@ -1,13 +1,12 @@
-import { Route, Routes } from "react-router-dom";
-
-import "./App.css";
-// import Home from "./pages/Home";
-
-
-import { useEffect } from "react";
-import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
+import React, { useEffect } from "react";
+import ButtonComponent from './components/Button/ButtonComponent';
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import About from "./pages/About";
+import "./App.css";
+// import Transaction from "./pages/Transaction";
 import Home from "./pages/Home/Home";
+// import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 import LoginPage from "./pages/loginPage/loginPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
@@ -18,8 +17,15 @@ import Alerts from "./components/Toast/Alerts";
 import AccountPage from "./pages/AccountPage/AccountPage";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
+import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
-
+import AccountDetails from "./pages/accountDetails/accountDetails";
+import DummyAccountPage from "./pages/DummyData";
+import TransactionPage from "./pages/TransactionPage/TransactionPage";
+import Error404 from "./pages/ErrorPages/Error404";
+import GenericError from "./pages/ErrorPages/GenericError";
+import Maintenance from "./pages/ErrorPages/Maintenance";
+import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 
 
 export default function App() {
@@ -41,17 +47,22 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-          {/* <Route path="/transactions" element={<IDBTransaction />} /> */}
-          <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<ViewUserProfile />} />
-          <Route path='/accountsPage' element={<AccountPage />}></Route>
-          <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>} />
-        </Route>
-      </Routes>
+        <Route path="/transactions" element={< TransactionPage />}/>
+        
+        <Route path="about" element={<About />} />
+        <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
+        <Route path='/accountsPage' element={<ProtectedRoute><AccountPage/></ProtectedRoute>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage/>}></Route>
+      </Route>
 
+      <Route path="/help" element={<HelpAndSupport />} />
+      <Route path = "/error404" element = {< Error404/>}></Route>
+      <Route path = "/genericError" element = {< GenericError/>}></Route>
+      <Route path = "/maintenance" element = {< Maintenance/>}></Route>
+    </Routes>
     </>
   );
 }
