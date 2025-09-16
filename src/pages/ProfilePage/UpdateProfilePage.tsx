@@ -27,7 +27,7 @@ function UpdateUserProfile() {
     const handleUpdateUser = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        await updateUser(FullName, UpdatedPhone, UpdateEmail, UpdatedAddress);
+        await updateUser(FullName, UpdateEmail, UpdatedPhone, UpdatedAddress);
     };
     return (
         <div className="update-body">
@@ -35,11 +35,10 @@ function UpdateUserProfile() {
                 <form onSubmit={handleUpdateUser} className="update-form">
                     <div className="form-header">
                         <h2 className="profile-heading">Profile</h2>
-                        <div className="form-actions">
+                        <div className="profile-form-actions">
                             <ButtonComponent
                                 label="Save"
                                 type="submit"
-                                variant="primary"
                             />
                         </div>
                     </div>
@@ -64,14 +63,6 @@ function UpdateUserProfile() {
                         </div>
                         <div className="PhandEmail">
                             <InputField
-                                id="Phone"
-                                label=""
-                                type="tel"
-                                placeholder="phone"
-                                value={UpdatedPhone}
-                                onChange={(e) => setUpdatedPhone(e.target.value)}
-                            />
-                            <InputField
                                 id="Email"
                                 label=""
                                 type="email"
@@ -79,6 +70,15 @@ function UpdateUserProfile() {
                                 value={UpdateEmail}
                                 onChange={(e) => setUpdatedEmail(e.target.value)}
                             />
+                            <InputField
+                                id="Phone"
+                                label=""
+                                type="tel"
+                                placeholder="phone"
+                                value={UpdatedPhone}
+                                onChange={(e) => setUpdatedPhone(e.target.value)}
+                            />
+
                         </div>
                         <div className="Address">
                             <InputField

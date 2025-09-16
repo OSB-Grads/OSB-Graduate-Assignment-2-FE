@@ -11,17 +11,26 @@
   color: var(--color-text);
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea {
   padding: 10px;
   width: 100%;
+  max-width: 1080px;
+  resize: vertical;
   border-radius: var(--border-radius);
   border-color: var(--color-secondary);
   border: 1px solid;
   background-color: transparent;
   color: var(--color-text);
+  resize: none;
 }
 
-.form-group.secondary input {
+.form-group textarea {
+  min-height: 90px;
+}
+
+.form-group.secondary input,
+.form-group.secondary textarea {
   border: none;
   border-bottom: 1px solid var(--color-input-white)
 }

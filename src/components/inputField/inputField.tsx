@@ -27,15 +27,19 @@ export default function InputField({
   return (
     <div className={`form-group ${kind.toLowerCase()}`}>
       <label>{label}</label>
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
-      />
+      {
+        type == 'textarea'
+          ? <textarea />
+          : <input
+            id={id}
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            disabled={disabled}
+          />
+      }
     </div>
   );
 }

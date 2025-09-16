@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import logoimage from "../../assets/logo.png";
 import bellIcon from "../../assets/bell-icon.png";
+import logoimage from "../../assets/logo.png";
 import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
 
-import ButtonComponent from "../Button/ButtonComponent";
+import { Link } from "react-router-dom";
 import useAuthStore from "../../store/AuthStore/authStore";
+import ButtonComponent from "../Button/ButtonComponent";
 
 
 
 
 const Header = () => {
-  
-    const { isAuthenticated } = useAuthStore();
-  
+
+  const { isAuthenticated } = useAuthStore();
+
   return (
     <>
       <div className="dashborad-headder">
@@ -29,14 +29,16 @@ const Header = () => {
                 <img src={bellIcon} alt="bell-icon" />
               </div>
               <div className="profile-info">
-                <img src={profileImage} alt="" />
+                <Link to="/profile">
+                  <img src={profileImage} alt="" />
+                </Link>
               </div>
             </>
           ) : (
-             <ButtonComponent
-             label="Help"
-             type='button'
-             variant='secondary'></ButtonComponent>
+            <ButtonComponent
+              label="Help"
+              type='button'
+              variant='secondary'></ButtonComponent>
           )}
         </div>
       </div>

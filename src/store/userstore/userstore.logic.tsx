@@ -1,3 +1,5 @@
+import { notify } from "../../components/Toast/Alerts";
+import { ToastTypes } from "../../components/Toast/interfaces";
 import { createUserApi, getUserApi, updateUserApi } from "./usestore.api";
 
 export const createUser = async (set: any, name: string, email: string, phone: string) => {
@@ -15,13 +17,7 @@ export const getUser = async (set: any) => {
     try {
         const userData = await getUserApi();
         set({ user: userData });
-        // const dummyUser = {
-        //     name: "John Doe",
-        //     email: "john@example.com",
-        //     phone: "1234567890",
-        //     address: "123 Main St",
-        // };
-        // set({ user: dummyUser });
+
 
     } catch (error) {
         console.log("error occurred", error);
@@ -31,8 +27,15 @@ export const getUser = async (set: any) => {
 export const updateUser = async (set: any, name: string, email: string, phone: string, address: string): Promise<void> => {
     try {
         await updateUserApi(name, email, phone, address);
+        notify({
+            type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
+            message: 'profile Updated Successfully',
+        });
     } catch (error) {
-        console.log("error occured", error);
+        notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: 'Error!!! ',
+        });
 
     }
 }

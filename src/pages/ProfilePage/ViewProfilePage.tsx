@@ -52,8 +52,6 @@ function ViewUserProfile() {
                         <div className="profile-form-actions">
                             <ButtonComponent
                                 label="Edit"
-                                type="button"
-                                variant="primary"
                             />
                         </div>
                     </div>
@@ -80,15 +78,6 @@ function ViewUserProfile() {
                         </div>
                         <div className="profile-PhandEmail">
                             <InputField
-                                id="Phone"
-                                label=""
-                                type="tel"
-                                value={load ? "Loading..." : Phone}
-                                onChange={(e) => { if (!load) setPhone(e.target.value) }}
-                                disabled
-                            // kind='SECONDARY'
-                            />
-                            <InputField
                                 id="Email"
                                 label=""
                                 type="email"
@@ -97,6 +86,17 @@ function ViewUserProfile() {
                                 disabled
                             // kind='SECONDARY'
                             />
+                            <InputField
+                                id="Phone"
+                                label=""
+                                type="tel"
+                                value={load ? "Loading..." : Phone}
+                                onChange={(e) => { if (!load) setPhone(e.target.value) }}
+                                disabled
+                            // kind='SECONDARY'
+                            />
+
+
                         </div>
                         <div className="profile-Address">
                             <InputField
