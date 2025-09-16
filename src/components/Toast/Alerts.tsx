@@ -4,7 +4,7 @@ import './Alerts.css';
 import type { IToastProps } from "./interfaces";
 import Toast from "./ToastComponent";
 
-let notify: (instance: IToastProps) => void = () => {};
+let notify: (instance: IToastProps) => void = () => { };
 
 const Alerts = () => {
     const [alerts, setAlerts] = useState<IToastProps[]>([]);

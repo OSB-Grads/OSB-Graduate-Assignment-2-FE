@@ -1,77 +1,71 @@
+.web-window {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
 
-.web-window{
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
+  width: 100vw;
+  min-height: 100vh;
 
-width: 100vw;
-height: 1136px;
-min-height: 800px;
+  background: #122117;
 
-background: #122117;
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
 
 }
 
-.web-window >div{
+.web-window>div {
   /* Depth 1, Frame 0 */
 
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
+  /* Auto layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
 
-width: 1280px;
-height: 1136px;
+  width: 1280px;
+  height: 1136px;
 
 
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
 
 }
-.below-window{
+
+.below-window {
   /* Depth 2, Frame 1 */
 
-/* Auto layout */
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: flex-start;
-padding: 0px;
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
 
-gap: 4px;
+  gap: 4px;
 
-width: 1508px;
-height: 1071px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-align-self: stretch;
-flex-grow: 0;
+  width: 1508px;
+  height: 1071px;
 
 
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+
+  width: 100vw;
 }
-.main-component{
+
+.main-component {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
- 
+
 }
-
-
-
-
-
-

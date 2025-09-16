@@ -5,17 +5,20 @@ import About from "./pages/About";
 import "./App.css";
 // import Transaction from "./pages/Transaction";
 import Home from "./pages/Home/Home";
+// import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 import LoginPage from "./pages/loginPage/loginPage";
+import ProductPage from "./pages/productsPage/ProductPage";
+import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
 import Register from "./pages/Register/Register";
+// import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Alerts from "./components/Toast/Alerts";
+import AccountPage from "./pages/AccountPage/AccountPage";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
-import AccountPage from "./pages/AccountPage/AccountPage";
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
-import Header from "./components/Header/Header";
-import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
-
-import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
 import DummyAccountPage from "./pages/DummyData";
 import TransactionPage from "./pages/TransactionPage/TransactionPage";
@@ -26,23 +29,23 @@ import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 
 
 export default function App() {
-  const { authenticate ,isAuthenticated} = useAuthStore();
+  const { authenticate } = useAuthStore();
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setToken(token);
       authenticate(true);
-    } else {
-      authenticate(false);
     }
   }, [])
-return (
-  <>
-    <Header />
-    <Routes>
-      
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<Register />} />
+
+  return (
+    <>
+      <Header></Header>
+      <Alerts />
+      <Routes>
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
 
       <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -61,7 +64,5 @@ return (
       <Route path = "/maintenance" element = {< Maintenance/>}></Route>
     </Routes>
     </>
-
-
   );
 }
