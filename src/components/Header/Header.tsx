@@ -29,7 +29,7 @@ const Header = () => {
                 <img src={bellIcon} alt="bell-icon" />
               </div>
               <div className="profile-info">
-                <img src={profileImage} alt="" />
+                <img src={profileImage} alt="profile-image" />
               </div>
             </>
           ) : (
