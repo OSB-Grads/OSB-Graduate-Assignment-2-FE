@@ -49,7 +49,7 @@ function Register() {
     <div className="register-body">
       <div className="register-container">
         <form onSubmit={handleRegister} className="register-form">
-          <h2 className="create-heading">Create New User</h2>
+          <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
             <InputField

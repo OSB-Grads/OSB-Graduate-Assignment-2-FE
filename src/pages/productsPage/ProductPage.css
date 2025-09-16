@@ -1,13 +1,21 @@
+h2 {
+    font-family: 'Spline Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
 
-
-.productBoxCssClass{
-     padding: 5px;
-     display: flex;
-     gap: 16px;
-     flex-direction: column;
+    color: var(--color-white);
 }
 
-.productPaperCss{
+.productBoxCssClass {
+    padding: 5px;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+}
+
+.productPaperCss {
     background-color: var(--color-secondary) !important;
     color: var(--color-white) !important;
     padding: 16px;
@@ -22,7 +30,7 @@
     margin: 0;
 }
 
-.productContentCss{
+.productContentCss {
     flex: 1;
 }
 
@@ -32,6 +40,6 @@
     align-items: center;
 }
 
-.productPaperCss >p:last-child {
+.productPaperCss>p:last-child {
     font-size: 24px;
 }
