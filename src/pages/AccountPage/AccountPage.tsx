@@ -1,4 +1,4 @@
-import React, { useEffect, type JSX } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 
 import "./AccountPage.css";
@@ -7,6 +7,7 @@ import axiosInstance from "../../utils/httpClientUtil";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import Error404 from "../ErrorPages/Error404";
+import CreateAccountModal from "../CreateAccountModal/CreateAccountModal";
 
 interface AccountData {
   accountNumber: string;
@@ -33,6 +34,7 @@ const tableheader = [
 
 const AccountPage = () => {
   const navigate = useNavigate();
+  const [open,setOpen]=useState(false);
   const [accounts, setAccounts] =
     React.useState<AccountData[]>(defaultAccounts);
   const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
@@ -57,6 +59,10 @@ const AccountPage = () => {
       });
   }, []);
 
+  const addAccount = (acc: any) => {
+    setAccounts(prev => [...prev, acc]);
+  }
+
   const table = accounts.map((item) => ({
     AccountNumber: item.accountNumber,
     Account: item.accountType,
@@ -66,6 +72,14 @@ const AccountPage = () => {
       <Link to={`/account-details/${item.accountNumber}`} className="table-link">View Details</Link>
     ),
   }));
+    useEffect(()=>{
+      if(accountsError!=null){
+       navigate('/error404')
+      }
+    },[])
+    
+  
+  
 
   return (
     <div className="accountpage-container">
@@ -75,18 +89,17 @@ const AccountPage = () => {
         </div>
         <ButtonComponent
           label="Create Account"
-          onClick={()=> navigate("/createAccount")}
+          onClick={()=> setOpen(true)}
           type="button"
           variant="secondary"
         />
+        <CreateAccountModal open={open} setOpen={setOpen} addAccount={addAccount}/>
       </div>
-      {!accountsLoading && !accountsError ? (
+      
         <div className="accounts-dispaly-page">
           <TableComponent tableheader={tableheader} tabledata={table} />
         </div>
-      ) : (
-        <Error404></Error404>
-      )}
+      
     </div>
   );
 };

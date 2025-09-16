@@ -26,6 +26,7 @@ import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
 import CreateAccountModal from "./pages/CreateAccountModal/CreateAccountModal";
+import Alerts from "./components/Toast/Alerts";
 
 
 export default function App() {
@@ -42,15 +43,16 @@ export default function App() {
 
   return (
     <>
-      <Header></Header>
+      <Header />
+      <Alerts />
     <Routes>
       
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
 
-      <Route path="/" element={<WebFlow />}>
-        <Route path="/" element={<Home />} />
-        <Route path = "/createAccount" element = {< CreateAccountModal/>}></Route>
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        {/* <Route path = "/createAccount" element = {< CreateAccountModal/>}></Route> */}
         <Route path="/transactions" element={< TransactionPage />}/>
         
         <Route path="about" element={<About />} />

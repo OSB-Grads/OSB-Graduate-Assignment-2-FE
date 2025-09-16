@@ -34,7 +34,7 @@ function Register() {
     try {
       await signup(username, password);
       await createUser(name, email, phone);
-     
+
     } catch (error) {
       console.log("Register Error");
       // error page
@@ -42,13 +42,13 @@ function Register() {
   };
 
   useEffect(() => {
-    if(isAuthenticated) navigate("/");
+    if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
 
   return (
-    <div className="register-body">
-      <div className="register-container">
-        <form onSubmit={handleRegister} className="register-form">
+    <div className="register-container">
+      <main className="register-main">
+        <form onSubmit={handleRegister} >
           <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
@@ -174,7 +174,7 @@ function Register() {
             </strong>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
 }
