@@ -43,8 +43,8 @@ return (
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
 
-      <Route path="/" element={<WebFlow />}>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
         <Route path="/transactions" element={< TransactionPage />}/>
         
