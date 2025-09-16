@@ -5,7 +5,8 @@ import profileImage from "../../assets/profile-image.png";
 import "./Header.css";
 
 import ButtonComponent from "../Button/ButtonComponent";
-import useAuthStore from "../../Store/AuthStore/authStore";
+import useAuthStore from "../../store/AuthStore/authStore";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 
@@ -13,6 +14,8 @@ import useAuthStore from "../../Store/AuthStore/authStore";
 const Header = () => {
   
     const { isAuthenticated } = useAuthStore();
+    const navigate = useNavigate();
+
   
   return (
     <>
@@ -29,14 +32,16 @@ const Header = () => {
                 <img src={bellIcon} alt="bell-icon" />
               </div>
               <div className="profile-info">
-                <img src={profileImage} alt="" />
+                <img src={profileImage} alt="profile-image" />
               </div>
             </>
           ) : (
              <ButtonComponent
              label="Help"
              type='button'
-             variant='secondary'></ButtonComponent>
+             variant='secondary'
+             onClick={()=>navigate('/help')}
+             ></ButtonComponent>
           )}
         </div>
       </div>
