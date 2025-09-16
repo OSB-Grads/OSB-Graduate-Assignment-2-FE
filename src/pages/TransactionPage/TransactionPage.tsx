@@ -53,20 +53,32 @@ const TransactionPage: React.FC = () => {
           type="text"
           placeholder="Search"
           value = {value}
-          onChange={(e)=>{setFilter(e.target.value)}}   
+          // onChange={(e)=>{setFilter(e.target.value)}}   
+          onChange={(e) => {
+          setValue(e.target.value);
+          setFilter(e.target.value);
+}}
           />
       </div>
       <div className="transactiontableCss">
-        <TableComponent tableheader={headersForTransactionTable} tabledata={[]}>
+        <TableComponent tableheader={headersForTransactionTable} tabledata={paginatedData} >
         </TableComponent>
-        <TablePagination
+        {/* <TablePagination
         component="div"
         count={transactions.length}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[]}
-        />
+        /> */}
+        <TablePagination
+          component="div"
+          count={transactions.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[10]}   // instead of []
+/>
       </div>
       </div>
     </>
