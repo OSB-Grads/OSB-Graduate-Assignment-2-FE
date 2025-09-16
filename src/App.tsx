@@ -54,6 +54,7 @@ export default function App() {
         
         <Route path="about" element={<About />} />
         <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
+        <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
         <Route path='/accountsPage' element={<ProtectedRoute><AccountPage/></ProtectedRoute>}></Route>
         <Route path='/account-details/:accountNumber' element={<AccountDetailPage/>}></Route>
       </Route>
