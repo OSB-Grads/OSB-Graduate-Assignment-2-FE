@@ -25,6 +25,7 @@ import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
+import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 
 
 export default function App() {
@@ -47,17 +48,18 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
 
-      <Route path="/" element={<WebFlow />}>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
         <Route path="/transactions" element={< TransactionPage />}/>
         
         <Route path="about" element={<About />} />
         <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
-        <Route path='/accountsPage' element={<AccountPage/>}></Route>
-        <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
-  
+        <Route path='/accountsPage' element={<ProtectedRoute><AccountPage/></ProtectedRoute>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage/>}></Route>
       </Route>
+
+      <Route path="/help" element={<HelpAndSupport />} />
       <Route path = "/error404" element = {< Error404/>}></Route>
       <Route path = "/genericError" element = {< GenericError/>}></Route>
       <Route path = "/maintenance" element = {< Maintenance/>}></Route>

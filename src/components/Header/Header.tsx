@@ -6,6 +6,7 @@ import "./Header.css";
 
 import ButtonComponent from "../Button/ButtonComponent";
 import useAuthStore from "../../store/AuthStore/authStore";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 
@@ -13,6 +14,8 @@ import useAuthStore from "../../store/AuthStore/authStore";
 const Header = () => {
   
     const { isAuthenticated } = useAuthStore();
+    const navigate = useNavigate();
+
   
   return (
     <>
@@ -36,7 +39,9 @@ const Header = () => {
              <ButtonComponent
              label="Help"
              type='button'
-             variant='secondary'></ButtonComponent>
+             variant='secondary'
+             onClick={()=>navigate('/help')}
+             ></ButtonComponent>
           )}
         </div>
       </div>
