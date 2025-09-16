@@ -21,6 +21,7 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
 import Header from "./components/Header/Header";
+import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 
 
 export default function App() {
@@ -45,12 +46,14 @@ export default function App() {
       <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-        <Route path="transactions" element={<Transaction />} />
-        <Route path="about" element={<About />} />
+        <Route path="/transactions" element={<Transaction />} />
         <Route path="/products" element={<ProtectedRoute><ProductPage/></ProtectedRoute>}></Route>
-        <Route path='/accountsPage' element={<AccountPage/>}></Route>
+        <Route path='/accountsPage' element={<ProtectedRoute><AccountPage/></ProtectedRoute>}></Route>
         <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
-        </Route>
+      </Route>
+
+      <Route path="/help" element={<HelpAndSupport />} />
+
       </Routes>
       </>
     

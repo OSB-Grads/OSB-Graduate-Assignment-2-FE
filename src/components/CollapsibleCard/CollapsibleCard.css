@@ -1,0 +1,64 @@
+/* CollapsibleCard.css */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+ 
+  width:896px;
+  background: #264533 !important; 
+  border-radius: 8px;
+  padding-bottom: 10px;
+
+  box-sizing: border-box;
+ 
+  /* background-clip: padding-box; */
+
+  color: white;
+  margin-bottom: 16px; 
+  max-height: 300px;
+  overflow: auto;
+}
+
+
+.card-content {
+  background: transparent !important;
+
+  color: #94C4A8;
+  font-family: 'Spline Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 17px;
+line-height: 21px;
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+}
+
+
+
+
+.container {
+  background: transparent !important;
+  padding: 0 !important;
+  line-height: 1.5;
+}
+
+
+.card-header {
+  background: transparent !important;
+  padding: 0;
+  width: 100%;
+}
+
+.card-title {
+  font-family: 'Spline Sans';
+font-style: normal;
+font-weight: 500;
+font-size: 17px;
+line-height: 21px;
+  color: white;
+}

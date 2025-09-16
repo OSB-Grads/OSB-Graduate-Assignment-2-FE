@@ -170,7 +170,7 @@ function Register() {
 
           <div className="login-link">
             <strong>
-              Already have an account ? <Link to="/LoginPage">Log In</Link>{" "}
+              Already have an account ? <Link to="/login">Log In</Link>{" "}
             </strong>
           </div>
         </form>
