@@ -12,7 +12,6 @@ const WebFlow: FC = () => {
          
         <div  className="below-window">
 
-
           <Leftnavbar></Leftnavbar>
             <main className="main-component">
             <Outlet />
