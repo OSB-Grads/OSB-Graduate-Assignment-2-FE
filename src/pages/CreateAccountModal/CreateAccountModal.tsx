@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import "./CreateAccount.css"
 import InputField from '../../components/inputField/inputField';
 import ButtonComponent from '../../components/Button/ButtonComponent';
-import useProductStore from '../../store/ProductStore/ProductStore';
 import { MenuItem, Modal, TextField } from '@mui/material';
 import axiosInstance from '../../utils/httpClientUtil';
 import { notify } from '../../components/Toast/Alerts';
 import { ToastTypes } from '../../components/Toast/interfaces';
+import  useProductStore from '../../store/ProductStore/ProductStore'
+
 
 
 function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.SetStateAction<boolean>>, addAccount: (acc:any)=>void}) {
@@ -33,7 +34,7 @@ function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.Set
             type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
             message: "Account created successfully",
         })
-        props.addAccount(data);
+        props.addAccount(data)
         handleClose();
     };
     return (

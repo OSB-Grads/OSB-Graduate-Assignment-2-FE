@@ -6,7 +6,6 @@ import TableComponent from "../../components/TableComponent/TableComponent";
 import axiosInstance from "../../utils/httpClientUtil";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import Error404 from "../ErrorPages/Error404";
 import CreateAccountModal from "../CreateAccountModal/CreateAccountModal";
 
 interface AccountData {
@@ -72,11 +71,12 @@ const AccountPage = () => {
       <Link to={`/account-details/${item.accountNumber}`} className="table-link">View Details</Link>
     ),
   }));
-    useEffect(()=>{
-      if(accountsError!=null){
-       navigate('/error404')
-      }
-    },[])
+
+  useEffect(()=>{
+    if(accountsError!=null){
+      navigate('/genericError')
+    }
+  },[])
     
   
   
