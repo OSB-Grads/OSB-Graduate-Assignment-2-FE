@@ -5,7 +5,6 @@ import InputField from "../../components/inputField/inputField.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/httpClientUtil.ts";
 
-import { getUserStore } from "../../store/userstore/userstoreGetters.ts";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
 import useUserStore from "../../store/userstore/userstore.ts";
 

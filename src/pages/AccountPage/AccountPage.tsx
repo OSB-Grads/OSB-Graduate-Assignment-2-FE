@@ -1,27 +1,10 @@
 import React, { useEffect, type JSX } from "react";
 import ButtonComponent from "../../components/Button/ButtonComponent";
-
 import "./AccountPage.css";
 import TableComponent from "../../components/TableComponent/TableComponent";
-import axiosInstance from "../../utils/httpClientUtil";
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
 import Error404 from "../ErrorPages/Error404";
-
-interface AccountData {
-  accountNumber: string;
-  accountType: string;
-  balance: number;
-  accountUpdated: string;
-}
-const defaultAccounts: AccountData[] = [
-  {
-    accountNumber: "1234567890",
-    accountType: "Savings",
-    balance: 2500.75,
-    accountUpdated: "2025-09-09T12:30:00",
-  },
-];
+import useAccountStore from "../../store/AccountStore/accountStore";
 
 const tableheader = [
   "AccountNumber",
@@ -32,31 +15,13 @@ const tableheader = [
 ];
 
 const AccountPage = () => {
-  const [accounts, setAccounts] =
-    React.useState<AccountData[]>(defaultAccounts);
-  const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
-  const [accountsError, setAccountsError] = React.useState<string | null>(null);
+    const {accounts,accountError,accountLoading,fetchAllAccounts}=useAccountStore();
 
-  useEffect(() => {
-    axiosInstance
-      .get("/api/v1/accounts")
-      .then((res) => {
-        const accountsdetails = res.data.map((account: AccountData) => ({
-          accountNumber: account.accountNumber,
-          accountType: account.accountType,
-          balance: account.balance,
-          accountUpdated: account.accountUpdated,
-        }));
-        setAccounts(accountsdetails);
-        setAccountsLoading(false);
-      })
-      .catch((err) => {
-        setAccountsError("Failed to fetch the accounts");
-        setAccountsLoading(false);
-      });
-  }, []);
+    useEffect(()=>{
+      fetchAllAccounts();
+    },[])
 
-  const table = accounts.map((item) => ({
+    const table = accounts.map((item) => ({
     AccountNumber: item.accountNumber,
     Account: item.accountType,
     Balance: item.balance,
@@ -78,7 +43,7 @@ const AccountPage = () => {
           variant="secondary"
         />
       </div>
-      {!accountsLoading && !accountsError ? (
+      {!accountError && !accountLoading ? (
         <div className="accounts-dispaly-page">
           <TableComponent tableheader={tableheader} tabledata={table} />
         </div>
