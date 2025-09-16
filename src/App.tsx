@@ -1,32 +1,32 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-
-import "./App.css";
+import React, { useEffect } from "react";
+import ButtonComponent from './components/Button/ButtonComponent';
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import About from "./pages/About";
+import "./App.css";
+
 import Home from "./pages/Home/Home";
 
-// import Home from "./pages/Home";
 
 
 import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 import LoginPage from "./pages/loginPage/loginPage";
-import ProductPage from "./pages/productsPage/ProductPage";
 import Register from "./pages/Register/Register";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
 import AccountPage from "./pages/AccountPage/AccountPage";
-
-
-
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
 import Header from "./components/Header/Header";
+import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
+
+import ProductPage from "./pages/productsPage/ProductPage";
 import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
 import CreateAccountModal from "./pages/CreateAccountModal/CreateAccountModal";
 import Alerts from "./components/Toast/Alerts";
+import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 
 
 export default function App() {
@@ -64,9 +64,18 @@ export default function App() {
       <Route path = "/error404" element = {< Error404/>}></Route>
       <Route path = "/genericError" element = {< GenericError/>}></Route>
       <Route path = "/maintenance" element = {< Maintenance/>}></Route>
-      
+    
+        <Route path='/accountsPage' element={<ProtectedRoute><AccountPage/></ProtectedRoute>}></Route>
+        <Route path='/account-details/:accountNumber' element={<AccountDetailPage/>}></Route>
+      </Route>
+
+      <Route path="/help" element={<HelpAndSupport />} />
+      <Route path = "/error404" element = {< Error404/>}></Route>
+      <Route path = "/genericError" element = {< GenericError/>}></Route>
+      <Route path = "/maintenance" element = {< Maintenance/>}></Route>
     </Routes>
     </>
+
 
   );
 }

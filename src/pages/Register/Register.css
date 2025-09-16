@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+=======
+ .register-body{
+  background: var(--color-background);
+  width: 100vw;
+  height: 100vh;
+}
+
+.register-form{
+  width: 27%;
+  height: 75%;
+}
+
+>>>>>>> 9b91fdc8e4edd049dbd4bb3f54f6ebd3eb28c2da
 .register-container {
   display: flex;
   justify-content: center;

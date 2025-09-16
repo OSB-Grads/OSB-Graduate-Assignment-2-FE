@@ -46,9 +46,15 @@ function Register() {
   }, [isAuthenticated]);
 
   return (
+<<<<<<< HEAD
     <div className="register-container">
       <main className="register-main">
         <form onSubmit={handleRegister} >
+=======
+    <div className="register-body">
+      <div className="register-container">
+        <form onSubmit={handleRegister} className="register-form">
+>>>>>>> 9b91fdc8e4edd049dbd4bb3f54f6ebd3eb28c2da
           <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
