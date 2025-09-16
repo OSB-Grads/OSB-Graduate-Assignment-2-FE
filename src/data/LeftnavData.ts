@@ -1,6 +1,7 @@
 import homeIcon from '../assets/Home-icon.png'
 import accountIcon from '../assets/Accounts.png'
 import paymentsIcon from '../assets/Payments.png'
+import productIcon from "../assets/Product.png"
 
 export type navItem={
     id:number,
@@ -29,7 +30,7 @@ export const LeftnavItems:navItem[]=[
     {
         id:3,
         label:"Products",
-        icon:accountIcon,
+        icon:productIcon,
         path:'/products'
     },
     {

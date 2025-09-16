@@ -29,7 +29,7 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 
 
 export default function App() {
-  const { authenticate ,isAuthenticated} = useAuthStore();
+  const { authenticate, isAuthenticated } = useAuthStore();
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -43,27 +43,27 @@ export default function App() {
   return (
     <>
       <Header></Header>
-    <Routes>
-      
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<Register />} />
+      <Routes>
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
 
 
-      <Route path="/" element={<WebFlow />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-        <Route path="/transactions" element={< TransactionPage />}/>
-        
-        <Route path="about" element={<About />} />
-        <Route path="/products" element={<ProductPage/>}></Route>
-        <Route path='/accountsPage' element={<AccountPage/>}></Route>
-        <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
-  
-      </Route>
-      <Route path = "/error404" element = {< Error404/>}></Route>
-      <Route path = "/genericError" element = {< GenericError/>}></Route>
-      <Route path = "/maintenance" element = {< Maintenance/>}></Route>
-    </Routes>
+          <Route path="/transactions" element={< TransactionPage />} />
+          <Route path="about" element={<About />} />
+          <Route path="/products" element={<ProductPage />}></Route>
+          <Route path='/accountsPage' element={<AccountPage />}></Route>
+          <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
+          <Route path='/payments' element={<PaymentPage/>}/>
+    
+        </Route>
+        <Route path="/error404" element={< Error404 />}></Route>
+        <Route path="/genericError" element={< GenericError />}></Route>
+        <Route path="/maintenance" element={< Maintenance />}></Route>
+      </Routes>
     </>
 
 

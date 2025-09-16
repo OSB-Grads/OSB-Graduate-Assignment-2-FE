@@ -16,6 +16,12 @@
 
 .paymentsUserAccountDiv{
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    height:300px !important;
+    display:flex;
+    justify-content: space-evenly;
+}
+
+#paymentFromAccountSelectionList{
+    width: 50%;
+    color: var(--color-white) !important;
 }
