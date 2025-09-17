@@ -12,6 +12,10 @@ export interface AccountState {
   accounts:AccountDto[]
   accountLoading: boolean;
   accountError: string | null;
+  loadingFetchAccount:boolean,
+  errorFetchAccount:string|null,
+  loadingCreateAccount:boolean,
+  errorCreateAccount:string |null,
   fetchAccount: (accountNumber: string) => Promise<void>;
   fetchAllAccounts:()=>Promise<void>
   CreateAccount:(balance:string,accountType:string ,productType:string)=>Promise<void>

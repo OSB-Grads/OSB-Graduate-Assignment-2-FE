@@ -7,9 +7,9 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
    
     try {
       const result= await getAccount(accountNumber);
-      set(()=>({ account:result,accountLoading: false }));
+      set(()=>({ account:result,loadingFetchAccount: false }));
     } catch (err: any) {
-      set({ accountError: err.message || "Failed to fetch account", accountLoading: false });
+      set({ errorFetchAccount: err.message || "Failed to fetch account", loadingFetchAccount: false });
     }
   }
 
@@ -31,16 +31,16 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
 
   export const CreateAccount=async (set:any,balance:string,accountType:string ,productType:string) => {
     try {
-      set(()=>({accountLoading:true}))
+      set(()=>({loadingCreateAccount:true}))
       const newAccount=await postAccount(balance,accountType,productType);
       set((state:any) => ({
       accounts: [...state.accounts, newAccount],
-      accountLoading: false,
+      loadingCreateAccount: false,
       }));
       
     } catch (error) {
       set(()=>({
-        accountError:"error in creating the accounts",accountLoading:false
+        errorCreateAccount:"error in creating the accounts",loadingCreateAccount:false
       }))
       
     }

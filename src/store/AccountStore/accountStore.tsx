@@ -10,6 +10,10 @@ const useAccountStore = create<AccountState>(
         accounts:[],
         accountLoading:false,
         accountError:null,
+        loadingFetchAccount:false,
+        errorFetchAccount:null,
+        loadingCreateAccount:false,
+        errorCreateAccount:null,
         fetchAccount:(accountNumber)=>fetchAccount(set,accountNumber),
         fetchAllAccounts:()=>fetchAllAccounts(set),
         CreateAccount:(balance,accountType,productType)=>CreateAccount(set,balance,accountType,productType)
