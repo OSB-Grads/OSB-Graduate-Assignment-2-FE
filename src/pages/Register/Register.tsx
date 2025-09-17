@@ -53,7 +53,6 @@ function Register() {
 
   useEffect(() => {
     if (isAuthenticated) navigate("/");
-    if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
 
   return (
