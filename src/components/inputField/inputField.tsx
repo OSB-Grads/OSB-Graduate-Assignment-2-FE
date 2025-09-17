@@ -9,6 +9,8 @@ interface InputFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  kind?: 'PRIMARY' | 'SECONDARY';
+  disabled?: boolean;
 }
 
 export default function InputField({
@@ -19,18 +21,25 @@ export default function InputField({
   value,
   onChange,
   onKeyDown,
+  kind = 'PRIMARY',
+  disabled = false,
 }: InputFieldProps) {
   return (
-    <div className="form-group">
+    <div className={`form-group ${kind.toLowerCase()}`}>
       <label>{label}</label>
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-      />
+      {
+        type == 'textarea'
+          ? <textarea />
+          : <input
+            id={id}
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            disabled={disabled}
+          />
+      }
     </div>
   );
 }

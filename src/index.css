@@ -7,11 +7,11 @@
   --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   --line-height: 1.5;
   --font-weight: 400;
+  --color-primary: #38E07A ;
+  --color-secondary: #264533 ;
   --color-background:#122117;
   --color-white:#EEEEEE;
   --color-black:#333333;
-  --color-primary: #38E07A ;
-  --color-secondary: #264533 ;
   --opacity:0.5;
 
   /* Font Sizes */
@@ -20,7 +20,7 @@
   --font-size-large:24px;
 
   /* Border radius */
-  --border-radius:8px;
+  --border-radius:4px;
 
   /* Spacing */
   --spacing-sm:8px;

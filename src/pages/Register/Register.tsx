@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import "./Register.css";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
-import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/httpClientUtil.ts";
-
 import useAuthStore from "../../store/AuthStore/authStore.ts";
 import useUserStore from "../../store/userstore/userstore.ts";
+import "./Register.css";
+
 
 function Register() {
   const [username, setUsername] = React.useState("");
@@ -33,7 +32,7 @@ function Register() {
     try {
       await signup(username, password);
       await createUser(name, email, phone);
-     
+
     } catch (error) {
       console.log("Register Error");
       // error page
@@ -41,7 +40,7 @@ function Register() {
   };
 
   useEffect(() => {
-    if(isAuthenticated) navigate("/");
+    if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
 
   return (
