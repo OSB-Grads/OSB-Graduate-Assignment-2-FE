@@ -4,28 +4,27 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import About from "./pages/About";
 import Home from "./pages/Home/Home";
-
 // import Home from "./pages/Home";
-
-
 import ProtectedRoute from "./components/ProtectedRoutes/protectedroutes";
 import LoginPage from "./pages/loginPage/loginPage";
+import ViewUserProfile from "./pages/ProfilePage/ViewProfilePage";
 import Register from "./pages/Register/Register";
+// import Transaction from "./pages/Transaction";
+import Header from "./components/Header/Header";
+import Alerts from "./components/Toast/Alerts";
+import AccountPage from "./pages/AccountPage/AccountPage";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
-import AccountPage from "./pages/AccountPage/AccountPage";
 
 
 
 import AccountDetailPage from './pages/AccountDetailsPage'
 import { setToken } from "./utils/httpClientUtil";
-import Header from "./components/Header/Header";
 import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
 
-import Alerts from "./components/Toast/Alerts";
 import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import ProductPage from "./pages/productsPage/ProductPage";
 
@@ -37,8 +36,6 @@ export default function App() {
     if (token) {
       setToken(token);
       authenticate(true);
-    } else {
-      authenticate(false);
     }
   }, [])
 

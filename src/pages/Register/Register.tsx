@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import "./Register.css";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
-import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
 import useUserStore from "../../store/userstore/userstore.ts";
 import { notify } from "../../components/Toast/Alerts.tsx";
 import { ToastTypes } from "../../components/Toast/interfaces.tsx";
+import "./Register.css";
+
 
 function Register() {
   const [username, setUsername] = React.useState("");
@@ -51,6 +52,7 @@ function Register() {
   };
 
   useEffect(() => {
+    if (isAuthenticated) navigate("/");
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
 

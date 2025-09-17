@@ -1,7 +1,8 @@
 export interface UserData {
- name: String;
+  name: String;
   email: String;
   phone: String;
+  address: string;
 }
 
 export interface UserState{
