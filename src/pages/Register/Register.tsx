@@ -4,6 +4,8 @@ import ButtonComponent from "../../components/Button/ButtonComponent.tsx";
 import InputField from "../../components/inputField/inputField.tsx";
 import useAuthStore from "../../store/AuthStore/authStore.ts";
 import useUserStore from "../../store/userstore/userstore.ts";
+import { notify } from "../../components/Toast/Alerts.tsx";
+import { ToastTypes } from "../../components/Toast/interfaces.tsx";
 import "./Register.css";
 
 
@@ -25,17 +27,27 @@ function Register() {
     e.preventDefault();
 
     if (password != confirmPassword) {
-      console.log("The password doesnt match");
-      return;
+      notify({
+            type: ToastTypes.WARNING as keyof typeof ToastTypes,
+            message: "Password Mismatch",
+        })
     }
 
     try {
       await signup(username, password);
-      await createUser(name, email, phone);
+      
+      await createUser(name, email, phone, address);
+      notify({
+            type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
+            message: "User created successfully",
+        })
+        
 
     } catch (error) {
-      console.log("Register Error");
-      // error page
+      notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: "Error while Registering",
+        })
     }
   };
 
@@ -44,9 +56,9 @@ function Register() {
   }, [isAuthenticated]);
 
   return (
-    <div className="register-body">
-      <div className="register-container">
-        <form onSubmit={handleRegister} className="register-form">
+    <div className="register-container">
+      <main className="register-main">
+        <form onSubmit={handleRegister} >
           <div className="create-heading"><h2>Create New User</h2></div>
 
           <div className="form-fields">
@@ -172,7 +184,7 @@ function Register() {
             </strong>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
 }

@@ -7,7 +7,7 @@ interface InputFieldProps {
   type?: string;
   placeholder?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   kind?: 'PRIMARY' | 'SECONDARY';
   disabled?: boolean;
@@ -29,7 +29,15 @@ export default function InputField({
       <label>{label}</label>
       {
         type == 'textarea'
-          ? <textarea />
+          ? (
+            <textarea
+              id={id}
+              placeholder={placeholder}
+              value={value}
+              onChange={onChange}
+              disabled={disabled}
+            />
+          )
           : <input
             id={id}
             type={type}

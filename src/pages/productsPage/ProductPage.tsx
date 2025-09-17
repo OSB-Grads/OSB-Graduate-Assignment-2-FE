@@ -27,7 +27,7 @@ const ProductPage: React.FC = () => {
                                         <div className="productContentCss">
                                             {product.productId.includes("FD") ?
                                                 <p>FIXED DEPOSIT-{product.productId}</p> :
-                                                product.productId.includes("SAV") ? <p>SAVING ACCOUNT-{product.productId}</p> : <p>product.productId</p>}
+                                                product.productId.includes("SAV") ? <p>SAVINGS-{product.productId}</p> : <p>product.productId</p>}
                                             {product.description}
                                         </div>
                                         <div className="productInterestContentCss">

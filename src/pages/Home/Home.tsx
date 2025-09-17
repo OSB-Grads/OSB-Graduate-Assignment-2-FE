@@ -10,116 +10,45 @@ import {
 import LatestNotificationTransferIcon from "../../assets/Latest-notification-transfer-icon.png";
 
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import axiosInstance from "../../utils/httpClientUtil";
-
-
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
-import useUserStore from "../../store/userstore/userstore";
-// import { getUserStore } from "../../store/userstore/userstoreGetters";
+import useUserStore from "../../store/userstore/userstore.ts";
+import useTransactionStore from "../../store/transactionStore/transactionStore";
+import useAccountStore from "../../store/AccountStore/accountStore.tsx";
 
-interface AccountData {
-  accountNumber: string;
-  accountType: string;
-  balance: number;
-  accountCreated: string;
-  accountUpdated: string;
-}
 
-interface TransactionData {
-  fromAccount: string;
-  toAccount: string;
-  description: string;
-  amount: number;
-  createdAt: string;
-}
-
-const defaultAccounts: AccountData[] = [
-  {
-    accountNumber: "1234567890",
-    accountType: "Savings",
-    balance: 2500.75,
-    accountCreated: "2022-01-15T10:00:00",
-    accountUpdated: "2025-09-09T12:30:00",
-  },
-];
-
-const defaultTransactions: TransactionData[] = [
-  {
-    fromAccount: "1234567890",
-    toAccount: "9876543210",
-    description: "Transaction done successfully",
-    amount: 100001,
-    createdAt: "2 hours",
-  },
-];
 
 export default function Home() {
 
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string | null>(null);
 
-
-  const [accounts, setAccounts] =
-    React.useState<AccountData[]>(defaultAccounts);
-  const [accountsLoading, setAccountsLoading] = React.useState<boolean>(true);
-  const [accountsError, setAccountsError] = React.useState<string | null>(null);
-
-  const [transactions, setTransactions] =
-    React.useState<TransactionData[]>(defaultTransactions);
-  const [transactionsLoading, setTransactionsLoading] =
-    React.useState<boolean>(true);
-  const [transactionsError, setTransactionsError] = React.useState<
-    string | null
-  >(null);
-
   const { user, getUser } = useUserStore();
+  const { transactions, fetchTransactionDetails, loading, error } = useTransactionStore();
+  const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
+
   useEffect(() => {
-    try {
-      if (user == null) {
-        getUser();
-        setUserLoading(false);
+    const fetchData = async () => {
+      try {
+        if (!user) {
+          await getUser();
+        }
+
+        await fetchAllAccounts(),
+        await fetchTransactionDetails(),
+
+
         setUserError(null);
+      } catch (err: any) {
+        setUserError(err.message || 'Error loading data');
+      } finally {
+        setUserLoading(false);
       }
-    } catch (err: any) {
-      setUserError(err);
-    }
+    };
+
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    axiosInstance
-      .get("/api/v1/accounts")
-      .then((res) => {
-        setAccounts(res.data);
-        setAccountsLoading(false);
-      })
-      .catch((err) => {
-        setAccountsError("failed to fetch the accounts");
-        setAccountsLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    axiosInstance
-      .get("/api/v1/transactions")
-      .then((res) => {
-        const formatData = res.data.map((item: any) => ({
-          fromAccount: item.fromAccount,
-          toAccount: item.toAccount,
-          description: item.description,
-          amount: item.amount,
-          createdAt: formatDistanceToNow(parseISO(item.createdAt), {
-            addSuffix: true,
-          }),
-        }));
-        setTransactions(formatData);
-        setTransactionsLoading(false);
-      })
-      .catch((err) => {
-        setTransactionsError("failed to fetch the transaction");
-        setTransactionsLoading(false);
-      });
-  }, []);
 
   return (
     <div className="dashboard">
@@ -139,8 +68,8 @@ export default function Home() {
 
       <div className="account-details">
         <div>
-          {/* {accountsError && <p>{accountsError}</p>}  */}
-          {accounts.map((account, index) => (
+
+          {!accountError && !accountLoading && accounts.map((account, index) => (
             <DashBoardAccount
               key={index}
               AccountType={account.accountType}
@@ -175,11 +104,12 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            transactions.map((item, index) => (
+            !error && !loading && transactions.map((item, index) => (
               <QuickActionItem
                 key={index}
-                label={`${item.description} : amount of ${item.amount} is transfered from ${item.fromAccount} to ${item.toAccount}`}
-                subLabel={item.createdAt}
+                label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
+
+                subLabel={formatDistanceToNow(parseISO(item.createdAt))}
                 icon={LatestNotificationTransferIcon}
               ></QuickActionItem>
             ))}
