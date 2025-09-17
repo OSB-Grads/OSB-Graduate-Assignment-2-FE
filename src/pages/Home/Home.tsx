@@ -10,9 +10,6 @@ import {
 import LatestNotificationTransferIcon from "../../assets/Latest-notification-transfer-icon.png";
 
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import axiosInstance from "../../utils/httpClientUtil";
-
-
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
 import useUserStore from "../../store/userstore/userstore.ts";
@@ -27,30 +24,30 @@ export default function Home() {
   const [userError, setUserError] = React.useState<string | null>(null);
 
   const { user, getUser } = useUserStore();
-  const {transactions,fetchTransactionDetails,loading,error}=useTransactionStore();
-  const {accounts,accountError,accountLoading,fetchAllAccounts}=useAccountStore();
+  const { transactions, fetchTransactionDetails, loading, error } = useTransactionStore();
+  const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
 
   useEffect(() => {
-    try {
-      if (user == null) {
-        getUser();
-        setUserLoading(false);
+    const fetchData = async () => {
+      try {
+        if (!user) {
+          await getUser();
+        }
+
+        await fetchAllAccounts(),
+        await fetchTransactionDetails(),
+
+
         setUserError(null);
+      } catch (err: any) {
+        setUserError(err.message || 'Error loading data');
+      } finally {
+        setUserLoading(false);
       }
-    } catch (err: any) {
-      setUserError(err);
-    }
+    };
+
+    fetchData();
   }, []);
-
-   useEffect(()=>{
-      fetchAllAccounts();
-    },[])
-
-
-  useEffect(()=>{
-    fetchTransactionDetails();
-  },[])
-
 
 
   return (
@@ -71,7 +68,7 @@ export default function Home() {
 
       <div className="account-details">
         <div>
-          
+
           {!accountError && !accountLoading && accounts.map((account, index) => (
             <DashBoardAccount
               key={index}
@@ -107,7 +104,7 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error&& !loading && transactions.map((item, index) => (
+            !error && !loading && transactions.map((item, index) => (
               <QuickActionItem
                 key={index}
                 label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
