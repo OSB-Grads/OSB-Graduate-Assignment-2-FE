@@ -18,12 +18,7 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
-
-  
-  useEffect(() => {
-    fetchAllAccounts();
-  }, [])
+  const { accounts, accountError, accountLoading} = useAccountStore();
 
   const table = accounts.map((item) => ({
     AccountNumber: item.accountNumber,
