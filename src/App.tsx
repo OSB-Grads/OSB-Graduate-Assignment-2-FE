@@ -25,7 +25,6 @@ import Maintenance from "./pages/ErrorPages/Maintenance";
 
 import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
-import Alerts from "./components/Toast/Alerts";
 import ProductPage from "./pages/productsPage/ProductPage";
 
 
