@@ -12,7 +12,12 @@ export type TransactionType = "DEPOSIT" | "WITHDRAW" | "TRANSFER";
 
 export interface transactionState{
     transactions : transactionDTO[],
+    transactionsFromAccountnumber:transactionDTO[],
     loading : boolean,
     error : boolean,
-    fetchTransactionDetails : () => Promise<void>
+    loadingTransactionsByAccount: boolean;
+    errorTransactionsByAccount: boolean | null;
+    fetchTransactionDetails : () => Promise<void>,
+    fetchTransactionFromAccountnumber:(accountNumber:string)=>Promise<void>
+
 }

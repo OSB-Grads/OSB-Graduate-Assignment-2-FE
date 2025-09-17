@@ -1,26 +1,22 @@
 export interface AccountDto {
   accountNumber: string;
-  accountType: "SAVINGS" | "FIXED_DEPOSIT";
+  accountType: AcccountType;
   balance: number;
   accountCreated: string;
   accountUpdated: string;
 }
-
-export interface TransactionDTO {
-  fromAccount: string;
-  toAccount: string;
-  description: string;
-  amount: number;
-  status: "COMPLETED" | "PENDING" | "FAILED";
-  type: "DEPOSIT" | "WITHDRAWAL" | "TRANSFER";
-  createdAt: string;
-}
+export type AcccountType="SAVINGS"|"FIXED_DEPOSIT";
 
 export interface AccountState {
   account: AccountDto | null;
-  transactions: TransactionDTO[];
-  loading: boolean;
-  error: string | null;
+  accounts:AccountDto[]
+  accountLoading: boolean;
+  accountError: string | null;
+  loadingFetchAccount:boolean,
+  errorFetchAccount:string|null,
+  loadingCreateAccount:boolean,
+  errorCreateAccount:string |null,
   fetchAccount: (accountNumber: string) => Promise<void>;
-  fetchTransactions: (accountNumber: string) => Promise<void>;
+  fetchAllAccounts:()=>Promise<void>
+  CreateAccount:(balance:string,accountType:string ,productType:string)=>Promise<void>
 }
