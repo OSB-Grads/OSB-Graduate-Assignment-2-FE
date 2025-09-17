@@ -55,7 +55,7 @@ export default function App() {
 
           <Route path="about" element={<About />} />
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
-          <Route path='/accountsPage' element={<AccountPage />}></Route>
+          <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
           <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
 
           <Route path="/error404" element={< Error404 />}></Route>
@@ -63,7 +63,6 @@ export default function App() {
           <Route path="/maintenance" element={< Maintenance />}></Route>
 
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
-          <Route path='/account-details/:accountNumber' element={<AccountDetailPage />}></Route>
         </Route>
 
         <Route path="/help" element={<HelpAndSupport />} />
