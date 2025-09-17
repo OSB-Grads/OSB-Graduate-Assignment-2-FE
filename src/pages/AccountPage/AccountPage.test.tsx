@@ -3,12 +3,12 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import AccountPage from "./AccountPage";
 
-// Mock the CreateAccountModal so it doesn't import product store or anything complex
+
 jest.mock("../CreateAccountModal/CreateAccountModal", () => (props: any) =>
   props.open ? <div>Mock CreateAccountModal Open</div> : null
 );
 
-// Mock the account store like in your Home test example
+
 jest.mock("../../store/AccountStore/accountStore.tsx", () => ({
   __esModule: true,
   default: () => ({
@@ -21,7 +21,7 @@ jest.mock("../../store/AccountStore/accountStore.tsx", () => ({
       },
       {
         accountNumber: "87654321",
-        accountType: "CHECKING",
+        accountType: "FIXED_DEPOSIT",
         balance: 500,
         accountUpdated: new Date("2024-09-16T12:00:00Z").toISOString(),
       },
@@ -31,7 +31,6 @@ jest.mock("../../store/AccountStore/accountStore.tsx", () => ({
   }),
 }));
 
-// Mock react-router-dom's useNavigate and Link
 jest.mock("react-router-dom", () => ({
   __esModule: true,
   ...jest.requireActual("react-router-dom"),
@@ -64,23 +63,23 @@ describe("AccountPage Component", () => {
       </Router>
     );
 
-    // Check for account numbers
+
     expect(screen.getByText("12345678")).toBeInTheDocument();
     expect(screen.getByText("87654321")).toBeInTheDocument();
 
-    // Check for account types
+    
     expect(screen.getByText("SAVINGS")).toBeInTheDocument();
-    expect(screen.getByText("CHECKING")).toBeInTheDocument();
+    expect(screen.getByText("FIXED_DEPOSIT")).toBeInTheDocument();
 
-    // Check for balances
+    
     expect(screen.getByText("1000")).toBeInTheDocument();
     expect(screen.getByText("500")).toBeInTheDocument();
 
-    // Check for "View Details" links
+    
     const links = screen.getAllByText("View Details");
     expect(links.length).toBe(2);
 
-    // Check if links href are correct
+    
     expect(links[0].getAttribute("href")).toBe("/account-details/12345678");
     expect(links[1].getAttribute("href")).toBe("/account-details/87654321");
   });
@@ -95,7 +94,7 @@ describe("AccountPage Component", () => {
     const createButton = screen.getByRole("button", { name: /create account/i });
     fireEvent.click(createButton);
 
-    // Since we mocked CreateAccountModal, check if mock text is shown when open
+
     expect(screen.getByText("Mock CreateAccountModal Open")).toBeInTheDocument();
   });
 
