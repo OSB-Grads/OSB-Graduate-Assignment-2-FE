@@ -15,7 +15,8 @@ import axiosInstance from "../../utils/httpClientUtil";
 
 import DashBoardAccount from "../../components/DashboardAccount/DashBoardAccount";
 import QuickActionItem from "../../components/QuickActionItem/QuickActionItem";
-import { getUserStore } from "../../Store/userstore/userstoreGetters";
+import { getUserStore } from "../../store/userstore/userstoreGetters";
+
 
 
 interface AccountData {

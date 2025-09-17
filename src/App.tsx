@@ -24,6 +24,7 @@ import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
 import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
+import Alerts from "./components/Toast/Alerts";
 
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <>
       <Header></Header>
+      <Alerts/>
       <Routes>
 
         <Route path="/login" element={<LoginPage />} />

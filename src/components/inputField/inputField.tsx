@@ -9,6 +9,7 @@ interface InputFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  style?: any;
 }
 
 export default function InputField({
@@ -19,11 +20,13 @@ export default function InputField({
   value,
   onChange,
   onKeyDown,
+  style,
 }: InputFieldProps) {
   return (
     <div className="form-group">
       <label>{label}</label>
       <input
+        style={style}
         id={id}
         type={type}
         placeholder={placeholder}

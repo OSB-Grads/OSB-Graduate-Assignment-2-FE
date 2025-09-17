@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import useProductStore from "../../Store/ProductStore/ProductStore";
+import useProductStore from "../../store/ProductStore/ProductStore";
 import { Box, Paper } from "@mui/material";
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import "./ProductPage.css"
 import Error404 from "../ErrorPages/Error404";
+
 
 
 const ProductPage: React.FC = () => {

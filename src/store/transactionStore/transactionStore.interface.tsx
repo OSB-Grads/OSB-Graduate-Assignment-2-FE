@@ -15,4 +15,6 @@ export interface transactionState{
     loading : boolean,
     error : boolean,
     fetchTransactionDetails : () => Promise<void>
+    transferAmountBetweenAccounts:(fromAccountNumber:string,toAccountNumber:string,amount:number)=>Promise<void>
+    
 }

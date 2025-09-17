@@ -1,13 +1,14 @@
 import {create} from "zustand";
 import type { transactionState } from "./transactionStore.interface";
-import { fetchTransactionDetails } from "./transactionStore.login";
+import { fetchTransactionDetails, transferAmountBetweenAccounts } from "./transactionStore.login";
 
 
 const useTransactionStore = create<transactionState>((set)=>({
     transactions :[],
     loading:false,
     error:false,
-    fetchTransactionDetails: () => fetchTransactionDetails(set)
+    fetchTransactionDetails: () => fetchTransactionDetails(set),
+    transferAmountBetweenAccounts:(fromAccountNumber:string,toAccountNumber:string,amount:number)=>transferAmountBetweenAccounts(set,fromAccountNumber,toAccountNumber,amount)
 }));
 
 export default useTransactionStore;

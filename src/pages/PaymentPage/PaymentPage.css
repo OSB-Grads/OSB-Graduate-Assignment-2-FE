@@ -1,27 +1,93 @@
-.paymentPageContainer{
-    width:100%
+/* .paymentPageContainer {
+    width: 100%
 }
 
-.paymentsInputFieldContainer{
-    width:480px;
-    height:100%;
+.paymentsInputFieldContainer {
+    width: 480px;
+    height: 100%;
+    align-items: center;
 }
 
 
-#paymentsInputField{
-    width:480px !important; 
-    height:300px !important;
-    background-color: beige  !important;
+#paymentsInputField {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+
+    width: 480px;
+    height: 120.5px;
+
+    border-bottom: 1px solid #366347;
+    border-radius: 0px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
 }
 
-.paymentsUserAccountDiv{
-    width: 100%;
-    height:300px !important;
-    display:flex;
+.paymentsUserAccountDiv {
+    width: 100% !important;
+    display: flex;
     justify-content: space-evenly;
 }
 
-#paymentFromAccountSelectionList{
+#paymentFromAccountSelectionList {
     width: 50%;
     color: var(--color-white) !important;
+}
+
+#paymentToAccountSelectionList {
+    width: 50%;
+    color: var(--color-white) !important;
+
+}
+
+.paymentsButtonComponent {
+    width: fit-content;
+} */
+
+.paymentPageContainer {
+    width:100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.paymentPageContainer h1 {
+  width: 100%;
+}
+
+.paymentsInputFieldContainer {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#paymentsInputField {
+  text-align: center;
+  font-size: 32px;
+  color: var(--color-white);
+}
+
+.paymentsUserAccountDiv {
+  display: flex;
+  width:100%;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.paymentsUserAccountDiv > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.paymentsToAccountNumberInput {
+  width: 100%;
+  margin-top: 16px;
 }
