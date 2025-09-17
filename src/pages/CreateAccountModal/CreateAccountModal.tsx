@@ -10,7 +10,7 @@ import  useProductStore from '../../store/ProductStore/ProductStore'
 
 
 
-function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.SetStateAction<boolean>>, addAccount: (acc:any)=>void}) {
+function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.SetStateAction<boolean>>}) {
 
     // const [open, setOpen] = React.useState(false);
     // const handleOpen = () => setOpen(true);
@@ -34,7 +34,7 @@ function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.Set
             type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
             message: "Account created successfully",
         })
-        props.addAccount(data)
+       
         handleClose();
     };
     return (
