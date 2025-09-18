@@ -1,6 +1,6 @@
 import { notify } from "../../components/Toast/Alerts";
 import { ToastTypes } from "../../components/Toast/interfaces";
-import { transactionsApi, transferAmountAPI } from "./transactionStore.api";
+import { getTransactionsFromAccountnumber, transactionsApi, transferAmountAPI } from "./transactionStore.api";
 
 export const fetchTransactionDetails = async (set: any) => {
     try {
@@ -25,10 +25,18 @@ export const transferAmountBetweenAccounts = async (set: any, fromAccountNumber:
         })
     } catch (error) {
         console.log("Error in transaction fetch", error)
-        set(() => ({ error: true, loading: false }));
-        notify({
-            type: ToastTypes.ERROR as keyof typeof ToastTypes,
-            message: 'Transaction Failed',
-        });
+        set(() => ({error : true, loading: false}));
+    }
+}
+
+export const fetchTransactionFromAccountnumber=async(set:any,accountNumber:string)=>{
+    try {
+        set(()=>({loadingTransactionsByAccount:true}));
+        const result=await getTransactionsFromAccountnumber(accountNumber);
+        set(()=>({transactionsFromAccountnumber:result,loadingTransactionsByAccount:false}))
+        
+    } catch (error) {
+        console.log("Error in transaction fetch from account number", error)
+        set(() => ({errorTransactionsByAccount: true, loadingTransactionsByAccount: false}));
     }
 }
