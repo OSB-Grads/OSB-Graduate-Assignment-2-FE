@@ -50,13 +50,13 @@ export default function App() {
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-          <Route path="/transactions" element={< TransactionPage />} />
-          <Route path="about" element={<About />} />
-          <Route path="/products" element={<ProductPage />}></Route>
-          <Route path="/profile" element={<ViewUserProfile></ViewUserProfile>}/>
-          <Route path='/accountsPage' element={<AccountPage />}></Route>
-          <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
-          <Route path='/payments' element={<PaymentPage/>}/>
+          <Route path="/transactions" element={<ProtectedRoute>< TransactionPage /></ProtectedRoute>} />
+          <Route path="about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+          <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
+          <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
+          <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
+          <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetailPage></AccountDetailPage></ProtectedRoute>}></Route>
+          <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
     
         </Route>
            <Route path="/help" element={<HelpAndSupport />} />

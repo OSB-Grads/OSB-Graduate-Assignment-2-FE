@@ -35,7 +35,6 @@ export default function Home() {
         if (!user) {
           await getUser();
         }
-        console.log(transactions);
         setUserError(null);
       } catch (err: any) {
         setUserError(err.message || 'Error loading data');
