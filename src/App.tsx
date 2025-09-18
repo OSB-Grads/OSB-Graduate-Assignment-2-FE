@@ -48,16 +48,18 @@ export default function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
           <Route path="/transactions" element={< TransactionPage />} />
           <Route path="about" element={<About />} />
           <Route path="/products" element={<ProductPage />}></Route>
+          <Route path="/profile" element={<ViewUserProfile></ViewUserProfile>}/>
           <Route path='/accountsPage' element={<AccountPage />}></Route>
           <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
           <Route path='/payments' element={<PaymentPage/>}/>
     
         </Route>
+           <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/error404" element={< Error404 />}></Route>
         <Route path="/genericError" element={< GenericError />}></Route>
         <Route path="/maintenance" element={< Maintenance />}></Route>

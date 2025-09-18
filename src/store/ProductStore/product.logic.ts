@@ -8,11 +8,11 @@ export const fetchProductDetails=async(set:any)=>{
         const response = await apiCallToTheProductsEndpoint();
         console.log("Products Information Successful");
         set(()=>({products:response.data}));
-         set(()=>({loading:false}))
+         set(()=>({loading:false,error:false}))
        }
        catch(error){
         console.log("Error Has Occured",error);
-        set(()=>({error:true}));
+        set(()=>({error:true,loading:false}));
        }
 
 }

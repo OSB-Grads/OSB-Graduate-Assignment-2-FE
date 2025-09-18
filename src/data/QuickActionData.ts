@@ -33,7 +33,7 @@ export const QuickActionListData:QuickList[]=[
      id: 3,
     label:'Create Account',
     subLabel:'Create an account',
-    path: '',
+    path: '/accountsPage',
     icon: quick3,
 }
 
