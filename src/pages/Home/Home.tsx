@@ -27,17 +27,15 @@ export default function Home() {
   const { transactions, fetchTransactionDetails, loading, error } = useTransactionStore();
   const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (!user) {
           await getUser();
         }
-
-        await fetchAllAccounts(),
-        await fetchTransactionDetails(),
-
-
+        console.log(transactions);
         setUserError(null);
       } catch (err: any) {
         setUserError(err.message || 'Error loading data');
@@ -45,10 +43,31 @@ export default function Home() {
         setUserLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchAccounts=async () => {
+      try {
+        await fetchAllAccounts();
+      }
+      catch (err) {
+        console.log("Error While Fetching account details", err);
+      }
+    }
+    fetchAccounts();
+  }, []);
+  useEffect(() => {
+    const fetchTransactions=async () => {
+      try {
+        await fetchTransactionDetails();
+      }
+      catch (err) {
+        console.log("Error While Fetching Transaction details", err);
+      }
+    }
+    fetchTransactions();
+  }, []);
 
   return (
     <div className="dashboard">
@@ -69,13 +88,15 @@ export default function Home() {
       <div className="account-details">
         <div>
 
-          {!accountError && !accountLoading && accounts.map((account, index) => (
-            <DashBoardAccount
-              key={index}
-              AccountType={account.accountType}
-              AccountNumber={account.accountNumber}
-            />
-          ))}
+          {!accountError && !accountLoading && accounts.map((account, index) => {
+            return (
+              <DashBoardAccount
+                key={index}
+                AccountType={account.accountType}
+                AccountNumber={account.accountNumber}
+              />
+            )
+          })}
         </div>
       </div>
 
@@ -104,15 +125,16 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error && !loading && transactions.map((item, index) => (
-              <QuickActionItem
-                key={index}
-                label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
-
-                subLabel={formatDistanceToNow(parseISO(item.createdAt))}
-                icon={LatestNotificationTransferIcon}
-              ></QuickActionItem>
-            ))}
+            !error && !loading && transactions.map((item, index) => {
+              return (
+                <QuickActionItem
+                  key={index}
+                  label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
+                  subLabel={formatDistanceToNow(parseISO(item.createdAt))}
+                  icon={LatestNotificationTransferIcon}
+                ></QuickActionItem>
+              )
+            })}
         </div>
       </div>
     </div>
