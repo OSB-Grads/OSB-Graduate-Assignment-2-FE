@@ -26,7 +26,7 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    if(isAuthenticated) navigate("/");
+    if(isAuthenticated) navigate("/dashboard");
   }, [isAuthenticated]);
 
   return (

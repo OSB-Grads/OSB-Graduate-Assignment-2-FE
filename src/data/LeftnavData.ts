@@ -1,6 +1,8 @@
-import accountIcon from '../assets/Accounts.png';
-import homeIcon from '../assets/Home-icon.png';
-import profileIcon from '../assets/Navbar-profile-image.png';
+import homeIcon from '../assets/Home-icon.png'
+import accountIcon from '../assets/Accounts.png'
+import paymentsIcon from '../assets/Payments.png'
+import productIcon from "../assets/Product.png"
+import profileIcon from "../assets/Navbar-Profile-image.png"
 
 export type navItem = {
     id: number,
@@ -16,7 +18,7 @@ export const LeftnavItems: navItem[] = [
         id: 1,
         label: "Dashboard",
         icon: homeIcon,
-        path: '/'
+        path: '/dashboard'
 
     },
     {
@@ -27,17 +29,23 @@ export const LeftnavItems: navItem[] = [
 
     },
     {
-        id: 3,
-        label: "Products",
-        icon: accountIcon,
-        path: '/products'
+        id:3,
+        label:"Products",
+        icon:productIcon,
+        path:'/products'
     },
     {
-        id: 5,
-        label: "Profile",
-        icon: profileIcon,
-        path: '/Profile'
+       id:4,
+        label:"Payments",
+        icon:paymentsIcon,
+        path:'/payments' 
+    },{
+        id:5,
+        label:"Profile",
+        icon:profileIcon,
+        path:'/profile'
     }
+
 
 
 ]

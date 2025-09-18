@@ -18,7 +18,8 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { accounts, accountError, accountLoading} = useAccountStore();
+  const { accounts, errorFetchAccount, accountLoading} = useAccountStore();
+  console.log("Accounty Details",accounts,errorFetchAccount);
 
   const table = accounts.map((item) => ({
     AccountNumber: item.accountNumber,
@@ -31,7 +32,7 @@ const AccountPage = () => {
   }));
 
   useEffect(() => {
-    if (accountError!= null) {
+    if (errorFetchAccount) {
       navigate('/genericError')
     }
   }, [])
@@ -53,7 +54,7 @@ const AccountPage = () => {
         />
         <CreateAccountModal open={open} setOpen={setOpen} />
       </div>
-      {!accountError && !accountLoading &&
+      {!errorFetchAccount && !accountLoading &&
         <div className="accounts-dispaly-page">
           <TableComponent tableheader={tableheader} tabledata={table} />
         </div>}

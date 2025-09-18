@@ -7,9 +7,9 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
    
     try {
       const result= await getAccount(accountNumber);
-      set(()=>({ account:result,loadingFetchAccount: false }));
+      set(()=>({ account:result,loadingFetchAccount: false,errorFetchAccount:false }));
     } catch (err: any) {
-      set({ errorFetchAccount: err.message || "Failed to fetch account", loadingFetchAccount: false });
+      set({ errorFetchAccount: false, loadingFetchAccount: false });
     }
   }
 
@@ -23,7 +23,7 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
       }))
     } catch (error) {
       set(()=>({
-        accountError:"error in fetchAllAccounts",accountLoading:false
+        accountError:false,accountLoading:false
       }))
     }
     

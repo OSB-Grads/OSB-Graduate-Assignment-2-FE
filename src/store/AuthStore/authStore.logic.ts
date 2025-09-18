@@ -42,6 +42,8 @@ export const logout = (set: any) => {
     set({
         isAuthenticated: false,
     })
+    console.log("LogOut INtiated")
     localStorage.removeItem('token');
+    console.log("Token Deletion successful")
     setToken(null);
 }
