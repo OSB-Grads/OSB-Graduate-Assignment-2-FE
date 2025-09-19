@@ -5,9 +5,8 @@ import TableComponent from "../../components/TableComponent/TableComponent";
 import useAccountStore from "../../store/AccountStore/accountStore";
 import useTransactionStore from "../../store/transactionStore/transactionStore";
 import "./AccountDetails.css";
-import type { AccountDto } from "../../store/AccountStore/accountStore.interface";
-import type { transactionDTO } from "../../store/transactionStore/transactionStore.interface";
-import useTransactionStore from "../../store/transactionStore/transactionStore";
+
+
 
 export default function AccountDetails() {
   const { accountNumber: paramAccountNumber } = useParams<{ accountNumber: string }>();
