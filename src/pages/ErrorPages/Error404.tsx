@@ -18,7 +18,7 @@ function Error404() {
           label="Go to Dashboard"
           type="button"
           variant="primary"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
         />
       
     </div>
