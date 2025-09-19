@@ -1,91 +1,98 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import useAccountStore from "../../store/AccountStore/accountStore";
-
-import "./AccountDetails.css";
-import type { AccountDto } from "../../store/AccountStore/accountStore.interface";
-import type { transactionDTO } from "../../store/transactionStore/transactionStore.interface";
 import useTransactionStore from "../../store/transactionStore/transactionStore";
+import "./AccountDetails.css";
 
 
-interface AccountDetailsProps {
-  dummyAccount?: AccountDto;
-  dummyTransactions?: transactionDTO[];
-}
 
-export default function AccountDetails(
-  {
-  
-  dummyAccount,
-  dummyTransactions,
-}: AccountDetailsProps) {
-   
-   const { accountNumber:paramAccountNumber } = useParams<{ accountNumber: string }>();
-   console.log(paramAccountNumber);
-   const accountNumber = paramAccountNumber || dummyAccount?.accountNumber;
-   const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
-   const navigate = useNavigate();
-   const {account,fetchAccount,errorFetchAccount,loadingFetchAccount}=useAccountStore();
-   const {transactions,fetchTransactionFromAccountnumber}=useTransactionStore()
+export default function AccountDetails() {
+  const { accountNumber: paramAccountNumber } = useParams<{ accountNumber: string }>();
+  const navigate = useNavigate();
 
+  const accountNumber = paramAccountNumber;
+
+  // Account store
+  const {
+    account,
+    loadingFetchAccount: loadingAccount,
+    errorFetchAccount: accountError,
+    fetchAccount,
+  } = useAccountStore();
+
+  // Transaction store
+  const {
+    transactionsFromAccountnumber: transactions,
+    loadingTransactionsByAccount: loadingTransactions,
+    errorTransactionsByAccount: transactionsError,
+    fetchTransactionFromAccountnumber,
+  } = useTransactionStore();
+
+  const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
+
+  // Fetch account and transactions when accountNumber changes
   useEffect(() => {
-    if (dummyAccount && dummyTransactions) return;
-    if(!accountNumber)return;
-    
+    if (!accountNumber) return;
     fetchAccount(accountNumber);
     fetchTransactionFromAccountnumber(accountNumber);
-    
+  }, [accountNumber, fetchAccount, fetchTransactionFromAccountnumber]);
 
-  },[accountNumber,dummyAccount,dummyTransactions]);
-
-  const accountData=dummyAccount || account;
-  const transactionData=dummyTransactions || transactions;
-
-  
-  if(loadingFetchAccount && !dummyAccount) return <div className="loading-message">Loading account...</div>;
-
+  // Redirect on account fetch error
   useEffect(() => {
-  if (errorFetchAccount && !dummyAccount) {
-    navigate('/GenericError', { state: { message: errorFetchAccount } });
-  }
-}, [errorFetchAccount, dummyAccount, navigate]);
+    if (accountError) {
+      navigate("/GenericError", { state: { message: accountError } });
+    }
+  }, [accountError, navigate]);
 
+  // Redirect if account not found after loading
   useEffect(() => {
-  if (!loadingFetchAccount && !accountData && !dummyAccount) {
-    navigate('/GenericError', { state: { message: "Account Not Found" } });
+    if (!loadingAccount && !accountError && !account) {
+      navigate("/GenericError", { state: { message: "Account Not Found" } });
+    }
+  }, [loadingAccount, account, accountError, navigate]);
+
+  if (loadingAccount || loadingTransactions) {
+    return <div className="loading-message">Loading account...</div>;
   }
-}, [loadingFetchAccount, accountData, dummyAccount, navigate]);
- 
 
-  if (!accountData) {
-  // Can render loading or a "No account found" message
-  return <div>Account details not available</div>;
-}
-  const maskedAccountNumber = "**** **** **** " + accountData.accountNumber.slice(-4);
+  if (!account) {
+    return <div>Account details not available</div>;
+  }
 
-  // Prepare table data for TableComponent
+  // Mask account number: "**** **** **** 1234"
+  const maskedAccountNumber = "**** **** **** " + account.accountNumber.slice(-4);
 
- const sortedTransactions = [...transactionData].sort(
+  // Sort transactions by date ascending
+  const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
-  // Calculate starting balance before any transactions
-  const totalTransactionAmount = sortedTransactions.reduce((sum, txn) => sum + txn.amount, 0);
-  const startingBalance = accountData.balance - totalTransactionAmount;
+  const totalTransactionAmount = sortedTransactions.reduce((sum, txn) => {
+    // Define sign for amount
+    const isCredit = txn.type === "DEPOSIT";
+    const signedAmount = isCredit ? txn.amount : -txn.amount;
+    return sum + signedAmount;
+  }, 0);
 
-  // Calculate running balances
+  // Calculate starting balance = current balance - sum of transactions amounts
+  const startingBalance = account.balance - totalTransactionAmount;
+
+  // Running balance calculation for table rows
   let runningBalance = startingBalance;
 
   const tableHeaders = ["Date", "Description", "Amount", "Balance"];
 
-  const tableData = sortedTransactions.map(txn => {
-    runningBalance += txn.amount; // update running balance after this txn
+  const tableData = sortedTransactions.map((txn) => {
+    const isCredit = txn.type === "DEPOSIT";
+    const sign = isCredit ? "+" : "-";
+    runningBalance += isCredit ? txn.amount : -txn.amount;
+
     return {
       Date: new Date(txn.createdAt).toLocaleDateString(),
       Description: txn.description,
-      Amount: txn.amount < 0 ? `-$${Math.abs(txn.amount).toFixed(2)}` : `+$${txn.amount.toFixed(2)}`,
+      Amount: `${sign}$${txn.amount.toFixed(2)}`,
       Balance: `$${runningBalance.toFixed(2)}`,
     };
   });
@@ -93,50 +100,41 @@ export default function AccountDetails(
   return (
     <div className="account-details-container">
       <div className="account-header">
-        <h1 className="account-title">{accountData.accountType} ACCOUNT</h1>
+        <h1 className="account-title">{account.accountType} ACCOUNT</h1>
         <p className="masked-account-number">Account Number: {maskedAccountNumber}</p>
-        <p className="account-balance">Balance: ${accountData.balance.toFixed(2)}</p>
+        <p className="account-balance">Balance: ${account.balance.toFixed(2)}</p>
         <div className="action-buttons">
           <ButtonComponent
             label="Transfer"
-            onClick={() =>
-              navigate("/transfer", { state: { accountNumber: accountData.accountNumber } })
-            }
+            onClick={() => navigate("/transfer", { state: { accountNumber: account.accountNumber } })}
             variant="primary"
           />
           <ButtonComponent
             label="Initiate Payment"
-            onClick={() =>
-              navigate("/initiate-payment", { state: { accountNumber: accountData.accountNumber } })
-            }
+            onClick={() => navigate("/initiate-payment", { state: { accountNumber: account.accountNumber } })}
             variant="secondary"
           />
         </div>
       </div>
 
       <div className="tab-navigation">
-  <div
-    className={`tab ${activeTab === "overview" ? "tab-active" : ""}`}
-    onClick={() => setActiveTab("overview")}
-  >
-    Overview
-  </div>
-  <div
-    className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
-    onClick={() =>
-      navigate("/transactions", { state: { accountNumber: accountData.accountNumber } })
-    }
-  >
-    Transactions
-  </div>
-</div>
+        <div className={`tab ${activeTab === "overview" ? "tab-active" : ""}`} onClick={() => setActiveTab("overview")}>
+          Overview
+        </div>
+        <div
+          className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
+          onClick={() => navigate("/transactions", { state: { accountNumber: account.accountNumber } })}
+        >
+          Transactions
+        </div>
+      </div>
 
       {activeTab === "overview" && (
         <div className="account-overview">
           <h2 className="account-overview-header">Account details</h2>
           <div className="account-type">
             <p>Account Type</p>
-            <strong>{accountData.accountType}</strong>
+            <strong>{account.accountType}</strong>
           </div>
           <div className="masked-account-number">
             <p>Account Number</p>
@@ -144,24 +142,24 @@ export default function AccountDetails(
           </div>
           <div className="account-created-date">
             <p>Created At</p>
-            <strong>{accountData.accountCreated}</strong>
+            <strong>{new Date(account.accountCreated).toLocaleDateString()}</strong>
           </div>
           <div className="account-updated-date">
             <p>Last Updated</p>
-            <strong>{accountData.accountUpdated}</strong>
+            <strong>{new Date(account.accountUpdated).toLocaleDateString()}</strong>
           </div>
           <div className="account-balance">
             <p>Balance</p>
-            <strong>${accountData.balance.toFixed(2)}</strong>
+            <strong>${account.balance.toFixed(2)}</strong>
           </div>
         </div>
       )}
-
-      <h2 className="transactions-title">Recent Transactions</h2>
-      <div className="recent-transactions">
+         <h2 className="transactions-title">Recent Transactions</h2>
+      {transactions.length > 0 ? (
         <TableComponent tableheader={tableHeaders} tabledata={tableData} />
-      </div>
+      ) : (
+        <div className="no-transactions">No transactions found.</div>
+      )}
     </div>
   );
 }
-
