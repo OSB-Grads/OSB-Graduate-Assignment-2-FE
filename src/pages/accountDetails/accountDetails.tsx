@@ -152,11 +152,12 @@ export default function AccountDetails() {
           </div>
         </div>
       )}
-
-      <h2 className="transactions-title">Recent Transactions</h2>
-      <div className="recent-transactions">
+         <h2 className="transactions-title">Recent Transactions</h2>
+      {transactions.length > 0 ? (
         <TableComponent tableheader={tableHeaders} tabledata={tableData} />
-      </div>
+      ) : (
+        <div className="no-transactions">No transactions found.</div>
+      )}
     </div>
   );
 }
