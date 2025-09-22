@@ -24,6 +24,7 @@ import GenericError from "./pages/ErrorPages/GenericError";
 import Maintenance from "./pages/ErrorPages/Maintenance";
 
 import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
+import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 
 
@@ -47,23 +48,18 @@ export default function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          {/* <Route path = "/createAccount" element = {< CreateAccountModal/>}></Route> */}
-          <Route path="/transactions" element={< TransactionPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
-          <Route path="about" element={<About />} />
+          <Route path="/transactions" element={<ProtectedRoute>< TransactionPage /></ProtectedRoute>} />
+          <Route path="about" element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
-          <Route path='/account-details/:accountNumber' element={<AccountDetailPage></AccountDetailPage>}></Route>
-
-          <Route path="/error404" element={< Error404 />}></Route>
-          <Route path="/genericError" element={< GenericError />}></Route>
-          <Route path="/maintenance" element={< Maintenance />}></Route>
-
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
+          <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetailPage></AccountDetailPage></ProtectedRoute>}></Route>
+          <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
+    
         </Route>
-
-        <Route path="/help" element={<HelpAndSupport />} />
+           <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/error404" element={< Error404 />}></Route>
         <Route path="/genericError" element={< GenericError />}></Route>
         <Route path="/maintenance" element={< Maintenance />}></Route>

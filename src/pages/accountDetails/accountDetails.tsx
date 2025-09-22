@@ -3,13 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import useAccountStore from "../../store/AccountStore/accountStore";
-import type { AccountDto,TransactionDTO } from "../../store/AccountStore/accountStore.interface";
+
 import "./AccountDetails.css";
+import type { AccountDto } from "../../store/AccountStore/accountStore.interface";
+import type { transactionDTO } from "../../store/transactionStore/transactionStore.interface";
+import useTransactionStore from "../../store/transactionStore/transactionStore";
 
 
 interface AccountDetailsProps {
   dummyAccount?: AccountDto;
-  dummyTransactions?: TransactionDTO[];
+  dummyTransactions?: transactionDTO[];
 }
 
 export default function AccountDetails(
@@ -22,16 +25,17 @@ export default function AccountDetails(
    const { accountNumber:paramAccountNumber } = useParams<{ accountNumber: string }>();
    console.log(paramAccountNumber);
    const accountNumber = paramAccountNumber || dummyAccount?.accountNumber;
-   const{account , transactions,loading,error,fetchAccount,fetchTransactions} =useAccountStore();
    const [activeTab, setActiveTab] = useState<"overview" | "transactions">("overview");
    const navigate = useNavigate();
+   const {account,fetchAccount,errorFetchAccount,loadingFetchAccount}=useAccountStore();
+   const {transactions,fetchTransactionFromAccountnumber}=useTransactionStore()
 
   useEffect(() => {
     if (dummyAccount && dummyTransactions) return;
     if(!accountNumber)return;
     
     fetchAccount(accountNumber);
-    fetchTransactions(accountNumber);
+    fetchTransactionFromAccountnumber(accountNumber);
     
 
   },[accountNumber,dummyAccount,dummyTransactions]);
@@ -40,19 +44,19 @@ export default function AccountDetails(
   const transactionData=dummyTransactions || transactions;
 
   
-  if(loading && !dummyAccount) return <div className="loading-message">Loading account...</div>;
+  if(loadingFetchAccount && !dummyAccount) return <div className="loading-message">Loading account...</div>;
 
   useEffect(() => {
-  if (error && !dummyAccount) {
-    navigate('/GenericError', { state: { message: error } });
+  if (errorFetchAccount && !dummyAccount) {
+    navigate('/GenericError', { state: { message: errorFetchAccount } });
   }
-}, [error, dummyAccount, navigate]);
+}, [errorFetchAccount, dummyAccount, navigate]);
 
   useEffect(() => {
-  if (!loading && !accountData && !dummyAccount) {
+  if (!loadingFetchAccount && !accountData && !dummyAccount) {
     navigate('/GenericError', { state: { message: "Account Not Found" } });
   }
-}, [loading, accountData, dummyAccount, navigate]);
+}, [loadingFetchAccount, accountData, dummyAccount, navigate]);
  
 
   if (!accountData) {
@@ -160,3 +164,4 @@ export default function AccountDetails(
     </div>
   );
 }
+

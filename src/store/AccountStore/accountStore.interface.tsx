@@ -11,9 +11,9 @@ export interface AccountState {
   account: AccountDto | null;
   accounts:AccountDto[]
   accountLoading: boolean;
-  accountError: string | null;
+  accountError: boolean;
   loadingFetchAccount:boolean,
-  errorFetchAccount:string|null,
+  errorFetchAccount:boolean,
   loadingCreateAccount:boolean,
   errorCreateAccount:string |null,
   fetchAccount: (accountNumber: string) => Promise<void>;

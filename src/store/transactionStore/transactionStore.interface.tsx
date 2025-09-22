@@ -16,8 +16,10 @@ export interface transactionState{
     loading : boolean,
     error : boolean,
     loadingTransactionsByAccount: boolean;
-    errorTransactionsByAccount: boolean | null;
+    errorTransactionsByAccount: boolean ;
     fetchTransactionDetails : () => Promise<void>,
     fetchTransactionFromAccountnumber:(accountNumber:string)=>Promise<void>
 
+    transferAmountBetweenAccounts:(fromAccountNumber:string,toAccountNumber:string,amount:number)=>Promise<void>
+    
 }

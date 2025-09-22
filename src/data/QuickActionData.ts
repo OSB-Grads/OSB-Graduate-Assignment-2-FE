@@ -19,21 +19,21 @@ export const QuickActionListData:QuickList[]=[
      id: 1,
     label: 'Transfer',
     subLabel: 'Transfer money',
-    path: '/transactions',
+    path: '/payments',
     icon: quick1,
 },
 {
      id: 2,
     label: 'Make Payment',
     subLabel: 'Pay someone',
-    path: '',
+    path: '/payments',
     icon: quick2,
 },
 {
      id: 3,
     label:'Create Account',
     subLabel:'Create an account',
-    path: '',
+    path: '/accountsPage',
     icon: quick3,
 }
 
