@@ -34,24 +34,30 @@ export default function AccountDetails() {
 
   // Fetch account and transactions when accountNumber changes
   useEffect(() => {
+    const fetchData=async()=>{
     if (!accountNumber) return;
-    fetchAccount(accountNumber);
-    fetchTransactionFromAccountnumber(accountNumber);
-  }, [accountNumber, fetchAccount, fetchTransactionFromAccountnumber]);
-
+    await fetchAccount(accountNumber);
+    await fetchTransactionFromAccountnumber(accountNumber);
+    }
+    fetchData();
+  }, []);
   // Redirect on account fetch error
+  
   useEffect(() => {
     if (accountError) {
       navigate("/GenericError", { state: { message: accountError } });
     }
-  }, [accountError, navigate]);
+  }, [accountError]);
 
   // Redirect if account not found after loading
   useEffect(() => {
-    if (!loadingAccount && !accountError && !account) {
-      navigate("/GenericError", { state: { message: "Account Not Found" } });
-    }
-  }, [loadingAccount, account, accountError, navigate]);
+    const check = setTimeout(() => {
+      if (!loadingAccount && !accountError && !account) {
+        navigate("/GenericError", { state: { message: "Account Not Found" } });
+      }
+    }, 1)
+    return () => clearTimeout(check);
+  }, [ loadingAccount, account, accountError]);
 
   if (loadingAccount || loadingTransactions) {
     return <div className="loading-message">Loading account...</div>;
@@ -106,12 +112,12 @@ export default function AccountDetails() {
         <div className="action-buttons">
           <ButtonComponent
             label="Transfer"
-            onClick={() => navigate("/transfer", { state: { accountNumber: account.accountNumber } })}
+            onClick={() => navigate("/payments", { state: { accountNumber: account.accountNumber } })}
             variant="primary"
           />
           <ButtonComponent
             label="Initiate Payment"
-            onClick={() => navigate("/initiate-payment", { state: { accountNumber: account.accountNumber } })}
+            onClick={() => navigate("/payments", { state: { accountNumber: account.accountNumber } })}
             variant="secondary"
           />
         </div>

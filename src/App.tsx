@@ -26,6 +26,7 @@ import Maintenance from "./pages/ErrorPages/Maintenance";
 import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
+import AccountDetails from "./pages/accountDetails/accountDetails";
 
 
 export default function App() {
@@ -55,7 +56,7 @@ export default function App() {
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
-          <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetailPage></AccountDetailPage></ProtectedRoute>}></Route>
+          <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
     
         </Route>

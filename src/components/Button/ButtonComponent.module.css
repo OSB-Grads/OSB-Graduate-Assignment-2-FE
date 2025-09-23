@@ -30,7 +30,6 @@
     justify-content: center;
     height: var(--text-height);
     font-size: var(--font-size-small);
-    font-family: var(--font-family);
     font-weight: var(--font-weight);
     text-align: center;
 }

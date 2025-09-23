@@ -6,12 +6,14 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
   export const fetchAccount= async (set:any,accountNumber:string ) => {
    
     try {
+      set(()=>({loadingFetchAccount:true}))
       const result= await getAccount(accountNumber);
       set(()=>({ account:result,loadingFetchAccount: false,errorFetchAccount:false }));
     } catch (err: any) {
-      set({ errorFetchAccount: false, loadingFetchAccount: false });
+      set({ errorFetchAccount: true, loadingFetchAccount: false });
     }
   }
+
 
 
   export const fetchAllAccounts=async (set:any) => {
@@ -23,7 +25,7 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
       }))
     } catch (error) {
       set(()=>({
-        accountError:false,accountLoading:false
+        accountError:true,accountLoading:false
       }))
     }
     
@@ -33,6 +35,7 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
     try {
       set(()=>({loadingCreateAccount:true}))
       const newAccount=await postAccount(balance,accountType,productType);
+      console.log(newAccount)
       set((state:any) => ({
       accounts: [...state.accounts, newAccount],
       loadingCreateAccount: false,
@@ -44,5 +47,4 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
       }))
       
     }
-    
   }

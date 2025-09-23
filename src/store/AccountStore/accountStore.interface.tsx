@@ -17,6 +17,6 @@ export interface AccountState {
   loadingCreateAccount:boolean,
   errorCreateAccount:string |null,
   fetchAccount: (accountNumber: string) => Promise<void>;
-  fetchAllAccounts:()=>Promise<void>
-  CreateAccount:(balance:string,accountType:string ,productType:string)=>Promise<void>
+  fetchAllAccounts:()=>Promise<void>;
+  CreateAccount:(balance:string,accountType:string ,productType:string)=>Promise<void>;
 }

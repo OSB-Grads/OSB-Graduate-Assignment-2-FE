@@ -27,7 +27,9 @@ export default function Home() {
   const { transactions, fetchTransactionDetails, loading, error } = useTransactionStore();
   const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
 
-
+  useEffect(() => {
+    console.log(accounts, accountError, accountLoading)
+  }, [accounts, accountError, accountLoading])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +58,7 @@ export default function Home() {
     }
     fetchAccounts();
   }, []);
+
   useEffect(() => {
     const fetchTransactions=async () => {
       try {

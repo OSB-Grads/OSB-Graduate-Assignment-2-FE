@@ -7,6 +7,7 @@ import axiosInstance from '../../utils/httpClientUtil';
 import { notify } from '../../components/Toast/Alerts';
 import { ToastTypes } from '../../components/Toast/interfaces';
 import  useProductStore from '../../store/ProductStore/ProductStore'
+import useAccountStore from '../../store/AccountStore/accountStore';
 
 
 
@@ -20,15 +21,15 @@ function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.Set
     const [amount, setAmount] = useState("");
 
     const { products, fetchProductDetails } = useProductStore();
+    const{CreateAccount}=useAccountStore();
     useEffect(() => { fetchProductDetails() }, []);
 
     const handleSubmit = async () => {
         if (!productType || !amount) return;
         const typeOfAccount = productType.includes("FD") ? "FIXED_DEPOSIT" : "SAVINGS";
 
-        const { data } = await axiosInstance.post(`/api/v1/accounts`,
-            { balance: amount, accountType: typeOfAccount, },
-            { params: { productId: productType } }   
+         await CreateAccount(
+        amount, typeOfAccount,productType  
         );
         notify({
             type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
