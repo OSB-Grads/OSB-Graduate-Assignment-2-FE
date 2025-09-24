@@ -33,7 +33,7 @@ const AccountPage = () => {
 
   useEffect(() => {
     if (errorFetchAccount) {
-      navigate('/genericError')
+      navigate('/GenericError')
     }
   }, [])
 

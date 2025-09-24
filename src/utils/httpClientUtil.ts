@@ -1,6 +1,7 @@
 import axios from "axios";
 import { notify } from "../components/Toast/Alerts";
 import { ToastTypes } from "../components/Toast/interfaces";
+import { resetAllStores } from "../store/reset";
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080',
@@ -37,6 +38,11 @@ axiosInstance.interceptors.response.use(
             notify({
                 type: ToastTypes.ERROR as keyof typeof ToastTypes,
                 message: 'Backend is not connected ',
+            });
+        } else if (error.status === 403) {
+            notify({
+                type: ToastTypes.UNAUTHENTICATED as keyof typeof ToastTypes,
+                message: 'Session has expired, please login again',
             });
         } else {
             notify({

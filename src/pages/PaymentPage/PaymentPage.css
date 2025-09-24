@@ -50,11 +50,12 @@
 } */
 
 .paymentPageContainer {
-    width:100%;
+  width:100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
   align-items: center;
+  color: var(--color-text);
 }
 
 .paymentPageContainer h1 {
@@ -64,13 +65,15 @@
 .paymentsInputFieldContainer {
   width: 100%;
   display: grid;
-  place-items: center;
+  place-items: center
 }
 
 #paymentsInputField {
   text-align: center;
   font-size: 32px;
-  color: var(--color-white);
+  border-color: var(--color-secondary);
+  border: 1px solid;
+  
 }
 
 .paymentsUserAccountDiv {
@@ -91,3 +94,4 @@
   width: 100%;
   margin-top: 16px;
 }
+

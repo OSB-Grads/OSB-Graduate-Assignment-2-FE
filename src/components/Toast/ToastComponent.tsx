@@ -9,6 +9,7 @@ import styles from './ToastComponents.module.css';
 const ToastColors = {
     SUCCESS: '--color-primary',
     ERROR: '--color-primary',
+    UNAUTHENTICATED: '--color-primary',
     WARNING: '--color-primary',
     INFO: '--color-primary',
 }
@@ -37,6 +38,7 @@ const Toast = ({ type, message, handleClose, TTL = 5 }: IToastProps) => {
 const Icon = ({ type }: { type: keyof typeof ToastTypes }) => {
     if (type === ToastTypes.SUCCESS) return <CheckCircleIcon />;
     if (type === ToastTypes.ERROR) return <ErrorIcon />;
+    if (type === ToastTypes.UNAUTHENTICATED) return <ErrorIcon />;
     if (type === ToastTypes.INFO) return <InfoIcon />;
     if (type === ToastTypes.WARNING) return <WarningIcon />;
 }

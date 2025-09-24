@@ -3,6 +3,7 @@ export const ToastTypes = {
     ERROR: 'ERROR',
     INFO: 'INFO',
     WARNING: 'WARNING',
+    UNAUTHENTICATED: 'UNAUTHENTICATED'
 }
 
 export interface IToastProps {

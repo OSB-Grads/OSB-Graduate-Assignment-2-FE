@@ -1,4 +1,5 @@
 import { setToken } from "../../utils/httpClientUtil";
+import { resetAllStores } from "../reset";
 import { loginApi, registerApi } from "./authstore.api";
 
 export const authenticate = (set: any, toAuthenticate: boolean) => {
@@ -39,9 +40,7 @@ export const login = async (set: any, username: string, password: string, rememb
 }
 
 export const logout = (set: any) => {
-    set({
-        isAuthenticated: false,
-    })
+    resetAllStores();
     console.log("LogOut INtiated")
     localStorage.removeItem('token');
     console.log("Token Deletion successful")

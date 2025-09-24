@@ -7,7 +7,7 @@
   min-height: 100vh;
   width: 100vw;
   background-color: var(--color-background);
-  font-family: Arial, sans-serif;
+  
   color: var(--color-text);
 
 
@@ -62,7 +62,6 @@ flex-grow: 0;
 .help-support-container-heading>span{
 
     
-font-family: 'Inter';
 font-style: normal;
 font-weight: 700;
 font-size: 32px;

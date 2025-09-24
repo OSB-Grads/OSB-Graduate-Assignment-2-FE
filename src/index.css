@@ -1,10 +1,13 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 :root {
   /* Colors */
-  --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-family: monospace;
   --line-height: 1.5;
   --font-weight: 400;
   --color-primary: #38E07A ;
@@ -65,7 +68,6 @@
    --radius-md: 0.5rem;
   --spacing-xs: 0.25rem;
   --spacing-md: 0.75rem;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -118,7 +120,6 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;

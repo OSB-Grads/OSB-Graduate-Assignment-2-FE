@@ -9,3 +9,7 @@
     gap: 12px;
     overflow: hidden;
 }
+
+.toast-container:empty {
+    display: none;
+}
