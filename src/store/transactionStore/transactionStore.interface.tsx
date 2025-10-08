@@ -21,5 +21,7 @@ export interface transactionState{
     fetchTransactionFromAccountnumber:(accountNumber:string)=>Promise<void>
 
     transferAmountBetweenAccounts:(fromAccountNumber:string,toAccountNumber:string,amount:number)=>Promise<void>
+
+    lastSeenTransactionTime:string|null;
     
 }
