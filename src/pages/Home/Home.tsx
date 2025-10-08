@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Home.css";
 
 import {
@@ -19,6 +19,7 @@ import useAccountStore from "../../store/AccountStore/accountStore.tsx";
 
 
 export default function Home() {
+   const navigate = useNavigate();
 
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string | null>(null);
@@ -94,8 +95,9 @@ export default function Home() {
             return (
               <DashBoardAccount
                 key={index}
-                AccountType={account.accountType}
-                AccountNumber={account.accountNumber}
+                AccountType={account.accountType.includes("FIXED")?"FIXED DEPOSIT":"SAVINGS"}
+                AccountNumber={"**"+account.accountNumber.slice(-4)}
+                onClick={()=>navigate(`/account-details/${account.accountNumber}`)}
               />
             )
           })}
