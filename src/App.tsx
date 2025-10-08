@@ -58,7 +58,7 @@ export default function App() {
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
           <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
-    
+    <Route path="/help" element={<HelpAndSupport />} />
         </Route>
            <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/error404" element={< Error404 />}></Route>
