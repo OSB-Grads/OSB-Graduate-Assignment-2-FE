@@ -28,7 +28,7 @@ export const fetchTransactionDetails = async (set: any, get: any) => {
                 set({ lastSeenTransactionTime: newestTime });
             })
         }
-        console.log(result.data);
+        
         set(() => ({ transactions:result.data, loading: false, error: false }));
     } catch (error) {
         console.log("Error in transaction fetch", error)

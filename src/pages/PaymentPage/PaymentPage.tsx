@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputField from "../../components/inputField/inputField";
 import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
 import ButtonComponent from "../../components/Button/ButtonComponent";
@@ -7,6 +7,7 @@ import useTransactionStore from "../../store/transactionStore/transactionStore";
 import { notify } from "../../components/Toast/Alerts";
 import { ToastTypes } from "../../components/Toast/interfaces";
 import useAccountStore from "../../store/AccountStore/accountStore";
+import { useLocation } from "react-router-dom";
 
 
 const PaymentPage = () => {
@@ -19,6 +20,17 @@ const PaymentPage = () => {
     const { accounts } = useAccountStore();
 
     const [customToAccountNumber, setCustomToAccountNumber] = useState<string>("");
+
+    const location=useLocation();
+    const state=location.state as {mode:string} | undefined;
+    
+    useEffect(()=>{
+       if(state?.mode=='makePayment'){
+        setToAccountNumber("Another Customer");
+       }
+    },[state])
+
+
 
 
     const handleFromAccountChange = (event: SelectChangeEvent) => {

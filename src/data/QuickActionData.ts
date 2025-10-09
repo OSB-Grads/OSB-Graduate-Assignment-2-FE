@@ -8,7 +8,10 @@ export type QuickList={
     label:string,
     subLabel:string,
     path:string,
-    icon:string
+    icon:string,
+    state?:{
+        mode:string
+    }
 };
 
 
@@ -21,6 +24,7 @@ export const QuickActionListData:QuickList[]=[
     subLabel: 'Transfer money',
     path: '/payments',
     icon: quick1,
+    
 },
 {
      id: 2,
@@ -28,6 +32,7 @@ export const QuickActionListData:QuickList[]=[
     subLabel: 'Pay someone',
     path: '/payments',
     icon: quick2,
+    state: { mode: 'makePayment' }, 
 },
 {
      id: 3,

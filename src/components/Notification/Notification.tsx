@@ -23,7 +23,7 @@ const Notification: React.FC<INotification> = ({ isOpen }) => {
                     {notifications.length == 0 ?
                         <div className="notification-item">You're all cought up !</div>
                         : notifications.slice(0, 3).map((item, index) => (
-                            <div className="notification-item">{item.message}</div>
+                            <div className="notification-item" key={index}>{item.message}</div>
                         ))
                     }
                 </div>

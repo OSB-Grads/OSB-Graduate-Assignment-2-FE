@@ -29,10 +29,6 @@ export default function Home() {
   const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
 
   useEffect(() => {
-    console.log(accounts, accountError, accountLoading)
-  }, [accounts, accountError, accountLoading])
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         if (!user) {
@@ -111,7 +107,7 @@ export default function Home() {
       <div className="quick-action-lists">
         <div className="quick-actions">
           {QuickActionListData.map((item: QuickList) => (
-            <Link to={item.path} key={item.id}>
+            <Link to={item.path} key={item.id} state={{mode:item.state?.mode}}>
               <QuickActionItem
                 label={item.label}
                 subLabel={item.subLabel}
@@ -129,7 +125,8 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error && !loading && transactions.slice(-3).map((item, index) => {
+            !error && !loading && Array.isArray(transactions) && transactions.length > 0 ?
+            transactions.slice(0,3).map((item, index) => {
               return (
                 <QuickActionItem
                   key={index}
@@ -138,7 +135,7 @@ export default function Home() {
                   icon={LatestNotificationTransferIcon}
                 ></QuickActionItem>
               )
-            })}
+            }):<></>}
         </div>
       </div>
     </div>
