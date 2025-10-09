@@ -32,6 +32,7 @@
   width:100%;
   justify-content: space-between;
   gap: 32px;
+  padding-bottom: 20px;
 }
 
 .paymentsUserAccountDiv > div {
@@ -45,4 +46,24 @@
   width: 100%;
   margin-top: 16px;
 }
+#paymentFromAccountSelectionList {
+  border: 1px solid var(--color-white) ;
+  color: var(--color-white) ;
+ 
+}
+
+#paymentToAccountSelectionList{
+  border: 1px solid var(--color-white);
+  color: var(--color-white);
+}
+#paymentFromAccountSelectionList .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+#paymentFromAccountSelectionList.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+
+
+
 

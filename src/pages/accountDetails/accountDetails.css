@@ -3,9 +3,10 @@
   background-color: var(--color-background);
   color: var(--color-white);
   padding: var(--spacing-lg);
-  min-height: 100vh;
-  width: 75vw;
+  padding-bottom: 100px;
+  width: 100%;
   box-sizing: border-box;
+  
   
 }
 

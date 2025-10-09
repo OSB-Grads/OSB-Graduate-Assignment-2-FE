@@ -95,7 +95,7 @@ export default function Home() {
             return (
               <DashBoardAccount
                 key={index}
-                AccountType={account.accountType.includes("FIXED")?"FIXED DEPOSIT":"SAVINGS"}
+                AccountType={account.accountType.includes("FIXED")?"Fixed Deposit":"Savings"}
                 AccountNumber={"**"+account.accountNumber.slice(-4)}
                 onClick={()=>navigate(`/account-details/${account.accountNumber}`)}
               />
@@ -129,12 +129,12 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error && !loading && transactions.map((item, index) => {
+            !error && !loading && transactions.slice(-3).map((item, index) => {
               return (
                 <QuickActionItem
                   key={index}
                   label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
-                  subLabel={formatDistanceToNow(parseISO(item.createdAt))}
+                  subLabel={`${formatDistanceToNow(parseISO(item.createdAt))} ago`}
                   icon={LatestNotificationTransferIcon}
                 ></QuickActionItem>
               )

@@ -18,6 +18,8 @@ const PaymentPage = () => {
     const { transferAmountBetweenAccounts } = useTransactionStore();
     const { accounts } = useAccountStore();
 
+    const [customToAccountNumber, setCustomToAccountNumber] = useState<string>("");
+
 
     const handleFromAccountChange = (event: SelectChangeEvent) => {
         setFromAccountNumber(event.target.value as string);
@@ -30,9 +32,11 @@ const PaymentPage = () => {
 
     const handleSubmit = async () => {
         try {
-            transferAmountBetweenAccounts(fromAccountNumber, toAccountNumber, Number(amount));
+            const toAccount = toAccountNumber === "Another Customer" ? customToAccountNumber : toAccountNumber;
+            transferAmountBetweenAccounts(fromAccountNumber, toAccount, Number(amount));
             setFromAccountNumber("");
             setToAccountNumber("");
+            setCustomToAccountNumber("");
             setAmount("");
             console.log("Transaction Successful");
         }
@@ -62,8 +66,15 @@ const PaymentPage = () => {
                         <h4>From Account Number</h4>
                         <Select label="From Account Number" id="paymentFromAccountSelectionList"
                             value={fromAccountNumber}
-                            onChange={handleFromAccountChange}>
-                            <MenuItem value="">From Account Number</MenuItem>
+                            onChange={handleFromAccountChange}
+                            displayEmpty
+                            sx={{
+                                '.MuiSelect-icon': {
+                                    color: 'white',
+                                    fill: 'white',
+                                }
+                            }}>
+                            <MenuItem value="" >Select From Account </MenuItem>
                             {accounts.map((account) => { return (<MenuItem value={account.accountNumber}>{account.accountNumber}</MenuItem>) })}
 
                         </Select>
@@ -72,8 +83,15 @@ const PaymentPage = () => {
                         <h4>To Account Number</h4>
                         <Select label="To Account Number" id="paymentToAccountSelectionList"
                             value={toAccountNumber}
-                            onChange={handleToAccountChange}>
-                            <MenuItem value="">To Account Number</MenuItem>
+                            onChange={handleToAccountChange}
+                            displayEmpty
+                            sx={{
+                                '.MuiSelect-icon': {
+                                    color: 'white',
+                                    fill: 'white',
+                                }
+                            }}>
+                            <MenuItem value="">Select To Account</MenuItem>
                             {accounts.map((account) => { return (<MenuItem value={account.accountNumber}>{account.accountNumber}</MenuItem>) })}
                             <MenuItem value="Another Customer">Another Customer</MenuItem>
                         </Select>
@@ -84,8 +102,8 @@ const PaymentPage = () => {
                         <InputField
                             label="To Account Number"
                             placeholder=" To Account Number"
-                            value={toAccountNumber != undefined && toAccountNumber === "Another Customer" ? toAccountNumber : ""}
-                            onChange={(e) => { setToAccountNumber(e.target.value as string) }}>
+                            value={customToAccountNumber}
+                            onChange={(e) => { setCustomToAccountNumber(e.target.value as string) }}>
                         </InputField>
 
                     </div>) : (<></>)
