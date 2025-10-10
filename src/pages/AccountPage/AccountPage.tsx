@@ -19,7 +19,7 @@ const AccountPage = () => {
   const [open, setOpen] = useState(false);
 
   const { accounts, errorFetchAccount, accountLoading} = useAccountStore();
-  console.log("Accounty Details",accounts,errorFetchAccount);
+  
 
   const table = accounts.map((item) => ({
     AccountNumber: item.accountNumber,

@@ -28,7 +28,7 @@ export const login = async (set: any, username: string, password: string, rememb
         set({
             isAuthenticated: true,
         })
-        console.log(token);
+        
         setToken(token);
 
         if (rememberMe) {

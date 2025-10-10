@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useProductStore from "../../store/ProductStore/ProductStore";
 import { Box, Paper } from "@mui/material";
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import "./ProductPage.css"
 import Error404 from "../ErrorPages/Error404";
 import { useNavigate } from "react-router-dom";
+import CreateAccountModal from "../CreateAccountModal/CreateAccountModal";
 
 
 
@@ -13,8 +14,15 @@ const ProductPage: React.FC = () => {
     const { products, loading, error, fetchProductDetails } = useProductStore();
     const navigate=useNavigate();
 
+    const[open,setOpen]=useState<boolean>(false);
+    const[selectedProduct,setSelectedProduct]=useState<string>("");
+
+    const handleProductClick=(productId:string)=>{
+        setOpen(pre=>!pre)
+        setSelectedProduct(productId)
+    }
+
     useEffect(() => { fetchProductDetails() }, []);
-    console.log("Error",error);
     useEffect(()=>{
         if(error){
             navigate('/genericError')
@@ -28,7 +36,8 @@ const ProductPage: React.FC = () => {
                 <Box className="productBoxCssClass">
                     {products.map((product) => {
                         return (
-                            <Paper elevation={15} className="productPaperCss">
+                            <Paper elevation={15} className="productPaperCss"
+                            onClick={()=>handleProductClick(product.productId)}>
                                 <AssuredWorkloadIcon fontSize="large" />
                                 <div className="productContentCss">
                                     {product.productId.includes("FD") ?
@@ -45,6 +54,7 @@ const ProductPage: React.FC = () => {
                         )
                     })}
                 </Box>
+                <CreateAccountModal open={open} setOpen={setOpen} preSelectedProduct={selectedProduct}/>
             </>
         </>
     )

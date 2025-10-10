@@ -11,7 +11,7 @@ import useAccountStore from '../../store/AccountStore/accountStore';
 
 
 
-function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.SetStateAction<boolean>>}) {
+function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.SetStateAction<boolean>>,preSelectedProduct?:string}) {
 
     // const [open, setOpen] = React.useState(false);
     // const handleOpen = () => setOpen(true);
@@ -23,6 +23,13 @@ function CreateAccountModal(props:{open:boolean,setOpen:React.Dispatch<React.Set
     const { products, fetchProductDetails } = useProductStore();
     const{CreateAccount}=useAccountStore();
     useEffect(() => { fetchProductDetails() }, []);
+
+    useEffect(()=>{
+        if(props.preSelectedProduct){
+            setProductType(props.preSelectedProduct);
+        }
+
+    },[props.preSelectedProduct])
 
     const handleSubmit = async () => {
         if (!productType || !amount) return;

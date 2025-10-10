@@ -21,7 +21,7 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
       set(()=>({accountLoading:true}))
       const result=await getAllAccounts();
       set(()=>({
-        accounts:result,accountLoading:false
+        accounts:result,accountLoading:false,accountError:false
       }))
     } catch (error) {
       set(()=>({

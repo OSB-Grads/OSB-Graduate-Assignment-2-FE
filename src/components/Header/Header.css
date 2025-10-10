@@ -13,9 +13,13 @@
 
    width: 100vw;
    height: 64px;
-   background-color: var(--main-color);
+   background-color: var(--color-background);
 
-   border-bottom: 1px solid #E5E8EB
+   border-bottom: 1px solid #E5E8EB;
+
+  position: fixed;
+  top: 0;          
+  z-index: 1000;   
 
 }
 

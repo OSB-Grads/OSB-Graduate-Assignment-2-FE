@@ -29,10 +29,6 @@ export default function Home() {
   const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
 
   useEffect(() => {
-    console.log(accounts, accountError, accountLoading)
-  }, [accounts, accountError, accountLoading])
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         if (!user) {
@@ -95,7 +91,7 @@ export default function Home() {
             return (
               <DashBoardAccount
                 key={index}
-                AccountType={account.accountType.includes("FIXED")?"FIXED DEPOSIT":"SAVINGS"}
+                AccountType={account.accountType.includes("FIXED")?"Fixed Deposit":"Savings"}
                 AccountNumber={"**"+account.accountNumber.slice(-4)}
                 onClick={()=>navigate(`/account-details/${account.accountNumber}`)}
               />
@@ -111,7 +107,7 @@ export default function Home() {
       <div className="quick-action-lists">
         <div className="quick-actions">
           {QuickActionListData.map((item: QuickList) => (
-            <Link to={item.path} key={item.id}>
+            <Link to={item.path} key={item.id} state={{mode:item.state?.mode}}>
               <QuickActionItem
                 label={item.label}
                 subLabel={item.subLabel}
@@ -129,16 +125,17 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error && !loading && transactions.map((item, index) => {
+            !error && !loading && Array.isArray(transactions) && transactions.length > 0 ?
+            transactions.slice(0,3).map((item, index) => {
               return (
                 <QuickActionItem
                   key={index}
-                  label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
-                  subLabel={formatDistanceToNow(parseISO(item.createdAt))}
+                  label={`${item.description} : amount of $${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
+                  subLabel={`${formatDistanceToNow(parseISO(item.createdAt))} ago`}
                   icon={LatestNotificationTransferIcon}
                 ></QuickActionItem>
               )
-            })}
+            }):<></>}
         </div>
       </div>
     </div>

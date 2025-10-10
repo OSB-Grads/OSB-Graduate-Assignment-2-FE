@@ -1,132 +1,141 @@
-:root{
-    --main-color:#122117;
+:root {
+    --main-color: #122117;
 
 }
 
-.left-nav-bar{
- 
-/* Depth 4, Frame 0 */
+.left-nav-bar {
 
-/* Auto layout */
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: flex-start;
-padding:16px;
+    /* Depth 4, Frame 0 */
 
-
-width:320px;
-height: calc(100vh - 64px);
-
-background: #122117;
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
 
 
-}
+    width: 320px;
+    height: calc(100vh - 64px);
 
+    background:var(--color-background);
 
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
 
-
-.left-nav-bar-list{
-/* Depth 5, Frame 0 */
-
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 16px;
-
-width: 288px;
-height: 272px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+    box-sizing: border-box;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    overflow: hidden;
+    z-index: 999;
 
 
 
 }
 
-.left-nav-bar-headding{
-/* Depth 6, Frame 0 */
-
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-
-width: 288px;
-height: 24px;
 
 
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+
+.left-nav-bar-list {
+    /* Depth 5, Frame 0 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: 288px;
+    height: 272px;
 
 
-}
-.left-nav-bar-headding>span{
- /* FinanceFirst */
-
-width: 288px;
-height: 24px;
-
-
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-
-color: #FFFFFF;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
-
-
-}
-
-.left-nav-bar-elements{
-   /* Depth 6, Frame 1 */
-
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 8px;
-
-width: 288px;
-height: 232px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-align-self: stretch;
-flex-grow: 0;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
 
 
 
 }
 
-.left-nav-bar-elements > a {
+.left-nav-bar-headding {
+    /* Depth 6, Frame 0 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: 288px;
+    height: 24px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+.left-nav-bar-headding>span {
+    /* FinanceFirst */
+
+    width: 288px;
+    height: 24px;
+
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+.left-nav-bar-elements {
+    /* Depth 6, Frame 1 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 288px;
+    height: 232px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+
+}
+
+.left-nav-bar-elements>a {
     width: 100%;
     border-radius: 4px;
     padding-left: 0;
@@ -134,181 +143,181 @@ flex-grow: 0;
     transition: 0.1s linear all;
 }
 
-.left-nav-bar-help{
- /* Depth 5, Frame 1 */
+.left-nav-bar-help {
+    /* Depth 5, Frame 1 */
 
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 4px;
-
-width: 288px;
-height: 40px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-align-self: stretch;
-flex-grow: 0;
-
-
-}
-.left-nav-bar-help >div{
-/* Depth 6, Frame 0 */
-
-/* Auto layout */
-display: flex;
-flex-direction: row;
-align-items: center;
-padding: 8px 12px;
-gap: 12px;
-
-width: 288px;
-height: 40px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 1;
-
-
-
-}
-.left-nav-bar-help-logo{
-    /* Depth 6, Frame 0 */
-
-/* Depth 7, Frame 0 */
-
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-
-width: 24px;
-height: 24px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-flex-grow: 0;
-
-
-}
-
-
-
-.left-nav-bar-help-logo>div{
- /* Depth 8, Frame 0 */
-
-width: 24px;
-height: 24px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-flex-grow: 1;
-
-
-}
-
-
-
-.left-nav-bar-help-logo >img{
-/* Depth 9, Frame 0 */
-
-/* Auto layout */
-
-    display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-
-position: absolute;
-width: 21px;
-height: 15px;
-left: infpx;
-top: infpx;
-
-transform: matrix(1, 0, 0, 1, -nan, -nan);
-
-
-/* Vector - 0 */
-
-position: absolute;
-width: 24px;
-height: 24px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-
-
-
-
-}
-
-.left-nav-bar-help-name{
- /* Depth 7, Frame 1 */
-
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-
-width: 111px;
-height: 21px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-flex-grow: 0;
-
-
-
-}
-
-.left-nav-bar-help-name > span{
-/* Help and Support */
-
-/* Help and Support */
-
-width: 111px;
-height: 21px;
-
-
-font-style: normal;
-font-weight: 500;
-font-size: 14px;
-line-height: 21px;
-/* identical to box height, or 150% */
-
-color: #FFFFFF;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
-
-
-}
-.left-nav-bottom{
+    /* Auto layout */
     display: flex;
     flex-direction: column;
-    align-items:flex-end;
-   
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
+
+    width: 288px;
+    height: 40px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+.left-nav-bar-help>div {
+    /* Depth 6, Frame 0 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 12px;
+
+    width: 288px;
+    height: 40px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 1;
+
+
+
+}
+
+.left-nav-bar-help-logo {
+    /* Depth 6, Frame 0 */
+
+    /* Depth 7, Frame 0 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: 24px;
+    height: 24px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+
 }
 
 
 
+.left-nav-bar-help-logo>div {
+    /* Depth 8, Frame 0 */
+
+    width: 24px;
+    height: 24px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+
+
+}
+
+
+
+.left-nav-bar-help-logo>img {
+    /* Depth 9, Frame 0 */
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    position: absolute;
+    width: 21px;
+    height: 15px;
+    left: infpx;
+    top: infpx;
+
+    transform: matrix(1, 0, 0, 1, -nan, -nan);
+
+
+    /* Vector - 0 */
+
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 0px;
+    top: 0px;
+
+    background: #FFFFFF;
+
+
+
+
+}
+
+.left-nav-bar-help-name {
+    /* Depth 7, Frame 1 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: 111px;
+    height: 21px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+
+
+}
+
+.left-nav-bar-help-name>span {
+    /* Help and Support */
+
+    /* Help and Support */
+
+    width: 111px;
+    height: 21px;
+
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height, or 150% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+.left-nav-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+}
