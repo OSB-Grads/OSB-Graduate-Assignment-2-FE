@@ -130,7 +130,7 @@ export default function Home() {
               return (
                 <QuickActionItem
                   key={index}
-                  label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
+                  label={`${item.description} : amount of $${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
                   subLabel={`${formatDistanceToNow(parseISO(item.createdAt))} ago`}
                   icon={LatestNotificationTransferIcon}
                 ></QuickActionItem>

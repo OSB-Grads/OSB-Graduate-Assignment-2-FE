@@ -1,16 +1,18 @@
-
-
 .paymentPageContainer {
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 25px;
   align-items: center;
   color: var(--color-text);
 }
 
 .paymentPageContainer h1 {
   width: 100%;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
 }
 
 .paymentsInputFieldContainer {
@@ -24,46 +26,46 @@
   font-size: 32px;
   border-color: var(--color-secondary);
   border: 1px solid;
-  
+
 }
 
 .paymentsUserAccountDiv {
   display: flex;
-  width:100%;
-  justify-content: space-between;
-  gap: 32px;
+  width: 100%;
+  justify-content: space-evenly;
   padding-bottom: 20px;
 }
 
-.paymentsUserAccountDiv > div {
+.paymentsUserAccountDiv>div {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 464px;
   gap: 8px;
 }
 
 .paymentsToAccountNumberInput {
-  width: 100%;
+  width:956px;
   margin-top: 16px;
 }
-#paymentFromAccountSelectionList {
-  border: 1px solid var(--color-white) ;
-  color: var(--color-white) ;
- 
-}
 
-#paymentToAccountSelectionList{
+#paymentFromAccountSelectionList {
   border: 1px solid var(--color-white);
   color: var(--color-white);
+  background-color: var(--color-secondary);
+
 }
+
+#paymentToAccountSelectionList {
+  border: 1px solid var(--color-white);
+  color: var(--color-white);
+  background-color: var(--color-secondary);
+}
+
+
 #paymentFromAccountSelectionList .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
 }
+
 #paymentFromAccountSelectionList.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
 }
-
-
-
-
-

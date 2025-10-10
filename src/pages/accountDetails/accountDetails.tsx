@@ -4,7 +4,7 @@ import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import useAccountStore from "../../store/AccountStore/accountStore";
 import useTransactionStore from "../../store/transactionStore/transactionStore";
-import "./AccountDetails.css";
+import "./accountDetails.css";
 
 
 
@@ -117,7 +117,7 @@ export default function AccountDetails() {
           />
           <ButtonComponent
             label="Initiate Payment"
-            onClick={() => navigate("/payments", { state: { accountNumber: account.accountNumber } })}
+            onClick={() => navigate("/payments", { state: { accountNumber: account.accountNumber ,mode:"makePayment"} })}
             variant="secondary"
           />
         </div>
@@ -137,7 +137,7 @@ export default function AccountDetails() {
 
       {activeTab === "overview" && (
         <div className="account-overview">
-          <h2 className="account-overview-header">Account details</h2>
+          <h2 className="account-overview-header">Account Details</h2>
           <div className="account-type">
             <p>Account Type</p>
             <strong>{account.accountType}</strong>
@@ -162,7 +162,9 @@ export default function AccountDetails() {
       )}
          <h2 className="transactions-title">Recent Transactions</h2>
       {transactions.length > 0 ? (
+        <div className="accountDetails-transactionTable">
         <TableComponent tableheader={tableHeaders} tabledata={tableData} />
+        </div>
       ) : (
         <div className="no-transactions">No transactions found.</div>
       )}

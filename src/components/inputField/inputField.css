@@ -32,5 +32,16 @@
 .form-group.secondary input,
 .form-group.secondary textarea {
   border: none;
-  border-bottom: 1px solid var(--color-input-white)
+  border-bottom: 1px solid var(--color-input-white);
+  background-color: var(--color-secondary);
+  height: 56px;
+}
+
+.form-group.secondary input::placeholder,
+.form-group.secondary textarea::placeholder {
+  color: #96C4A8;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
 }

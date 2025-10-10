@@ -22,16 +22,19 @@ const PaymentPage = () => {
     const [customToAccountNumber, setCustomToAccountNumber] = useState<string>("");
 
     const location=useLocation();
-    const state=location.state as {mode:string} | undefined;
+    const state=location.state as {accountNumber:string,mode:string} | undefined;
+   
     
     useEffect(()=>{
        if(state?.mode=='makePayment'){
         setToAccountNumber("Another Customer");
        }
+       if(state?.accountNumber){
+        setFromAccountNumber(state.accountNumber)
+       }
     },[state])
 
-
-
+    
 
     const handleFromAccountChange = (event: SelectChangeEvent) => {
         setFromAccountNumber(event.target.value as string);
@@ -69,23 +72,26 @@ const PaymentPage = () => {
                         label=""
                         placeholder="0.0"
                         value={amount}
+                        kind="PRIMARY"
                         onChange={(e) => { setAmount(e.target.value as string) }}
                     >
                     </InputField>
                 </div>
                 <div className="paymentsUserAccountDiv" >
-                    <div >
+                    <div>
                         <h4>From Account Number</h4>
                         <Select label="From Account Number" id="paymentFromAccountSelectionList"
                             value={fromAccountNumber}
                             onChange={handleFromAccountChange}
                             displayEmpty
                             sx={{
+                                
                                 '.MuiSelect-icon': {
-                                    color: 'white',
-                                    fill: 'white',
+                                    color: '#96C4A8',
+                                    fill:'#38E07A',
                                 }
-                            }}>
+                            }}
+                            notched={false}>
                             <MenuItem value="" >Select From Account </MenuItem>
                             {accounts.map((account) => { return (<MenuItem value={account.accountNumber}>{account.accountNumber}</MenuItem>) })}
 
@@ -99,10 +105,11 @@ const PaymentPage = () => {
                             displayEmpty
                             sx={{
                                 '.MuiSelect-icon': {
-                                    color: 'white',
-                                    fill: 'white',
+                                    color: '#96C4A8',
+                                    fill:'#38E07A',
                                 }
-                            }}>
+                            }}
+                            notched={false}>
                             <MenuItem value="">Select To Account</MenuItem>
                             {accounts.map((account) => { return (<MenuItem value={account.accountNumber}>{account.accountNumber}</MenuItem>) })}
                             <MenuItem value="Another Customer">Another Customer</MenuItem>
@@ -112,9 +119,9 @@ const PaymentPage = () => {
                 {toAccountNumber === "Another Customer" ?
                     (<div className="paymentsToAccountNumberInput">
                         <InputField
-                            label="To Account Number"
                             placeholder=" To Account Number"
                             value={customToAccountNumber}
+                            kind="SECONDARY"
                             onChange={(e) => { setCustomToAccountNumber(e.target.value as string) }}>
                         </InputField>
 
