@@ -57,6 +57,25 @@ npx serve -s dist
 ```
 
 
+
+## Steps to Run The Frontend as Docker Container 
+
+Building the Docker Image 
+```
+docker build -t {IMAGE_NAME} .
+```
+Example:
+docker build -t bank-frontend .
+
+
+Running the Docker Container
+
+```
+docker run -p 3000:3000 --name {CONTAINER_NAME} {IMAGE_NAME}
+
+```
+Exmaple: docker run -p 3000:3000 --name FinanceFirst bank-frontend
+
 ## Directory Structure of The Application
 ``` bash
 OSB-Graduate-Assignment-2-FE

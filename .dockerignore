@@ -1,0 +1,11 @@
+# .dockerignore file
+# Exclude files/directories from the build context
+node_modules
+npm-debug.log
+Dockerfile
+.git
+*.md
+tests/
+coverage/
+**/*.log
+.DS_Store

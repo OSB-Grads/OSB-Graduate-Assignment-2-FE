@@ -4,7 +4,7 @@ import ButtonComponent from "../../components/Button/ButtonComponent";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import useAccountStore from "../../store/AccountStore/accountStore";
 import useTransactionStore from "../../store/transactionStore/transactionStore";
-import "./AccountDetails.css";
+import "./accountDetails.css";
 
 
 
