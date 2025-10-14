@@ -20,8 +20,8 @@ export const registerApi = async (username: string, password: string): Promise<A
 }
 
 export const logoutApi = async (refreshToken: string): Promise<boolean> => {
-    const response = await axiosInstance.post<boolean>("/api/v1/auth/logout", null, {
-        params: { Refreshtoken: refreshToken }
+    const response = await axiosInstance.post<boolean>("/api/v1/auth/logout", {},{
+        params: {  Refreshtoken:refreshToken }
     });
     return response.data;
 }

@@ -40,7 +40,12 @@ export const logout = async (set: any) => {
     try {
         const refreshToken = getRefreshToken();
         if (refreshToken) {
-            await logoutApi(refreshToken);
+          const refreshTokenRemoved=  await logoutApi(refreshToken);
+          if(refreshTokenRemoved){
+            console.log("refresh token is removed");
+          }else{
+             console.log("refresh token is not removed");
+          }
         }
     } catch (error) {
         console.log("Logout API call failed, but clearing tokens anyway", error);

@@ -1,6 +1,9 @@
 import axios from "axios";
 import { notify } from "../components/Toast/Alerts";
 import { ToastTypes } from "../components/Toast/interfaces";
+import { logoutApi } from "../store/AuthStore/authstore.api";
+import { logout } from "../store/AuthStore/authStore.logic";
+import useAuthStore from "../store/AuthStore/authStore";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -44,7 +47,7 @@ export const initializeTokens = () => {
 }
 
 const getAccessToken = () => tokens.token;
-export const getRefreshToken = () => tokens.refreshToken;
+export const getRefreshToken = () => localStorage.getItem('refreshToken');
 
 // Refresh token function
 const refreshAuthToken = async (): Promise<string | null> => {
@@ -54,23 +57,28 @@ const refreshAuthToken = async (): Promise<string | null> => {
             throw new Error('No refresh token available');
         }
 
-        const response = await axiosInstance.post("/api/v1/auth/refreshtoken", null, {
-            params: { Refreshtoken: refreshToken }
+        const response = await axios.post(import.meta.env.REFRESH_TOKEN_URL, {}, {
+            params: { Refreshtoken: refreshToken },
+            
         });
         
         const newAccessToken = response.data.token;
         const newRefreshToken = response.data.refreshToken;
+        console.log(newAccessToken);
+        console.log(newRefreshToken)
         
         // Update tokens
         setTokens(newAccessToken, newRefreshToken);
         return newAccessToken;
     } catch (error) {
         // Refresh failed, logout user
-        setTokens(null, null);
+        
         notify({
             type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
             message: 'Session expired, please login again',
         });
+       useAuthStore.getState().logout; 
+       setTokens(null, null);                                     //added logout
         window.location.href = '/login';
         return null;
     }
@@ -95,7 +103,7 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
         // Handle 401 - Token expired (try refresh)
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -107,19 +115,21 @@ axiosInstance.interceptors.response.use(
                 }
             } catch (refreshError) {
                 // Refresh failed, redirect to login
-                setTokens(null, null);
+                
+                // useAuthStore.getState().logout; 
+                setTokens(null, null);                                       //added logout
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
             }
         }
 
         // Handle 403 - Forbidden (no permission)
-        if (error.response?.status === 403) {
-            notify({
-                type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
-                message: 'Access denied - insufficient permissions',
-            });
-        }
+        // if (error.response?.status === 403) {
+        //     notify({
+        //         type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
+        //         message: 'Access denied - insufficient permissions',
+        //     });
+        // }
         // Handle Network Errors
         else if (error.message === 'Network Error') {
             notify({
