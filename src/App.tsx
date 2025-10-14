@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-
 import "./App.css";
 import About from "./pages/About";
 import Home from "./pages/Home/Home";
@@ -14,10 +13,8 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 import WebFlow from "./pages/webFlow/WebFlow";
 import useAuthStore from "./store/AuthStore/authStore";
 
-
-
 import AccountDetailPage from './pages/AccountDetailsPage'
-import { setToken } from "./utils/httpClientUtil";
+import { initializeTokens } from "./utils/httpClientUtil";
 import TransactionPage from "./pages/TransactionPage/TransactionPage";
 import Error404 from "./pages/ErrorPages/Error404";
 import GenericError from "./pages/ErrorPages/GenericError";
@@ -28,29 +25,30 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
 
-
 export default function App() {
   const { authenticate, isAuthenticated } = useAuthStore();
+  
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setToken(token);
+    // Initialize tokens from localStorage when app starts
+    initializeTokens();
+    
+    // Check if user is authenticated
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
       authenticate(true);
     }
-  }, [])
+  }, [authenticate])
 
   return (
     <>
       <Header />
       <Alerts />
       <Routes>
-
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-
           <Route path="/transactions" element={<ProtectedRoute>< TransactionPage /></ProtectedRoute>} />
           <Route path="about" element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
@@ -58,14 +56,13 @@ export default function App() {
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
           <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
-          
         </Route>
-           <Route path="/help" element={<HelpAndSupport />} />
+        
+        <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/error404" element={< Error404 />}></Route>
         <Route path="/genericError" element={< GenericError />}></Route>
         <Route path="/maintenance" element={< Maintenance />}></Route>
       </Routes>
     </>
-
   );
 }

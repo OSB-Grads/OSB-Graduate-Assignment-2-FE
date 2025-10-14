@@ -1,57 +1,142 @@
 import axios from "axios";
 import { notify } from "../components/Toast/Alerts";
 import { ToastTypes } from "../components/Toast/interfaces";
-import { resetAllStores } from "../store/reset";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
+    
 })
 
-interface IToken {
-    token: string | null,
+interface ITokens {
+    token: string | null;
+    refreshToken: string | null;
 }
 
-const token: IToken = {
+const tokens: ITokens = {
     token: null,
+    refreshToken: null,
 }
 
-export const setToken = function (t: string | null) {
-    token.token = t
+
+export const setTokens = function (accessToken: string | null, refreshToken: string | null) {
+    tokens.token = accessToken;
+    tokens.refreshToken = refreshToken;
+    
+
+    // Store in localStorage
+    if (accessToken && refreshToken) {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+    } else {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+    }
 }
 
-const getToken = () => token.token
+// Initialize tokens from localStorage
+export const initializeTokens = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (accessToken && refreshToken) {
+        tokens.token = accessToken;
+        tokens.refreshToken = refreshToken;
+    }
+}
 
+const getAccessToken = () => tokens.token;
+export const getRefreshToken = () => tokens.refreshToken;
+
+// Refresh token function
+const refreshAuthToken = async (): Promise<string | null> => {
+    try {
+        const refreshToken = getRefreshToken();
+        if (!refreshToken) {
+            throw new Error('No refresh token available');
+        }
+
+        const response = await axiosInstance.post("/api/v1/auth/refreshtoken", null, {
+            params: { Refreshtoken: refreshToken }
+        });
+        
+        const newAccessToken = response.data.token;
+        const newRefreshToken = response.data.refreshToken;
+        
+        // Update tokens
+        setTokens(newAccessToken, newRefreshToken);
+        return newAccessToken;
+    } catch (error) {
+        // Refresh failed, logout user
+        setTokens(null, null);
+        notify({
+            type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
+            message: 'Session expired, please login again',
+        });
+        window.location.href = '/login';
+        return null;
+    }
+}
+
+// Request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = getToken()
-
+        const token = getAccessToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        return config
-    }
-)
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+// Response interceptor with token refresh logic
 axiosInstance.interceptors.response.use(
     (response) => response,
-    (error) => {
-        if (error.message === 'Network Error') {
+    async (error) => {
+        const originalRequest = error.config;
+
+        // Handle 401 - Token expired (try refresh)
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                const newAccessToken = await refreshAuthToken();
+                if (newAccessToken) {
+                    // Retry the original request with new token
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return axiosInstance(originalRequest);
+                }
+            } catch (refreshError) {
+                // Refresh failed, redirect to login
+                setTokens(null, null);
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            }
+        }
+
+        // Handle 403 - Forbidden (no permission)
+        if (error.response?.status === 403) {
             notify({
-                type: ToastTypes.ERROR as keyof typeof ToastTypes,
-                message: 'Backend is not connected ',
+                type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
+                message: 'Access denied - insufficient permissions',
             });
-        } else if (error.status === 403) {
+        }
+        // Handle Network Errors
+        else if (error.message === 'Network Error') {
             notify({
-                type: ToastTypes.UNAUTHENTICATED as keyof typeof ToastTypes,
-                message: 'Session has expired, please login again',
+                type: 'ERROR' as keyof typeof ToastTypes,
+                message: 'Backend is not connected',
             });
-        } else {
+        }
+        // Handle other errors
+        else if (error.response?.status >= 500) {
             notify({
-                type: ToastTypes.ERROR as keyof typeof ToastTypes,
-                message: 'An error occurred while receiving response',
+                type: 'ERROR' as keyof typeof ToastTypes,
+                message: 'Server error, please try again later',
             });
         }
 
         return Promise.reject(error);
     }
 );
-export default axiosInstance
+
+export default axiosInstance;
