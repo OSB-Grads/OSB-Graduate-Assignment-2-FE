@@ -27,6 +27,8 @@ import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import SetPassword from "./pages/SetPassword/SetPassword";
 
 
 export default function App() {
@@ -47,6 +49,9 @@ export default function App() {
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path = "/forgotPassword" element ={<ForgotPassword />} />
+        
+        
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -64,6 +69,7 @@ export default function App() {
         <Route path="/error404" element={< Error404 />}></Route>
         <Route path="/genericError" element={< GenericError />}></Route>
         <Route path="/maintenance" element={< Maintenance />}></Route>
+        <Route path ="/SetPassword" element = {<SetPassword/>}></Route>
       </Routes>
     </>
 
