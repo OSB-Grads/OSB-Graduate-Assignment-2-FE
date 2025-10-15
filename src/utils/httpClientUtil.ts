@@ -56,8 +56,10 @@ const refreshAuthToken = async (): Promise<string | null> => {
         if (!refreshToken) {
             throw new Error('No refresh token available');
         }
-
-        const response = await axios.post(import.meta.env.REFRESH_TOKEN_URL, {}, {
+        
+       const refreshTokenendpoint=import.meta.env.VITE_REFRESH_TOKEN_URL;
+       console.log(refreshTokenendpoint);
+        const response = await axios.post(refreshTokenendpoint, {}, {
             params: { Refreshtoken: refreshToken },
             
         });
@@ -102,7 +104,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        // Handle 401 - Token expired (try refresh)
+        // Handle 403 - Token expired (try refresh)
         if (error.response?.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
 
@@ -116,7 +118,7 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
                 // Refresh failed, redirect to login
                 
-                // useAuthStore.getState().logout; 
+                 useAuthStore.getState().logout; 
                 setTokens(null, null);                                       //added logout
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
