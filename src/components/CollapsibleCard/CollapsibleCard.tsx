@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, type JSX } from 'react';
 import {
     Card,
     CardHeader,
@@ -13,7 +13,7 @@ import './CollapsibleCard.css'
 
 interface ICollapsibleCardProps {
     title: string;
-    answer: string;
+    answer: string|JSX.Element;
     defaultOpen?: boolean;
 }
 

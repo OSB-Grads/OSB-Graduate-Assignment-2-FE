@@ -6,7 +6,7 @@ interface InputFieldProps {
   label?: string;
   type?: string;
   placeholder?: string;
-  value: string;
+  value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   kind?: 'PRIMARY' | 'SECONDARY';

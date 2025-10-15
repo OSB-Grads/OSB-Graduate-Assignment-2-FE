@@ -8,7 +8,7 @@ const useUserStore = create<IUserState>()(
         user: undefined,
         createUser: (name, email, phone) => createUser(set, name, email, phone),
         getUser: () => getUser(set),
-        updateUser: (name, email, phone, address) => updateUser(set, name, email, phone, address)
+        updateUser: (name: string, email: string, phone: string, address: string) => updateUser(set, name, email, phone, address)
     })
 )
 

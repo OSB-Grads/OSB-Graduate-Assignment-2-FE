@@ -1,0 +1,58 @@
+
+.adminPageRoot {
+
+
+  display: flex-row;
+  justify-content: center;
+  /* align-items: flex-start; */
+
+
+  min-height: calc(100vh - 64px);
+  width: 100vw;
+  background-color: var(--color-background);
+
+  color: var(--color-text);
+  margin-top: 64px;
+  overflow-y: hidden;
+  overflow-y: hidden;
+
+}
+
+.adminPageNav {
+  border-right: 1px solid #ccc;
+}
+
+.adminPageHeader {
+  padding: 20px;
+  text-align: center;
+
+}
+
+.adminPageProductContent {
+  padding: 16px;
+  align-items: center;
+  margin-left: 320px;
+  gap: 5px;
+}
+
+.adminPageAccountContent{
+ padding: 16px;
+  align-items: center;
+  margin-left: 320px;
+  gap: 5px;
+}
+
+.adminPageLogsContent{
+  padding: 16px;
+  align-items: center;
+  margin-left: 320px;
+  gap: 5px;
+}
+
+.AdminCUDProduct{
+  padding:20px;
+  margin: auto;
+  border: 8px;
+  justify-content: space-between;
+  row-gap: 16px;  
+}

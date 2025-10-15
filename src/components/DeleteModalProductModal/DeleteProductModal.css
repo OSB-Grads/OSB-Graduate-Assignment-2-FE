@@ -1,0 +1,73 @@
+.deleteProduct-mainContainer{
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 400px;
+    align-items:center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.modal-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productInputs{
+    padding: 10px;
+    width: 90%;
+}
+
+.MuiList-root{
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.button-element{
+  padding-top : 15px;
+  width: 100%;
+}
+.button-element button{
+  padding: var(--spacing-md);
+  width: 100%;
+  text-align: center;
+  font-weight: 790;
+}
+
+.basicMUIText {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 10px;
+  gap: 31px;
+  background: var(--color-secondary); 
+}
+
+/* Style the input box inside */
+.basicMUIText .MuiInputBase-root {
+  color: var(--color-text) ;
+  font-size : 16px;
+}
+
+/* Label text */
+.basicMUIText .MuiInputLabel-root {
+  color: var(--color-white)
+}
+
+/* Dropdown arrow */
+.basicMUIText .MuiSvgIcon-root {
+  color: var(--color-primary); 
+}
+
+/* Menu items dropdown */
+.MuiMenuItem-root {
+  font-size: 16px;
+  padding: 10px 16px;
+}
+.MuiMenuItem-root:hover {
+  background-color: var(--color-secondary);
+}

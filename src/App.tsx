@@ -27,6 +27,7 @@ import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
+import AdminPage from "./pages/AdminPage/AdminPage";
 
 
 export default function App() {
@@ -47,6 +48,7 @@ export default function App() {
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/adminPage" element={<AdminPage/>}/>
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -56,6 +58,7 @@ export default function App() {
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
+          {/* <Route path="/adminPage" element={<ProtectedRoute><AdminPage/></ProtectedRoute>}/> */}
           <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
           
