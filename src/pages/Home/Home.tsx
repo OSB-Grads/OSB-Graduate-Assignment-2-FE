@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Home.css";
 
 import {
@@ -19,6 +19,7 @@ import useAccountStore from "../../store/AccountStore/accountStore.tsx";
 
 
 export default function Home() {
+   const navigate = useNavigate();
 
   const [userLoading, setUserLoading] = React.useState(true);
   const [userError, setUserError] = React.useState<string | null>(null);
@@ -26,10 +27,6 @@ export default function Home() {
   const { user, getUser } = useUserStore();
   const { transactions, fetchTransactionDetails, loading, error } = useTransactionStore();
   const { accounts, accountError, accountLoading, fetchAllAccounts } = useAccountStore();
-
-  useEffect(() => {
-    console.log(accounts, accountError, accountLoading)
-  }, [accounts, accountError, accountLoading])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,8 +91,9 @@ export default function Home() {
             return (
               <DashBoardAccount
                 key={index}
-                AccountType={account.accountType}
-                AccountNumber={account.accountNumber}
+                AccountType={account.accountType.includes("FIXED")?"Fixed Deposit":"Savings"}
+                AccountNumber={"**"+account.accountNumber.slice(-4)}
+                onClick={()=>navigate(`/account-details/${account.accountNumber}`)}
               />
             )
           })}
@@ -109,7 +107,7 @@ export default function Home() {
       <div className="quick-action-lists">
         <div className="quick-actions">
           {QuickActionListData.map((item: QuickList) => (
-            <Link to={item.path} key={item.id}>
+            <Link to={item.path} key={item.id} state={{mode:item.state?.mode}}>
               <QuickActionItem
                 label={item.label}
                 subLabel={item.subLabel}
@@ -127,16 +125,17 @@ export default function Home() {
       <div className="latest-notifiction">
         <div className="latest-notifiction-actions">
           {
-            !error && !loading && transactions.map((item, index) => {
+            !error && !loading && Array.isArray(transactions) && transactions.length > 0 ?
+            transactions.slice(0,3).map((item, index) => {
               return (
                 <QuickActionItem
                   key={index}
-                  label={`${item.description} : amount of ${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
-                  subLabel={formatDistanceToNow(parseISO(item.createdAt))}
+                  label={`${item.description} : amount of $${item.amount} is transferred ${item.fromAccount ? `from ${item.fromAccount} ` : ''}${item.toAccount ? `to ${item.toAccount}` : ''}`}
+                  subLabel={`${formatDistanceToNow(parseISO(item.createdAt))} ago`}
                   icon={LatestNotificationTransferIcon}
                 ></QuickActionItem>
               )
-            })}
+            }):<></>}
         </div>
       </div>
     </div>

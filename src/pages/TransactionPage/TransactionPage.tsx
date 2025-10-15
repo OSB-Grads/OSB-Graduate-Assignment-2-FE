@@ -51,8 +51,9 @@ const TransactionPage: React.FC = () => {
           id=""
           label=""
           type="text"
-          placeholder="Search"
+          placeholder="Search Transactions"
           value = {value}
+          kind="SECONDARY"
           // onChange={(e)=>{setFilter(e.target.value)}}   
           onChange={(e) => {
           setValue(e.target.value);

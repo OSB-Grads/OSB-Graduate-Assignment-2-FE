@@ -2,13 +2,16 @@
  
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   
-  
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   width: 100vw;
   background-color: var(--color-background);
   
   color: var(--color-text);
+  margin-top: 64px;
+  overflow-y: hidden;
+  overflow-y: hidden;
 
 
 }
@@ -22,8 +25,9 @@ align-items: center;
 /* justify-content: center; */
 padding: 0px;
 
-width:100vw;
 
+width:100vw;
+overflow: hidden;
 
 
 
@@ -84,5 +88,16 @@ flex-grow: 0;
   
   overflow-y: auto;
   height: 80vh;
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
   
+}
+
+.help-support-questions-answers::-webkit-scrollbar {
+  display: none; 
+}
+
+
+.help-support-questions-answers {
+  scroll-behavior: smooth;
 }

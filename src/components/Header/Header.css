@@ -13,9 +13,13 @@
 
    width: 100vw;
    height: 64px;
-   background-color: var(--main-color);
+   background-color: var(--color-background);
 
-   border-bottom: 1px solid #E5E8EB
+   border-bottom: 1px solid #E5E8EB;
+
+  position: fixed;
+  top: 0;          
+  z-index: 1000;   
 
 }
 
@@ -60,7 +64,6 @@ color:white;
 font-weight: 700;
 font-style: Bold;
 font-size: 18px;
-leading-trim: NONE;
 line-height: 23px;
 letter-spacing: 0px;
 
@@ -93,18 +96,19 @@ flex-grow: 0;
 }
 .headder-right>.headder-bell-icon{
    
-display: flex;
+display:flex;
 flex-direction: row;
 justify-content: center;
 align-items: center;
 padding: 0px 10px;
 gap: 8px;
+position: relative;
 
 width: 40px;
 max-width: 480px;
 height: 40px;
 
-background: #264533;
+/* background: #264533; */
 border-radius: 4px;
 
 /* Inside auto layout */
