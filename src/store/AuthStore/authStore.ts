@@ -3,7 +3,6 @@ import type { AuthState } from "./authStore.interface";
 import { login, signup, logout, authenticate } from "./authStore.logic";
 import { addToResetFns } from "../reset";
 
-//AuthStore
 const useAuthStore = create<AuthState>()(
     (set) => {
         addToResetFns(() => set({

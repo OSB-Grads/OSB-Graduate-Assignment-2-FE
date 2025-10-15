@@ -1,6 +1,6 @@
-import { setToken } from "../../utils/httpClientUtil";
-import { resetAllStores } from "../reset";
-import { loginApi, registerApi } from "./authstore.api";
+import { setTokens, getRefreshToken } from "../../utils/httpClientUtil";
+import { loginApi, registerApi, logoutApi} from "./authstore.api";
+import type { AuthResponse } from "./authstore.api";
 
 export const authenticate = (set: any, toAuthenticate: boolean) => {
     set({
@@ -10,39 +10,49 @@ export const authenticate = (set: any, toAuthenticate: boolean) => {
 
 export const signup = async (set: any, username: string, password: string) => {
     try {
-        const token = await registerApi(username, password);
+        const authResponse: AuthResponse = await registerApi(username, password);
         
         set({
             isAuthenticated: true,
         })
-        setToken(token);
+        setTokens(authResponse.token, authResponse.refreshToken);
     } catch (e) {
         console.log("error occurred", e);
+        throw e;
     }
 }
 
 export const login = async (set: any, username: string, password: string, rememberMe: boolean) => {
     try {
-        const token = await loginApi(username, password);
+        const authResponse: AuthResponse = await loginApi(username, password);
 
         set({
             isAuthenticated: true,
         })
-        
-        setToken(token);
-
-        if (rememberMe) {
-            localStorage.setItem('token', token);
-        }
+        setTokens(authResponse.token, authResponse.refreshToken);
     } catch (e) {
         console.log("error occurred", e);
+        throw e;
     }
 }
 
-export const logout = (set: any) => {
-    resetAllStores();
-    console.log("LogOut INtiated")
-    localStorage.removeItem('token');
-    console.log("Token Deletion successful")
-    setToken(null);
+export const logout = async (set: any) => {
+    try {
+        const refreshToken = getRefreshToken();
+        if (refreshToken) {
+          const refreshTokenRemoved=  await logoutApi(refreshToken);
+          if(refreshTokenRemoved){
+            console.log("refresh token is removed");
+          }else{
+             console.log("refresh token is not removed");
+          }
+        }
+    } catch (error) {
+        console.log("Logout API call failed, but clearing tokens anyway", error);
+    } finally {
+        set({
+            isAuthenticated: false,
+        })
+        setTokens(null, null);
+    }
 }
