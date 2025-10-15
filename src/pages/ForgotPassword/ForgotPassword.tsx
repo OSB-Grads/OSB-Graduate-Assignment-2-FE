@@ -33,9 +33,9 @@ function ForgotPassword() {
   }, [timer]);
 
   useEffect(() => {
-    console.log("USE EFFECT NAVIGATION");
+    
     if (otpSuccess) {
-      console.log("Navigation Should happen");
+      
       navigate('/SetPassword');
     }
   }, [otpSuccess])
@@ -64,7 +64,10 @@ function ForgotPassword() {
       setIsOTPSent(true);
       setTimer(30);
     } catch (error: any) {
-      console.log(error)
+      notify({
+            type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
+            message: 'Error in Verify Email',
+        });
     } finally {
       setLoadingForgotPassword(false);
     }
@@ -130,7 +133,7 @@ function ForgotPassword() {
     setLoadingForgotPassword(true);
     try {
      await verifyOtp(otp);
-     console.log("SUCCESS",otpSuccess)
+     
     } catch (err: any) {
       notify({
         type: ToastTypes.ERROR as keyof typeof ToastTypes,

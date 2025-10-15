@@ -43,7 +43,7 @@ export const resendOtpLogic = async (set: any, get: any) => {
         set({ loading: true, error: false })
         const email = get.userEmail;
         if (!email) {
-            console.log("Email not set in store")
+            
             throw new Error("Email not set in Store.");
         }
 
@@ -53,11 +53,15 @@ export const resendOtpLogic = async (set: any, get: any) => {
     }
 
     catch (error: any) {
-        console.log(error);
+        
         set({
             loading: false,
             error: true,
             mailSuccess: false,
+        });
+        notify({
+            type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
+            message: 'OTP Sending Failed.',
         });
     }
 
@@ -69,15 +73,13 @@ export const verifyOtpLogic = async (set: any, get: any, otp: string) => {
         set({ loading: true, error: false })
         const otpId = get().otpId
         if (!otpId) {
-            console.log("Missing OTP ID")
+        
             throw new Error("Missing OTP ID")
         }
         const res = await verifyOtpApi(otpId, otp);
 
         if (res.data === true) {
             set({ otp, loading: false, otpSuccess: true })
-            console.log("OTP Verified Successfully");
-
             notify({
                 type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
                 message: 'OTP Verified Successfully',
@@ -85,7 +87,7 @@ export const verifyOtpLogic = async (set: any, get: any, otp: string) => {
         }
         else {
             set({ otp, loading: false, otpSuccess: false, error: true });
-            console.log("Result of Verify OTP FALSE");
+            
             notify({
                 type: ToastTypes.ERROR as keyof typeof ToastTypes,
                 message: 'Invalid or OTP Expired',
@@ -93,9 +95,8 @@ export const verifyOtpLogic = async (set: any, get: any, otp: string) => {
         }
     }
     catch (err: any) {
-        console.error(err);
+        
         set({ loading: false, error: true });
-        console.log("OTP Verification failed");
         notify({
             type: ToastTypes.ERROR as keyof typeof ToastTypes,
             message: 'OTP Verification Failed',
@@ -118,14 +119,20 @@ export const resetPasswordLogic = async (set: any, get: any, password: string) =
         }
         else {
             set({ loading: false, resetSuccess: false, error: true })
-            console.log("Password Reset Failed")
+            
+            notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: 'Password Reset Failed',
+        });
         }
 
     }
     catch (err: any) {
-        console.error(err);
         set({ loading: false, error: false });
-        console.log("Reset failed")
+        notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: 'Reset Operation failed',
+        });
     }
 
 
