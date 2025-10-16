@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { transactionState } from "./transactionStore.interface";
-import { fetchTransactionDetails, fetchTransactionFromAccountnumber, transferAmountBetweenAccounts } from "./transactionStore.login";
+import { fetchTransactionDetails, fetchTransactionFromAccountnumber, transferAmountBetweenAccounts } from "./transactionStore.logic";
 import { persist } from "zustand/middleware";
 
 

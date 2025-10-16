@@ -25,6 +25,8 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import SetPassword from "./pages/SetPassword/SetPassword";
 
 export default function App() {
   const { authenticate, isAuthenticated } = useAuthStore();
@@ -51,6 +53,9 @@ export default function App() {
         <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
         {/* <Route path="/adminPage" element={<AdminPage/>}/> */}
         <Route path="/adminPage"  element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminPage/></ProtectedRoute>}/>
+        <Route path = "/forgotPassword" element ={<ForgotPassword />} />
+        
+        
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -68,6 +73,7 @@ export default function App() {
         <Route path="/error404" element={< Error404 />}></Route>
         <Route path="/genericError" element={< GenericError />}></Route>
         <Route path="/maintenance" element={< Maintenance />}></Route>
+        <Route path ="/SetPassword" element = {<SetPassword/>}></Route>
       </Routes>
     </>
   );

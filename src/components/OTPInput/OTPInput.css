@@ -1,0 +1,11 @@
+.otpInput{
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    padding: 10px;
+    background-color: var(--color-background);
+    border-color: var(--color-primary);
+    color: var(--color-text);
+    border-radius: 4px;
+}
