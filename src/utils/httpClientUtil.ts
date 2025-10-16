@@ -4,15 +4,23 @@ import { ToastTypes } from "../components/Toast/interfaces";
 import { logoutApi } from "../store/AuthStore/authstore.api";
 import { logout } from "../store/AuthStore/authStore.logic";
 import useAuthStore from "../store/AuthStore/authStore";
+import { jwtDecode, type JwtPayload } from 'jwt-decode';
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
-    
+
 })
 
 interface ITokens {
     token: string | null;
     refreshToken: string | null;
+}
+
+interface IJWTTokenPayLoad {
+    sub: string,
+    role: string,
+    exp: number,
+    iat: number
 }
 
 const tokens: ITokens = {
@@ -24,7 +32,7 @@ const tokens: ITokens = {
 export const setTokens = function (accessToken: string | null, refreshToken: string | null) {
     tokens.token = accessToken;
     tokens.refreshToken = refreshToken;
-    
+
 
     // Store in localStorage
     if (accessToken && refreshToken) {
@@ -56,36 +64,48 @@ const refreshAuthToken = async (): Promise<string | null> => {
         if (!refreshToken) {
             throw new Error('No refresh token available');
         }
-        
-       const refreshTokenendpoint=import.meta.env.VITE_REFRESH_TOKEN_URL;
-       console.log(refreshTokenendpoint);
+
+        const refreshTokenendpoint = import.meta.env.VITE_REFRESH_TOKEN_URL;
+        console.log(refreshTokenendpoint);
         const response = await axios.post(refreshTokenendpoint, {}, {
             params: { Refreshtoken: refreshToken },
-            
+
         });
-        
+
         const newAccessToken = response.data.token;
         const newRefreshToken = response.data.refreshToken;
         console.log(newAccessToken);
         console.log(newRefreshToken)
-        
+
         // Update tokens
         setTokens(newAccessToken, newRefreshToken);
         return newAccessToken;
     } catch (error) {
         // Refresh failed, logout user
-        
+
         notify({
             type: 'UNAUTHENTICATED' as keyof typeof ToastTypes,
             message: 'Session expired, please login again',
         });
-       useAuthStore.getState().logout; 
-       setTokens(null, null);                                     //added logout
+        useAuthStore.getState().logout;
+        setTokens(null, null);                                     //added logout
         window.location.href = '/login';
         return null;
     }
 }
 
+
+export const getRole = ():string => {
+
+    const token = getAccessToken();
+
+    if (token === null) return "";
+
+    const decoded = jwtDecode<IJWTTokenPayLoad>(token);
+    const roleOfUser = decoded.role;
+    return roleOfUser;
+
+}
 // Request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -117,8 +137,8 @@ axiosInstance.interceptors.response.use(
                 }
             } catch (refreshError) {
                 // Refresh failed, redirect to login
-                
-                 useAuthStore.getState().logout; 
+
+                useAuthStore.getState().logout;
                 setTokens(null, null);                                       //added logout
                 window.location.href = '/login';
                 return Promise.reject(refreshError);

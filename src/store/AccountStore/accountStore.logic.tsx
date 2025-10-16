@@ -1,5 +1,7 @@
 
-import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
+import { notify } from '../../components/Toast/Alerts';
+import { ToastTypes } from '../../components/Toast/interfaces';
+import { getAccount ,getAllAccounts, getAllAccountsByAdminApi, postAccount} from './accountStore.api';
 
 
 
@@ -47,4 +49,33 @@ import { getAccount ,getAllAccounts, postAccount} from './accountStore.api';
       }))
       
     }
+  }
+
+
+
+  export const fetchAllAccountsByAdmin=async (set:any)=>{
+
+    try{
+      set(()=>({loadingAdminFetch:true}))
+      const accountsForAdmin=await getAllAccountsByAdminApi();
+      set(()=>({
+        loadingAdminFetch:false,
+        allAccountsForAdmin:accountsForAdmin
+      }))
+    }
+    catch(error){
+
+      set(()=>({
+        loadingAdminFetch:false,
+        errorAdminFetch:true
+      }))
+
+       notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: 'Error While Fetching Accounts Operation',
+        });
+
+    }
+
+
   }

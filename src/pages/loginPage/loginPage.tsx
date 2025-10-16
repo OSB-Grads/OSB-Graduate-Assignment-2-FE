@@ -25,10 +25,6 @@ export default function LoginPage() {
     }
   };
 
-  useEffect(() => {
-    if(isAuthenticated) navigate("/dashboard");
-  }, [isAuthenticated]);
-
   return (
     <div className="login-container">
       <main className="login-main">

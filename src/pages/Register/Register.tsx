@@ -51,10 +51,6 @@ function Register() {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated]);
-
   return (
     <div className="register-container">
       <main className="register-main">

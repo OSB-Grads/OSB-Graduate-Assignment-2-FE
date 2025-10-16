@@ -19,3 +19,9 @@ export const  postAccount=async (balance:string,accountType:string ,productType:
     return res.data;
     
 }
+
+
+export const getAllAccountsByAdminApi =async()=>{
+    const result=await axiosInstance.get('/api/v1/admin/accounts');
+    return result.data;
+}

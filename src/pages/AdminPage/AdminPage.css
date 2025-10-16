@@ -31,21 +31,25 @@
 .adminPageProductContent {
   padding: 16px;
   align-items: center;
-  margin-left: 320px;
+  margin-left: 200px;
   gap: 5px;
+}
+
+.css-1j74uew-MuiPaper-root-MuiCard-root{
+  width:1200px;
 }
 
 .adminPageAccountContent{
  padding: 16px;
   align-items: center;
-  margin-left: 320px;
+  margin-left: 200px;
   gap: 5px;
 }
 
 .adminPageLogsContent{
   padding: 16px;
   align-items: center;
-  margin-left: 320px;
+  margin-left: 200px;
   gap: 5px;
 }
 

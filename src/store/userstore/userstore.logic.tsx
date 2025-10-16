@@ -1,6 +1,6 @@
 import { notify } from "../../components/Toast/Alerts";
 import { ToastTypes } from "../../components/Toast/interfaces";
-import { createUserApi, getUserApi, updateUserApi } from "./usestore.api";
+import { createUserApi, fetchAllUsersForAdminApi, getUserApi, updateUserApi } from "./usestore.api";
 
 export const createUser = async (set: any, name: string, email: string, phone: string) => {
     try {
@@ -35,6 +35,26 @@ export const updateUser = async (set: any, name: string, email: string, phone: s
         notify({
             type: ToastTypes.ERROR as keyof typeof ToastTypes,
             message: 'Error!!! ',
+        });
+
+    }
+}
+
+
+export const fetchAllUsersForAdmin =async (set:any)=>{
+    try{
+        const allUsersForAdmin=await fetchAllUsersForAdminApi();
+        set(()=>({
+            userDataForAdmin:allUsersForAdmin
+        }))
+
+        console.log("Users Data",allUsersForAdmin);
+    }
+    catch(error){
+
+         notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: 'Error While Fetching All Users Operation',
         });
 
     }

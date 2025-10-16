@@ -40,14 +40,17 @@ export default function App() {
     }
   }, [authenticate])
 
+
+
   return (
     <>
       <Header />
       <Alerts />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/adminPage" element={<AdminPage/>}/>
+        <Route path="/login" element={<ProtectedRoute><LoginPage /></ProtectedRoute>} />
+        <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
+        {/* <Route path="/adminPage" element={<AdminPage/>}/> */}
+        <Route path="/adminPage"  element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminPage/></ProtectedRoute>}/>
 
         <Route path="/" element={<ProtectedRoute><WebFlow /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -56,7 +59,7 @@ export default function App() {
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
-          {/* <Route path="/adminPage" element={<ProtectedRoute><AdminPage/></ProtectedRoute>}/> */}
+          
           <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
         </Route>
