@@ -71,3 +71,18 @@
 .MuiMenuItem-root:hover {
   background-color: var(--color-secondary);
 }
+
+
+.deletionProductConditionCSS{
+  gap:15px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.deletionProductTextCSS{
+  padding: 8px;
+  padding-bottom: 24px;
+}

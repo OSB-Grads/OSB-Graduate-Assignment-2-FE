@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import ButtonComponent from "../../components/Button/ButtonComponent"
 import CollapsibleCard from "../../components/CollapsibleCard/CollapsibleCard"
 import CUProductModal from "../../components/ProductModal/CUProductModal"
-import Leftnavbar from "../../components/Leftnavbar/Leftnavbar"
 import TableComponent from "../../components/TableComponent/TableComponent"
 import "./AdminPage.css"
 import DelectProductModal from "../../components/DeleteModalProductModal/DeleteProductModal"
@@ -12,7 +11,6 @@ import useUserStore from "../../store/userstore/userstore"
 import { useLogStore } from "../../store/LogStore/logStore"
 
 const AdminPage = () => {
-
     const productHeader: string[] = ["productId", "productName", "interestRate", "fundingWindow", "coolingPeriod", "tenure", "description"];
     const accountsHeader: string[] = ["accountNumber", "accountType", "balance", "accountCreated", "accountUpdated"];
     const usersHeader: string[] = ["name", "email", "phone", "address"];
@@ -87,8 +85,6 @@ const AdminPage = () => {
                             answer={<TableComponent tableheader={logHeader} tabledata={logData}></TableComponent>}>
                         </CollapsibleCard>
                     </div>
-
-
                 </div>
             </div>
 

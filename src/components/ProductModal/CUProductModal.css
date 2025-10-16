@@ -71,3 +71,28 @@
 .MuiMenuItem-root:hover {
   background-color: var(--color-secondary);
 }
+
+.css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+  width:100%;
+  color:var(--color-text);
+  border: 2px var(--color-white) solid;
+}
+
+.MuiSelect-select
+{ width: 100%;
+  gap: 8px;
+  
+ 
+}
+
+
+.updateProductCss{
+  width:100%;
+  padding: 8px;
+  gap:5px;
+
+}
+
+.productUpdateLabelCSS{
+  padding-bottom: 10px;
+}

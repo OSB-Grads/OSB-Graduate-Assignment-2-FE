@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import "./DeleteProductModal.css"
 import InputField from '../inputField/inputField';
 import ButtonComponent from '../Button/ButtonComponent';
-import { MenuItem, Modal, Select, TextField } from '@mui/material';
+import { FormControl, MenuItem, Modal, Select, TextField } from '@mui/material';
+import useProductStore from '../../store/ProductStore/ProductStore';
 // import axiosInstance from '../../utils/httpClientUtil';
 // import { notify } from '../../components/Toast/Alerts';
 // import { ToastTypes } from '../../components/Toast/interfaces';
@@ -23,51 +24,37 @@ function DelectProductModal(props: { open: boolean, setOpen: React.Dispatch<Reac
     const [tenure, setTenure] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
 
-       const productData: Record<string, any>[] = [{
-        productId: "FD001",
-        productName: "Fixed Deposit 1",
-        interestRate: 2,
-        fundingWindow: 1,
-        coolingPeriod: 4,
-        Tenure: 5,
-        description: "Fixed Deposit "
-    }]
+    const { products, deleteProductByAdmin ,fetchProductDetails} = useProductStore();
 
 
-    // const { products, fetchProductDetails } = useProductStore();
-    // // const{CreateAccount}=useAccountStore();
-    // useEffect(() => { fetchProductDetails() }, []);
 
-    // useEffect(() => {
-    //     if (props.preSelectedProduct) {
-    //         setProductType(props.preSelectedProduct);
-    //     }
+    const handleSelectedOptionChange = (e: React.ChangeEvent<Omit<HTMLInputElement, "value"> & { value: string; }> | (Event & { target: { value: string; name: string; }; })) => {
+        const selected = e.target.value;
+        setProductId(selected);
 
-    // }, [props.preSelectedProduct])
+        const productSelected = products.find((p) => p.productId === selected);
 
-    const handleSelectedOptionChange=(e: React.ChangeEvent<Omit<HTMLInputElement, "value"> & { value: string; }> | (Event & { target: { value: string; name: string; }; }))=>{
-
-     setProductId(e.target.value);
-
-     const productSelected=productData.find((p)=>p.productId===productId);
-
-     setProductName(productSelected?productSelected.productName:"");
+        setProductName(productSelected ? productSelected.productName : "");
+        setProductFundingWindow(productSelected ? productSelected.fundingWindow : productFundingWindow);
+        setCoolingPeriod(productSelected ? productSelected.coolingPeriod : coolingPeriod);
+        setDescription(productSelected ? productSelected.description : description);
+        setTenure(productSelected ? productSelected.tenure : tenure);
+        setProductInterestRate(productSelected ? productSelected.interestRate : productInterestRate);
     }
 
-    const handleSubmit = async () => {
-        // if (!productType || !amount) return;
-        // const typeOfAccount = productType.includes("FD") ? "FIXED_DEPOSIT" : "SAVINGS";
-
-        //  await CreateAccount(
-        // amount, typeOfAccount,productType  
-        // );
-        // notify({
-        //     type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
-        //     message: "Product created successfully",
-        // })
-
+    const handleSubmitdeleteProduct=async()=>{
+        await deleteProductByAdmin(productId);
+          setProductId("");
+        setProductName("");
+        setDescription("");
+        setCoolingPeriod(0);
+        setProductInterestRate(0);
+        setTenure(0);
+        setProductFundingWindow(0);
+        await fetchProductDetails();
         handleClose();
-    };
+    }
+
     return (
         <>
             <Modal
@@ -76,81 +63,47 @@ function DelectProductModal(props: { open: boolean, setOpen: React.Dispatch<Reac
                 onClose={handleClose}
             >
                 <div className="deleteProduct-mainContainer">
+                    <h3>Delete Product</h3>
 
                     <div className="productInputs">
-                        {/* {props.preSelectedOperation === "Create" ? (
-                            <InputField
-                                id="productId"
-                                label="Product Id"
-                                placeholder="Enter Product Id"
+                        <FormControl fullWidth>
+                            <p className='deleteUpdateLabelCSS'>Product Id</p>
+                            < Select
+                                label="ProductId"
                                 value={productId}
-                                onChange={(e) => setProductId(e.target.value)}
-                            />) : */}
-                            {/* (  */}
-                                < Select
-                                    label="ProductId"
-                                    value={productId}
-                                    onChange={(e)=>handleSelectedOptionChange(e)}
-                                    displayEmpty>
-                                        <MenuItem key="Select" value="">Select</MenuItem>
-                                    {productData.map((product) => (
-                                        <MenuItem key={product.productId} value={product.productId}>{
-                                            product.productId 
-                                        }
-                                    </MenuItem> ))}
-                                 </Select>
-                                    {/* )} */}
-
-                    {/* <InputField
-                        id="productName"
-                        label="Product Name"
-                        placeholder="Enter Product Name"
-                        value={productName}
-                        onChange={(e) => setProductName(e.target.value)}
-                        disabled={props.preSelectedOperation==="Create"?false:true}
-                    /> */}
-
-                    
-
-                    <div>
-                        <InputField
-                            id="productCoolingPeriod"
-                            label="Cooling Period"
-                            type="number"
-                            placeholder="Enter Cooling Period"
-                            value={coolingPeriod}
-                            onChange={(e) => setCoolingPeriod(Number(e.target.value))}
-                        />
-
-                        <InputField
-                            id="productTenure"
-                            label="Tenure"
-                            type="number"
-                            placeholder="Enter Tenure"
-                            value={tenure}
-                            onChange={(e) => setTenure(Number(e.target.value))}
-                        />
+                                onChange={(e) => handleSelectedOptionChange(e)}
+                                displayEmpty>
+                                <MenuItem key="Select" value="">Select</MenuItem>
+                                {products.map((product) => (
+                                    <MenuItem key={product.productId} value={product.productId}>{
+                                        product.productId
+                                    }
+                                    </MenuItem>))}
+                            </Select>
+                        </FormControl>
+                        {productId !== "" ? (
+                            <div className='deletionProductConditionCSS'>
+                                <p className='deletionProductTextCSS'>
+                                    Do You Want to Delete the Product <br/> with id:&nbsp;{productId}<br/>
+                                    with Name:&nbsp;{productName}<br/>
+                                    with description:&nbsp;{description}<br/>
+                                    with tenure:&nbsp;{tenure}<br/>
+                                    with cooling period:&nbsp;{coolingPeriod}<br/>
+                                    with fundingWIndow:&nbsp;{productFundingWindow}<br/>
+                                    with interestRate:&nbsp;{productInterestRate}
+                                </p>
+                                <ButtonComponent
+                                    label="Delete Product"
+                                    onClick={handleSubmitdeleteProduct}
+                                    type="button"
+                                    variant="primary"
+                                />
+                            </div>
+                        ) : (<></>)
+                        }
                     </div>
-
-                    <InputField
-                        id="productDescription"
-                        label="Product Description"
-                        placeholder="Enter Product Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-
-                    <div className="button-element">
-                        <ButtonComponent
-                            label="Create Product"
-                            onClick={handleSubmit}
-                            type="button"
-                            variant="secondary"
-                        />
-                    </div>
-                </div>
-            </div >
-        </Modal >
+                </div >
+            </Modal >
         </>
     )
 }
