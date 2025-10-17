@@ -5,7 +5,7 @@ export interface IProduct{
     interestRate:number,
     fundingWindow:number,
     coolingPeriod:number,
-    Tenure:number,
+    tenure:number,
     description:string
 
 }
@@ -15,4 +15,7 @@ export interface IProductStore{
     loading:boolean,
     error:boolean,
     fetchProductDetails:()=>Promise<void>
+    createProductByAdmin:(product :IProduct)=>Promise<void>
+    updateProductByAdmin:(productId:string,product:IProduct)=>Promise<void>
+    deleteProductByAdmin:(productId:string)=>Promise<void>
 }

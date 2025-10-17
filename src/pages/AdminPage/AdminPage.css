@@ -1,0 +1,76 @@
+.adminPageRoot {
+
+
+  display: flex-row;
+  justify-content: center;
+  /* align-items: flex-start; */
+
+  height: auto;
+  min-height: calc(100vh - 64px);
+  width: 100vw;
+  background-color: var(--color-background);
+
+  color: var(--color-text);
+  margin-top: 64px;
+  overflow-y: visible;
+
+}
+
+.adminPageNav {
+  border-right: 1px solid #ccc;
+}
+
+.adminPageHeader {
+  padding: 20px;
+  text-align: center;
+
+}
+
+.adminPageProductContent {
+  padding: 16px;
+  align-items: center;
+  margin-left: 200px;
+  gap: 5px;
+}
+
+.css-1j74uew-MuiPaper-root-MuiCard-root {
+  width: 1200px;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.adminPageAccountContent {
+  padding: 16px;
+  align-items: center;
+  margin-left: 200px;
+  gap: 5px;
+}
+
+.adminPageLogsContent {
+  padding: 16px;
+  align-items: center;
+  margin-left: 200px;
+  gap: 5px;
+}
+
+.AdminCUDProduct {
+  padding: 20px;
+  margin: auto;
+  border: 8px;
+  justify-content: space-between;
+  row-gap: 16px;
+}

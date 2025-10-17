@@ -16,18 +16,12 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
+    
       // Call login via Zustand store 
       await login(username, password, rememberMe);
 
-    } catch (error: any) {
-      alert(error.message || "Login failed");
-    }
+    
   };
-
-  useEffect(() => {
-    if(isAuthenticated) navigate("/dashboard");
-  }, [isAuthenticated]);
 
   return (
     <div className="login-container">

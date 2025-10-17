@@ -13,3 +13,10 @@ export const updateUserApi = async (name: string, email: string, phone: string, 
     const response = await axiosInstance.patch('api/v1/users/me', { name, email, phone, address })
     return response.status;
 }
+
+
+export const fetchAllUsersForAdminApi=async ()=>{
+    const response=await axiosInstance.get('/api/v1/admin/users');
+    return response.data;
+
+}

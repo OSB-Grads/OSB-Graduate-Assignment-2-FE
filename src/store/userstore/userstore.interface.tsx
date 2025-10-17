@@ -5,9 +5,11 @@ export interface UserData {
   address: string;
 }
 
-export interface UserState{
+export interface IUserState{
     createUser:(name:string,email:string,phone:string, address : string)=>Promise<number|null>;
     getUser:()=>Promise<void>;
     user?:UserData;
+    userDataForAdmin:UserData[];
+    fetchAllUsersForAdmin:()=>Promise<void>;
 
 };

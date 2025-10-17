@@ -24,6 +24,7 @@ import HelpAndSupport from "./pages/HelpAndSupport/HelpAndSupport";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ProductPage from "./pages/productsPage/ProductPage";
 import AccountDetails from "./pages/accountDetails/accountDetails";
+import AdminPage from "./pages/AdminPage/AdminPage";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import SetPassword from "./pages/SetPassword/SetPassword";
 
@@ -41,13 +42,17 @@ export default function App() {
     }
   }, [authenticate])
 
+
+
   return (
     <>
       <Header />
       <Alerts />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<ProtectedRoute><LoginPage /></ProtectedRoute>} />
+        <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
+        {/* <Route path="/adminPage" element={<AdminPage/>}/> */}
+        <Route path="/adminPage"  element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminPage/></ProtectedRoute>}/>
         <Route path = "/forgotPassword" element ={<ForgotPassword />} />
         
         
@@ -59,6 +64,7 @@ export default function App() {
           <Route path="/products" element={<ProtectedRoute><ProductPage /></ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute><ViewUserProfile></ViewUserProfile></ProtectedRoute>}/>
           <Route path='/accountsPage' element={<ProtectedRoute><AccountPage /></ProtectedRoute>}></Route>
+          
           <Route path='/account-details/:accountNumber' element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}></Route>
           <Route path='/payments' element={<ProtectedRoute><PaymentPage/></ProtectedRoute>}/>
         </Route>

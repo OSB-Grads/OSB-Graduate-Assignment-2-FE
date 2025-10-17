@@ -1,3 +1,5 @@
+import { notify } from "../../components/Toast/Alerts";
+import { ToastTypes } from "../../components/Toast/interfaces";
 import { setTokens, getRefreshToken } from "../../utils/httpClientUtil";
 import { loginApi, registerApi, logoutApi} from "./authstore.api";
 import type { AuthResponse } from "./authstore.api";
@@ -30,9 +32,17 @@ export const login = async (set: any, username: string, password: string, rememb
             isAuthenticated: true,
         })
         setTokens(authResponse.token, authResponse.refreshToken);
-    } catch (e) {
-        console.log("error occurred", e);
-        throw e;
+          notify({
+            type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
+            message: 'Login Successful, Welcome',
+        });
+    } catch (error) {
+        console.log("error occurred", error);
+          notify({
+            type: ToastTypes.ERROR as keyof typeof ToastTypes,
+            message: ` Login Failed ,Please Try again `,
+        });
+        
     }
 }
 
