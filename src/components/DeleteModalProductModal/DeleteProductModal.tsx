@@ -24,7 +24,7 @@ function DelectProductModal(props: { open: boolean, setOpen: React.Dispatch<Reac
     const [tenure, setTenure] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
 
-    const { products, deleteProductByAdmin ,fetchProductDetails} = useProductStore();
+    const { products, deleteProductByAdmin, fetchProductDetails } = useProductStore();
 
 
 
@@ -42,9 +42,9 @@ function DelectProductModal(props: { open: boolean, setOpen: React.Dispatch<Reac
         setProductInterestRate(productSelected ? productSelected.interestRate : productInterestRate);
     }
 
-    const handleSubmitdeleteProduct=async()=>{
+    const handleSubmitdeleteProduct = async () => {
         await deleteProductByAdmin(productId);
-          setProductId("");
+        setProductId("");
         setProductName("");
         setDescription("");
         setCoolingPeriod(0);
@@ -84,13 +84,13 @@ function DelectProductModal(props: { open: boolean, setOpen: React.Dispatch<Reac
                         {productId !== "" ? (
                             <div className='deletionProductConditionCSS'>
                                 <p className='deletionProductTextCSS'>
-                                    Do You Want to Delete the Product <br/> with id:&nbsp;{productId}<br/>
-                                    with Name:&nbsp;{productName}<br/>
-                                    with description:&nbsp;{description}<br/>
-                                    with tenure:&nbsp;{tenure}<br/>
-                                    with cooling period:&nbsp;{coolingPeriod}<br/>
-                                    with fundingWIndow:&nbsp;{productFundingWindow}<br/>
-                                    with interestRate:&nbsp;{productInterestRate}
+                                    Do You Want to Delete the Product <br />  <strong>id </strong>&nbsp;{productId}<br />
+                                    <strong>Name</strong> :&nbsp;{productName}<br />
+                                    <strong> description</strong> :&nbsp;{description}<br />
+                                    <strong> tenure</strong> :&nbsp;{tenure}<br />
+                                    <strong> period</strong> :&nbsp;{coolingPeriod}<br />
+                                    <strong>fundingWIndow</strong> :&nbsp;{productFundingWindow}<br />
+                                    <strong> interestRate</strong> :&nbsp;{productInterestRate}
                                 </p>
                                 <ButtonComponent
                                     label="Delete Product"
