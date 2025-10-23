@@ -1,11 +1,19 @@
 import { fetchProductDetails } from './product.logic';
+import * as api from './product.api';
+
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
 
 // Completely mock the API module
 jest.mock('./product.api', () => ({
   apiCallToTheProductsEndpoint: jest.fn()
 }));
 
-import * as api from './product.api';
+
 
 describe('Product Store Logic', () => {
   let set: jest.Mock;

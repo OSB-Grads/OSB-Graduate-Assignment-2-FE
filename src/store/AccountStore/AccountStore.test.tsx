@@ -3,6 +3,14 @@ import { fetchAccount, fetchAllAccounts, CreateAccount } from './accountStore.lo
 
 jest.mock('./accountStore.api');
 
+
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+
 describe('Account Store Logic', () => {
   let set: jest.Mock;
 
@@ -73,6 +81,7 @@ describe('Account Store Logic', () => {
 
     expect(newState).toEqual({
       accounts: mockAccounts,
+      accountError:false,
       accountLoading: false,
     });
   });
