@@ -40,7 +40,9 @@ function Register() {
       notify({
             type: ToastTypes.SUCCESS as keyof typeof ToastTypes,
             message: "User created successfully",
-        })
+        });
+
+        navigate("/dashboard" );
         
 
     } catch (error) {

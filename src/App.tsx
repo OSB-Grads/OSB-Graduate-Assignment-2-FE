@@ -50,7 +50,7 @@ export default function App() {
       <Alerts />
       <Routes>
         <Route path="/login" element={<ProtectedRoute><LoginPage /></ProtectedRoute>} />
-        <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
+        <Route path="/register" element={<Register />} />
         {/* <Route path="/adminPage" element={<AdminPage/>}/> */}
         <Route path="/adminPage"  element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminPage/></ProtectedRoute>}/>
         <Route path = "/forgotPassword" element ={<ForgotPassword />} />
