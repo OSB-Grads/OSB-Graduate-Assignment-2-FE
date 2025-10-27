@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr: none
+
+variables:
+  System.Debug: true       # Enable detailed logs
+  acrName: "bankingacr"
+  imageName: "frontend-ci"
+  dockerfilePath: "Dockerfile"
+  imageTag: "v$(Build.BuildId)"
+
+stages:
+  - stage: Build
+    displayName: "CI - Build & Push Docker Image"
+    jobs:
+      - job: BuildAndPush
+        displayName: "Build & Push Docker Image Job"
+        pool:
+          name: Default
+          demands:
+            - docker
+        steps:
+          # Checkout code
+          - checkout: self
+
+          # Run the Bash script
+          - task: PowerShell@2
+            displayName: "Build & Push Docker Image"
+            inputs:
+              filePath: './Pipelines/Frontend-CI.ps1'
+              arguments: '$(acrName) $(imageName) $(dockerfilePath) $(imageTag)'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              failOnStderr: false
