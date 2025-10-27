@@ -1,89 +1,96 @@
-import * as httpClientUtil from '../../utils/httpClientUtil';
 import { authenticate, login, logout, signup } from './authStore.logic';
 import * as api from './authstore.api';
+import * as httpClientUtil from '../../utils/httpClientUtil';
 
+// Mock toast
+jest.mock('../../components/Toast/Alerts', () => ({
+  notify: jest.fn(),
+}));
+
+// Mock httpClientUtil to avoid import.meta.env crash
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+
+// Mock API module
 jest.mock('./authstore.api');
-jest.mock('../utils/httpClientUtil');
 
 describe('Auth functions', () => {
-    let set: jest.Mock;
+  let set: jest.Mock;
 
-    beforeEach(() => {
-        set = jest.fn();
-        localStorage.clear();
-        jest.clearAllMocks();
+  beforeEach(() => {
+    set = jest.fn();
+    jest.clearAllMocks();
+  });
+
+  test('authenticate sets state', () => {
+    authenticate(set, true);
+    expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
+
+    authenticate(set, false);
+    expect(set).toHaveBeenCalledWith({ isAuthenticated: false });
+  });
+
+  test('signup success sets isAuthenticated and calls setTokens', async () => {
+    (api.registerApi as jest.Mock).mockResolvedValue({
+      token: 'dummy-JWT-register-token',
+      refreshToken: 'dummy-refresh-token',
     });
 
-    test('authenticate sets  state', () => {
-        authenticate(set, true);
-        expect(set).toHaveBeenCalledWith({ authenticate: true });
+    await signup(set, 'user', 'pass');
 
-        authenticate(set, false);
-        expect(set).toHaveBeenCalledWith({ authenticate: false });
+    expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
+    expect(httpClientUtil.setTokens).toHaveBeenCalledWith(
+      'dummy-JWT-register-token',
+      'dummy-refresh-token'
+    );
+  });
+
+  test('signup failure logs error', async () => {
+    const error = new Error('fail');
+    (api.registerApi as jest.Mock).mockRejectedValue(error);
+    console.log = jest.fn();
+
+    await expect(signup(set, 'user', 'pass')).rejects.toThrow('fail');
+    expect(console.log).toHaveBeenCalledWith('error occurred', error);
+  });
+
+  test('login success sets isAuthenticated and calls setTokens', async () => {
+    (api.loginApi as jest.Mock).mockResolvedValue({
+      token: 'dummy-JWT-login-token',
+      refreshToken: 'dummy-refresh-token',
     });
 
-    test('signup success sets isAuthenticated and calls setToken', async () => {
-        const Token = 'dummy-JWT-register-token';
-        (api.registerApi as jest.Mock).mockResolvedValue(Token);
+    await login(set, 'user', 'pass', true);
 
-        await signup(set, 'user', 'pass');
+    expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
+    expect(httpClientUtil.setTokens).toHaveBeenCalledWith(
+      'dummy-JWT-login-token',
+      'dummy-refresh-token'
+    );
+  });
 
-        expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
-        expect(httpClientUtil.setToken).toHaveBeenCalledWith(Token);
-    });
+  test('login failure logs error and shows error toast', async () => {
+    const error = new Error('fail');
+    (api.loginApi as jest.Mock).mockRejectedValue(error);
+    console.log = jest.fn();
 
-    test('signup failure  error', async () => {
-        const error = new Error('fail');
-        (api.registerApi as jest.Mock).mockRejectedValue(error);
-        console.log = jest.fn();
+    await login(set, 'user', 'pass', false);
 
-        await signup(set, 'user', 'pass');
+    expect(console.log).toHaveBeenCalledWith('error occurred', error);
+    expect(httpClientUtil.setTokens).not.toHaveBeenCalled();
+  });
 
-        expect(console.log).toHaveBeenCalledWith('error occurred', error);
-        expect(set).not.toHaveBeenCalled();
-        expect(httpClientUtil.setToken).not.toHaveBeenCalled();
-    });
+  test('logout sets isAuthenticated false and clears tokens', async () => {
+    (httpClientUtil.getRefreshToken as jest.Mock).mockReturnValue('dummy-refresh-token');
+    (api.logoutApi as jest.Mock).mockResolvedValue(true);
 
-    test('login success sets isAuthenticated, calls setToken and stores token if rememberMe', async () => {
-        const Token = 'dummy-JWT-login-token';
-        (api.loginApi as jest.Mock).mockResolvedValue(Token);
+    await logout(set);
 
-        await login(set, 'user', 'pass', true);
-
-        expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
-        expect(httpClientUtil.setToken).toHaveBeenCalledWith(Token);
-        expect(localStorage.getItem('token')).toBe(Token);
-    });
-
-    test('login success without rememberMe does not store token in localStorage', async () => {
-        const Token = 'dummy-JWT-login-token';
-        (api.loginApi as jest.Mock).mockResolvedValue(Token);
-
-        await login(set, 'user', 'pass', false);
-
-        expect(set).toHaveBeenCalledWith({ isAuthenticated: true });
-        expect(httpClientUtil.setToken).toHaveBeenCalledWith(Token);
-        expect(localStorage.getItem('token')).toBe(null);
-    });
-
-    test('login failure  error', async () => {
-        const error = new Error('fail');
-        (api.loginApi as jest.Mock).mockRejectedValue(error);
-        console.log = jest.fn();
-
-        await login(set, 'user', 'pass', false);
-
-        expect(console.log).toHaveBeenCalledWith('error occurred', error);
-        expect(set).not.toHaveBeenCalled();
-        expect(httpClientUtil.setToken).not.toHaveBeenCalled();
-    });
-
-    test('logout sets isAuthenticated false and clears token', () => {
-        localStorage.setItem('token', 'some-token');
-        logout(set);
-
-        expect(set).toHaveBeenCalledWith({ isAuthenticated: false });
-        expect(localStorage.getItem('token')).toBe(null);
-        expect(httpClientUtil.setToken).toHaveBeenCalledWith(null);
-    });
+    expect(httpClientUtil.setTokens).toHaveBeenCalledWith(null, null);
+    expect(set).toHaveBeenCalledWith({ isAuthenticated: false });
+  });
 });

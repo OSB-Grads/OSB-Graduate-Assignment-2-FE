@@ -4,6 +4,14 @@ import ViewUserProfile from "./ViewProfilePage";
 
 jest.mock('../../store/userstore/userstore');
 
+
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+
 const mockUser = {
     name: "Dummy User",
     email: "Dummy@email.com",

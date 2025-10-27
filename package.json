@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,md}'",
     "test": "jest",
+    "coverage":"jest --coverage",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
   "dependencies": {

@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import PaymentPage from "./PaymentPage";
 import useTransactionStore from "../../store/transactionStore/transactionStore";
 import useAccountStore from "../../store/AccountStore/accountStore";
+import { MemoryRouter } from "react-router-dom";
 
 // 🧩 Mock the stores
 const mockTransferAmountBetweenAccounts = jest.fn();
@@ -21,6 +22,14 @@ jest.mock("../../store/AccountStore/accountStore", () => ({
   default: jest.fn(),
 }));
 
+const renderWithRouter = (state?: any) => {
+  return render(
+    <MemoryRouter initialEntries={[{ pathname: "/payments", state }]}>
+      <PaymentPage />
+    </MemoryRouter>
+  );
+};
+
 describe("PaymentPage Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,7 +44,7 @@ describe("PaymentPage Component", () => {
   });
 
   test("renders all main elements correctly", () => {
-    render(<PaymentPage />);
+    renderWithRouter();
 
     expect(screen.getByText("Make Payments")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("0.0")).toBeInTheDocument();
@@ -45,7 +54,7 @@ describe("PaymentPage Component", () => {
   });
 
   test("renders account numbers in dropdowns", () => {
-    render(<PaymentPage />);
+     renderWithRouter();
 
     // Find both selects
     const selects = screen.getAllByRole("combobox");
@@ -60,7 +69,7 @@ describe("PaymentPage Component", () => {
   });
 
   test("updates amount field when typing", () => {
-    render(<PaymentPage />);
+     renderWithRouter();
 
     const amountInput = screen.getByPlaceholderText("0.0");
     fireEvent.change(amountInput, { target: { value: "5000" } });
@@ -69,7 +78,7 @@ describe("PaymentPage Component", () => {
   });
 
   test("shows 'To Account Number' input when 'Another Customer' is selected", () => {
-    render(<PaymentPage />);
+    renderWithRouter();
 
     const selects = screen.getAllByRole("combobox");
     const toSelect = selects[1];
@@ -81,11 +90,11 @@ describe("PaymentPage Component", () => {
     fireEvent.click(screen.getByText("Another Customer"));
 
     // Expect "To Account Number" input to appear
-    expect(screen.getAllByText("To Account Number")[3]).toBeInTheDocument();
+    expect(screen.getAllByText("To Account Number")[1]).toBeInTheDocument();
   });
 
   test("calls transferAmountBetweenAccounts when Make Payment clicked", async () => {
-    render(<PaymentPage />);
+    renderWithRouter();
 
     const amountInput = screen.getByPlaceholderText("0.0");
     fireEvent.change(amountInput, { target: { value: "1000" } });
@@ -120,7 +129,7 @@ describe("PaymentPage Component", () => {
     );
   });
   test("clears input fields after successful transaction", async() => {
-    render(<PaymentPage />);
+     renderWithRouter();
 
     const amountInput = screen.getByPlaceholderText("0.0");
     fireEvent.change(amountInput, { target: { value: "1500" } });
