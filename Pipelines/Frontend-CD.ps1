@@ -1,53 +1,32 @@
 # Pipelines/Frontend-CD.ps1
 # Reads configuration from environment variables (no param() block).
-# Required environment variables set by the pipeline:
-#   RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME, IMAGE_TAG
-# The pipeline runs this script through AzureCLI@2 so az is authenticated.
+# Expected env vars: RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME, IMAGE_TAG,
+#                    ACR_USER, ACR_PWD, ACR_LOGIN_SERVER
+# This script assumes it runs inside an AzureCLI@2 task (so 'az' is available & authenticated).
 
 Write-Host "=== Frontend-CD.ps1 started ==="
 
 # Read env vars
-$resourceGroup = $env:RESOURCE_GROUP
-$appService    = $env:APP_SERVICE
-$acrName       = $env:ACR_NAME
-$imageName     = $env:IMAGE_NAME
-$imageTag      = $env:IMAGE_TAG
+$resourceGroup   = $env:RESOURCE_GROUP
+$appService      = $env:APP_SERVICE
+$acrName         = $env:ACR_NAME
+$imageName       = $env:IMAGE_NAME
+$imageTag        = $env:IMAGE_TAG
+$acrUser         = $env:ACR_USER
+$acrPwd          = $env:ACR_PWD
+$acrLoginServer  = $env:ACR_LOGIN_SERVER
 
-if (-not $resourceGroup -or -not $appService -or -not $acrName -or -not $imageName -or -not $imageTag) {
-    Write-Error "One or more required environment variables are missing. Ensure RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME and IMAGE_TAG are set."
+if (-not $resourceGroup -or -not $appService -or -not $acrLoginServer -or -not $imageName -or -not $imageTag) {
+    Write-Error "One or more required environment variables are missing. Ensure RESOURCE_GROUP, APP_SERVICE, ACR_LOGIN_SERVER, IMAGE_NAME and IMAGE_TAG are set."
     exit 1
 }
 
-Write-Host "ResourceGroup: $resourceGroup"
-# Use $() to avoid PowerShell parsing issues when followed by punctuation
-Write-Host ("AppService:  {0}" -f $appService)
-Write-Host ("ACR Name:    {0}" -f $acrName)
-Write-Host ("Image:       {0}:{1}" -f $imageName, $imageTag)
+Write-Host ("ResourceGroup: {0}" -f $resourceGroup)
+Write-Host ("AppService:    {0}" -f $appService)
+Write-Host ("ACR Login:     {0}" -f $acrLoginServer)
+Write-Host ("Image:         {0}:{1}" -f $imageName, $imageTag)
 
-# Determine ACR login server (handle either full login server or short name)
-if ($acrName -match "\.") {
-    $acrLoginServer = $acrName
-} else {
-    $acrLoginServer = "$($acrName).azurecr.io"
-}
-Write-Host ("ACR login server: {0}" -f $acrLoginServer)
-
-# Get ACR credentials (username & password)
-Write-Host "Retrieving ACR credentials..."
-try {
-    $acrUser = az acr credential show --name $acrName --query "username" -o tsv
-    $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
-} catch {
-    Write-Error "Failed to get ACR credentials: $_"
-    exit 1
-}
-
-if (-not $acrUser -or -not $acrPwd) {
-    Write-Error "ACR credentials were empty. Ensure the service principal used by the pipeline has permission to read ACR credentials."
-    exit 1
-}
-
-# Build full image path safely using $()
+# Build full image path safely
 $fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
 Write-Host ("Full image path: {0}" -f $fullImage)
 

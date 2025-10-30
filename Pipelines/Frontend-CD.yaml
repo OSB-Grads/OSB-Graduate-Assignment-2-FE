@@ -1,4 +1,4 @@
-#frontend-cd.yml
+# frontend-cd.yml
 # Triggered after frontend CI finishes
 resources:
   pipelines:
@@ -54,15 +54,39 @@ stages:
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                # export required env vars for the script to consume
-                $env:RESOURCE_GROUP = "$(resourceGroup)"
-                $env:APP_SERVICE = "$(appServiceName)"
-                $env:ACR_NAME = "$(acrName)"
-                $env:IMAGE_NAME = "$(imageName)"
-                $env:IMAGE_TAG = "$(imageTag)"
-
                 # ensure AZ config dir is used by az cli inside the task
                 $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
+                New-Item -ItemType Directory -Force -Path $env:AZURE_CONFIG_DIR | Out-Null
+
+                # export required env vars for the script to consume
+                $env:RESOURCE_GROUP = "$(resourceGroup)"
+                $env:APP_SERVICE   = "$(appServiceName)"
+                $env:ACR_NAME      = "$(acrName)"
+                $env:IMAGE_NAME    = "$(imageName)"
+                $env:IMAGE_TAG     = "$(imageTag)"
+
+                # Determine ACR login server (handle short name or full login server)
+                if ($env:ACR_NAME -match "\.") {
+                    $acrLoginServer = $env:ACR_NAME
+                } else {
+                    $acrLoginServer = "$($env:ACR_NAME).azurecr.io"
+                }
+                Write-Host "ACR login server: $acrLoginServer"
+
+                # Get ACR credentials here (runs inside AzureCLI task context — authenticated)
+                Write-Host "Getting ACR credentials..."
+                $acrUser = az acr credential show --name $env:ACR_NAME --query "username" -o tsv
+                $acrPwd  = az acr credential show --name $env:ACR_NAME --query "passwords[0].value" -o tsv
+
+                if (-not $acrUser -or -not $acrPwd) {
+                    Write-Error "Failed to obtain ACR credentials. Ensure the service connection's principal has permission to access ACR."
+                    exit 1
+                }
+
+                # Export ACR creds for the script (job-scoped env vars)
+                $env:ACR_USER = $acrUser
+                $env:ACR_PWD  = $acrPwd
+                $env:ACR_LOGIN_SERVER = $acrLoginServer
 
                 Write-Host "Calling Pipelines/Frontend-CD.ps1..."
                 ./Pipelines/Frontend-CD.ps1
