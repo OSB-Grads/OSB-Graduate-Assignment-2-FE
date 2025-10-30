@@ -1,9 +1,8 @@
 # frontend-cd.yml
-# Triggered after frontend CI finishes
 resources:
   pipelines:
     - pipeline: frontend-ci
-      source: frontend-ci         # replace with your actual CI pipeline name
+      source: frontend-ci
       trigger:
         branches:
           include:
@@ -12,10 +11,10 @@ resources:
 pr: none
 
 variables:
-  myServiceConnection: "MyAzureServiceConnection"   # Azure service connection
+  myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
-  appServiceName: "frontend-appservice"             # App Service name
-  acrName: "bankingacr"                             # ACR name (without .azurecr.io)
+  appServiceName: "frontend-appservice"
+  acrName: "bankingacr"                  # short name or full login server OK
   imageName: "frontend-ci"
   imageTag: "v$(resources.pipeline.frontend-ci.runId)"
 
@@ -29,7 +28,6 @@ stages:
         steps:
           - checkout: self
 
-          # --- DEBUG: show chosen values (remove in production) ---
           - powershell: |
               Write-Host "=== Frontend CD DEBUG ==="
               Write-Host "RESOURCE_GROUP: $(resourceGroup)"
@@ -39,54 +37,83 @@ stages:
               Write-Host "IMAGE_TAG: $(imageTag)"
             displayName: "Print chosen variables (DEBUG) - REMOVE AFTER DEBUGGING"
 
-          # Ensure a writable AZURE config dir (helps on self-hosted agents)
           - powershell: |
               $azDir = "$(Agent.TempDirectory)\.az"
               New-Item -ItemType Directory -Force -Path $azDir | Out-Null
-              Write-Host "Ensured AZURE_CONFIG_DIR -> $azDir"
+              Write-Host "Prepared AZ config dir: $azDir"
             displayName: "Prepare AZ config dir"
 
-          # Call the deployment script using AzureCLI so it's run under the service connection
           - task: AzureCLI@2
-            displayName: "Deploy image to App Service (ACR -> App Service)"
+            displayName: "Deploy image from ACR -> App Service (all inside authenticated az context)"
             inputs:
               azureSubscription: "$(myServiceConnection)"
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                # ensure AZ config dir is used by az cli inside the task
-                $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
-                New-Item -ItemType Directory -Force -Path $env:AZURE_CONFIG_DIR | Out-Null
+                set -u  # treat unset vars as errors (optional guard)
 
-                # export required env vars for the script to consume
-                $env:RESOURCE_GROUP = "$(resourceGroup)"
-                $env:APP_SERVICE   = "$(appServiceName)"
-                $env:ACR_NAME      = "$(acrName)"
-                $env:IMAGE_NAME    = "$(imageName)"
-                $env:IMAGE_TAG     = "$(imageTag)"
+                try {
+                  Write-Host "=== AzureCLI inline script starting ==="
 
-                # Determine ACR login server (handle short name or full login server)
-                if ($env:ACR_NAME -match "\.") {
-                    $acrLoginServer = $env:ACR_NAME
-                } else {
-                    $acrLoginServer = "$($env:ACR_NAME).azurecr.io"
+                  # ensure az cli uses a writable config dir
+                  $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
+                  New-Item -ItemType Directory -Force -Path $env:AZURE_CONFIG_DIR | Out-Null
+                  Write-Host "AZURE_CONFIG_DIR = $env:AZURE_CONFIG_DIR"
+
+                  # Read pipeline variables (expand them into env so it's easier)
+                  $resourceGroup = "$(resourceGroup)"
+                  $appService    = "$(appServiceName)"
+                  $acrName       = "$(acrName)"
+                  $imageName     = "$(imageName)"
+                  $imageTag      = "$(imageTag)"
+
+                  Write-Host "ResourceGroup: $resourceGroup"
+                  Write-Host "AppService:    $appService"
+                  Write-Host "ACR (input):   $acrName"
+                  Write-Host "Image (input): $imageName:$imageTag"
+
+                  # Decide ACR login server
+                  if ($acrName -match "\.") {
+                      $acrLoginServer = $acrName
+                  } else {
+                      $acrLoginServer = "$($acrName).azurecr.io"
+                  }
+                  Write-Host "ACR login server: $acrLoginServer"
+
+                  # THIS runs inside AzureCLI@2 and IS authenticated by the service connection.
+                  Write-Host "Fetching ACR credentials (inside authenticated AzureCLI task)..."
+                  $acrUser = az acr credential show --name $acrName --query "username" -o tsv
+                  $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
+
+                  if (-not $acrUser -or -not $acrPwd) {
+                      Write-Error "Failed to obtain ACR credentials. Ensure the service connection has permission to access ACR."
+                      exit 1
+                  }
+                  Write-Host "ACR credentials retrieved (username length: $($acrUser.Length))."
+
+                  # Build full image
+                  $fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
+                  Write-Host "Full image: $fullImage"
+
+                  Write-Host "Setting App Service to use image and registry credentials..."
+                  az webapp config container set `
+                    --name $appService `
+                    --resource-group $resourceGroup `
+                    --docker-custom-image-name $fullImage `
+                    --docker-registry-server-url "https://$acrLoginServer" `
+                    --docker-registry-server-user $acrUser `
+                    --docker-registry-server-password $acrPwd | Out-Null
+
+                  Write-Host "Restarting App Service..."
+                  az webapp restart --name $appService --resource-group $resourceGroup | Out-Null
+
+                  # Small verification: show current container config
+                  Write-Host "Verifying container settings..."
+                  $cfg = az webapp config container show --name $appService --resource-group $resourceGroup -o json | ConvertFrom-Json
+                  Write-Host ("Configured image: {0}" -f $cfg.DOCKER_CUSTOM_IMAGE_NAME)
+
+                  Write-Host "Deployment finished successfully: $fullImage -> $appService"
+                } catch {
+                  Write-Error "Deployment failed: $_"
+                  exit 1
                 }
-                Write-Host "ACR login server: $acrLoginServer"
-
-                # Get ACR credentials here (runs inside AzureCLI task context — authenticated)
-                Write-Host "Getting ACR credentials..."
-                $acrUser = az acr credential show --name $env:ACR_NAME --query "username" -o tsv
-                $acrPwd  = az acr credential show --name $env:ACR_NAME --query "passwords[0].value" -o tsv
-
-                if (-not $acrUser -or -not $acrPwd) {
-                    Write-Error "Failed to obtain ACR credentials. Ensure the service connection's principal has permission to access ACR."
-                    exit 1
-                }
-
-                # Export ACR creds for the script (job-scoped env vars)
-                $env:ACR_USER = $acrUser
-                $env:ACR_PWD  = $acrPwd
-                $env:ACR_LOGIN_SERVER = $acrLoginServer
-
-                Write-Host "Calling Pipelines/Frontend-CD.ps1..."
-                ./Pipelines/Frontend-CD.ps1
