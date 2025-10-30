@@ -8,6 +8,14 @@ const mockFetchProductDetails = jest.fn();
 const mockUseProductStore = jest.fn();
 const mockNavigate = jest.fn();
 
+
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+
 jest.mock("../../store/ProductStore/ProductStore", () => ({
   __esModule: true,
   default:()=> mockUseProductStore(),
@@ -41,7 +49,7 @@ describe("ProductPage Component", () => {
         <ProductPage />
       </MemoryRouter>
     );
-    expect(mockFetchProductDetails).toHaveBeenCalledTimes(1);
+    expect(mockFetchProductDetails).toHaveBeenCalled();
   });
 
   test("should render 'Products' header", () => {

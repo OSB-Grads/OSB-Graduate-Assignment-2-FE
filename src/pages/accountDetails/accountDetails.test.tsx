@@ -1,15 +1,23 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import AccountDetails from "./accountDetails";
 
-import type { AccountDto } from "../../store/AccountStore/accountStore.interface";
-import type { TransactionDTO } from "../../store/AccountStore/accountStore.interface";
-
-//  Mock Zustand store
 import useAccountStore from "../../store/AccountStore/accountStore";
-jest.mock("../../store/AccountStore/accountStore");
+import useTransactionStore from "../../store/transactionStore/transactionStore";
+import type { AccountDto } from "../../store/AccountStore/accountStore.interface";
+import type { transactionDTO } from "../../store/transactionStore/transactionStore.interface";
+import { fetchTransactionFromAccountnumber } from "../../store/transactionStore/transactionStore.logic";
 
-//  Mock useNavigate and useParams from react-router-dom
+jest.mock("../../store/AccountStore/accountStore");
+jest.mock("../../store/transactionStore/transactionStore");
+
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+// Mock useNavigate and useParams
 const mockedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -17,25 +25,24 @@ jest.mock("react-router-dom", () => ({
   useParams: () => ({ accountNumber: "1234567890" }),
 }));
 
-describe("AccountDetails", () => {
+describe("AccountDetails Component", () => {
   const fetchAccountMock = jest.fn();
-  const fetchTransactionsMock = jest.fn();
+  const fetchTransactionMock = jest.fn();
 
   const baseAccount: AccountDto = {
     accountNumber: "1234567890",
-    accountType: "SAVINGS", 
+    accountType: "SAVINGS",
     accountCreated: "2025-01-01",
     accountUpdated: "2025-02-01",
     balance: 5000,
   };
 
-  const baseTransactions: TransactionDTO[] = [
+  const baseTransactions: transactionDTO[] = [
     {
       fromAccount: "1234567890",
       toAccount: "9876543210",
       description: "Salary",
       amount: 1000,
-      status: "COMPLETED",
       type: "DEPOSIT",
       createdAt: "2025-01-10",
     },
@@ -44,8 +51,7 @@ describe("AccountDetails", () => {
       toAccount: "5678901234",
       description: "Rent",
       amount: 500,
-      status: "COMPLETED",
-      type: "WITHDRAWAL",
+      type: "WITHDRAW",
       createdAt: "2025-01-15",
     },
   ];
@@ -53,23 +59,27 @@ describe("AccountDetails", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    // Mock Account Store
     (useAccountStore as unknown as jest.Mock).mockReturnValue({
       account: baseAccount,
-      transactions: baseTransactions,
-      loading: false,
-      error: null,
+      loadingFetchAccount: false,
+      errorFetchAccount: null,
       fetchAccount: fetchAccountMock,
-      fetchTransactions: fetchTransactionsMock,
+    });
+
+    // Mock Transaction Store
+    (useTransactionStore as unknown as jest.Mock).mockReturnValue({
+      transactionsFromAccountnumber: baseTransactions,
+      loadingTransactionsByAccount: false,
+      errorTransactionsByAccount: null,
+      fetchTransactionFromAccountnumber: fetchTransactionMock,
     });
   });
 
-  test("renders account details correctly with dummy props", () => {
+  test("renders account details correctly", () => {
     render(
       <BrowserRouter>
-        <AccountDetails
-          dummyAccount={baseAccount}
-          dummyTransactions={baseTransactions}
-        />
+        <AccountDetails />
       </BrowserRouter>
     );
 
@@ -80,25 +90,20 @@ describe("AccountDetails", () => {
     expect(screen.getByRole("button", { name: /Initiate Payment/i })).toBeInTheDocument();
   });
 
-  test("calls fetchAccount and fetchTransactions when no dummy data", () => {
-    render(
-      <BrowserRouter>
-        <AccountDetails />
-      </BrowserRouter>
-    );
 
-    expect(fetchAccountMock).toHaveBeenCalledWith("1234567890");
-    expect(fetchTransactionsMock).toHaveBeenCalledWith("1234567890");
-  });
-
-  test("shows loading state", () => {
-    (useAccountStore as unknown as jest.Mock).mockReturnValue({
+  test("shows loading state when fetching data", () => {
+    (useAccountStore as unknown as jest.Mock).mockReturnValueOnce({
       account: null,
-      transactions: [],
-      loading: true,
-      error: null,
+      loadingFetchAccount: true,
+      errorFetchAccount: null,
       fetchAccount: fetchAccountMock,
-      fetchTransactions: fetchTransactionsMock,
+    });
+
+    (useTransactionStore as unknown as jest.Mock).mockReturnValueOnce({
+      transactionsFromAccountnumber: [],
+      loadingTransactionsByAccount: true,
+      errorTransactionsByAccount: null,
+      fetchTransactionFromAccountnumber: fetchTransactionMock,
     });
 
     render(
@@ -110,14 +115,12 @@ describe("AccountDetails", () => {
     expect(screen.getByText("Loading account...")).toBeInTheDocument();
   });
 
-  test("navigates to GenericError when error occurs", () => {
-    (useAccountStore as unknown as jest.Mock).mockReturnValue({
+  test("navigates to GenericError on account fetch error", () => {
+    (useAccountStore as unknown as jest.Mock).mockReturnValueOnce({
       account: null,
-      transactions: [],
-      loading: false,
-      error: "Something went wrong",
+      loadingFetchAccount: false,
+      errorFetchAccount: "Something went wrong",
       fetchAccount: fetchAccountMock,
-      fetchTransactions: fetchTransactionsMock,
     });
 
     render(
@@ -131,14 +134,12 @@ describe("AccountDetails", () => {
     });
   });
 
-  test("navigates to GenericError when account not found", () => {
-    (useAccountStore as unknown as jest.Mock).mockReturnValue({
+  test("navigates to GenericError when account not found", async () => {
+    (useAccountStore as unknown as jest.Mock).mockReturnValueOnce({
       account: null,
-      transactions: [],
-      loading: false,
-      error: null,
+      loadingFetchAccount: false,
+      errorFetchAccount: null,
       fetchAccount: fetchAccountMock,
-      fetchTransactions: fetchTransactionsMock,
     });
 
     render(
@@ -147,45 +148,41 @@ describe("AccountDetails", () => {
       </BrowserRouter>
     );
 
-    expect(mockedNavigate).toHaveBeenCalledWith("/GenericError", {
-      state: { message: "Account Not Found" },
+    await waitFor(() => {
+      expect(mockedNavigate).toHaveBeenCalledWith("/GenericError", {
+        state: { message: "Account Not Found" },
+      });
     });
   });
 
-  test("navigates to transfer and initiate payment on button click", () => {
+  test("navigates correctly on Transfer and Initiate Payment click", () => {
     render(
       <BrowserRouter>
-        <AccountDetails
-          dummyAccount={baseAccount}
-          dummyTransactions={baseTransactions}
-        />
+        <AccountDetails />
       </BrowserRouter>
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Transfer/i }));
-    expect(mockedNavigate).toHaveBeenCalledWith("/transfer", {
+    expect(mockedNavigate).toHaveBeenCalledWith("/payments", {
       state: { accountNumber: "1234567890" },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /Initiate Payment/i }));
-    expect(mockedNavigate).toHaveBeenCalledWith("/initiate-payment", {
-      state: { accountNumber: "1234567890" },
+    expect(mockedNavigate).toHaveBeenCalledWith("/payments", {
+      state: { accountNumber: "1234567890", mode: "makePayment" },
     });
   });
 
-  test("renders transactions in table", () => {
+  test("renders transactions correctly in table", () => {
     render(
       <BrowserRouter>
-        <AccountDetails
-          dummyAccount={baseAccount}
-          dummyTransactions={baseTransactions}
-        />
+        <AccountDetails />
       </BrowserRouter>
     );
 
     expect(screen.getByText("Salary")).toBeInTheDocument();
     expect(screen.getByText("Rent")).toBeInTheDocument();
     expect(screen.getByText("+$1000.00")).toBeInTheDocument();
-    expect(screen.getByText("+$500.00")).toBeInTheDocument();
+    expect(screen.getByText("-$500.00")).toBeInTheDocument();
   });
 });

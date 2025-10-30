@@ -5,7 +5,21 @@ import "@testing-library/jest-dom";
 
 jest.mock("../../store/AuthStore/authStore");
 
+jest.mock('../../utils/httpClientUtil', () => ({
+  default: {},
+  getAccessToken: jest.fn(),
+  getRefreshToken: jest.fn(),
+  setTokens: jest.fn(),
+}));
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
+
+
 import useAuthStore from "../../store/AuthStore/authStore";
+import { BrowserRouter } from "react-router-dom";
 
 const mockedUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore>;
 
@@ -24,11 +38,17 @@ describe("Header component", () => {
 
   test("shows bell icon and profile image when authenticated", () => {
     mockedUseAuthStore.mockReturnValue({ isAuthenticated: true });
-    render(<Header />);
+    render(
+      <BrowserRouter>
+    <Header />
+    </BrowserRouter>);
 
     expect(screen.getByAltText(/bell-icon/i)).toBeInTheDocument();
-    expect(screen.getByRole("img",{name:"profile-image"})).toBeInTheDocument();
 
+
+// Or, more specifically, target by DOM hierarchy / class:
+ const profileImg = document.querySelector(".profile-info img") as HTMLImageElement;
+  expect(profileImg).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /help/i })).not.toBeInTheDocument();
   });
 

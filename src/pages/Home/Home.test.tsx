@@ -91,7 +91,7 @@ describe('Home Component', () => {
             </Router>
         );
 
-        expect(screen.getByTestId('dashboard-account')).toHaveTextContent('SAVINGS 12345678');
+        expect(screen.getByTestId('dashboard-account')).toHaveTextContent('**5678');
     });
 
     it('renders transactions', () => {

@@ -1,64 +1,63 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { useAuthStore } from "../../Store/AuthStore/authStore";
+import { render } from "@testing-library/react";
 import ProtectedRoute from "./protectedroutes";
-//mock
-jest.mock("../../store/AuthStoreGetters", () => ({
-    isAuthenticated: jest.fn(),
+import useAuthStore from "../../store/AuthStore/authStore";
+import { getRole } from "../../utils/httpClientUtil";
+
+const mockedNavigate = jest.fn();
+
+// Mock react-router-dom useNavigate
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockedNavigate,
 }));
-const Dashboard = () => <div>Dashboard Page</div>;
-const Login = () => <div>Login Page</div>;
+
+// Mock Zustand store
+jest.mock("../../store/AuthStore/authStore");
+
+// Mock getRole function
+jest.mock("../../utils/httpClientUtil", () => ({
+  getRole: jest.fn(),
+}));
+
 describe("ProtectedRoute", () => {
-    beforeEach(() => {
-        jest.resetAllMocks();
-    });
-    it("redirects to login if not authenticated", async () => {
-        const { isAuthenticated } = require("../../store/AuthStoreGetters");
-        //mock
-        isAuthenticated.mockReturnValue(false);
-        render(
-            <MemoryRouter initialEntries={["/dashboard"]}>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Routes>
-            </MemoryRouter>
-        );
-        await waitFor(() => {
-            expect(screen.getByText("Login Page")).toBeInTheDocument();
-        });
-    });
+  const childrenText = "Protected Content";
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    it("redirects to dashboard if authenticated", async () => {
-        const { isAuthenticated } = require("../../store/AuthStoreGetters");
-        //mock
-        isAuthenticated.mockReturnValue(true);
+  test("navigates to /login if not authenticated", () => {
+    (useAuthStore as unknown as jest.Mock).mockReturnValue({ isAuthenticated: false });
+    (getRole as jest.Mock).mockReturnValue("USER"); // role won't matter
 
-        render(
-            <MemoryRouter initialEntries={["/dashboard"]}>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Routes>
-            </MemoryRouter>
-        );
-        await waitFor(() => {
-            expect(screen.getByText("Dashboard Page")).toBeInTheDocument();
-        });
-    });
+    render(<ProtectedRoute>{childrenText}</ProtectedRoute>);
+
+    expect(mockedNavigate).toHaveBeenCalledWith("/login");
+  });
+
+  test("navigates to /adminPage if authenticated and role is ADMIN", () => {
+    (useAuthStore as unknown as jest.Mock).mockReturnValue({ isAuthenticated: true });
+    (getRole as jest.Mock).mockReturnValue("ADMIN");
+
+    render(<ProtectedRoute>{childrenText}</ProtectedRoute>);
+
+    expect(mockedNavigate).toHaveBeenCalledWith("/adminPage");
+  });
+
+  test("navigates to /dashboard if authenticated and role is not ADMIN", () => {
+    (useAuthStore as unknown as jest.Mock).mockReturnValue({ isAuthenticated: true });
+    (getRole as jest.Mock).mockReturnValue("USER");
+
+    render(<ProtectedRoute>{childrenText}</ProtectedRoute>);
+
+    expect(mockedNavigate).toHaveBeenCalledWith("/dashboard");
+  });
+
+  test("renders children regardless of navigation", () => {
+    (useAuthStore as unknown as jest.Mock).mockReturnValue({ isAuthenticated: true });
+    (getRole as jest.Mock).mockReturnValue("USER");
+
+    const { getByText } = render(<ProtectedRoute>{childrenText}</ProtectedRoute>);
+    expect(getByText(childrenText)).toBeInTheDocument();
+  });
 });
