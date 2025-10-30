@@ -1,5 +1,5 @@
 # Pipelines/Frontend-CD.ps1
-# This script reads configuration from environment variables (no param() block).
+# Reads configuration from environment variables (no param() block).
 # Required environment variables set by the pipeline:
 #   RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME, IMAGE_TAG
 # The pipeline runs this script through AzureCLI@2 so az is authenticated.
@@ -19,17 +19,18 @@ if (-not $resourceGroup -or -not $appService -or -not $acrName -or -not $imageNa
 }
 
 Write-Host "ResourceGroup: $resourceGroup"
-Write-Host "AppService:  $appService"
-Write-Host "ACR Name:    $acrName"
-Write-Host "Image:       $imageName:$imageTag"
+# Use $() to avoid PowerShell parsing issues when followed by punctuation
+Write-Host ("AppService:  {0}" -f $appService)
+Write-Host ("ACR Name:    {0}" -f $acrName)
+Write-Host ("Image:       {0}:{1}" -f $imageName, $imageTag)
 
 # Determine ACR login server (handle either full login server or short name)
 if ($acrName -match "\.") {
     $acrLoginServer = $acrName
 } else {
-    $acrLoginServer = "$acrName.azurecr.io"
+    $acrLoginServer = "$($acrName).azurecr.io"
 }
-Write-Host "ACR login server: $acrLoginServer"
+Write-Host ("ACR login server: {0}" -f $acrLoginServer)
 
 # Get ACR credentials (username & password)
 Write-Host "Retrieving ACR credentials..."
@@ -46,8 +47,9 @@ if (-not $acrUser -or -not $acrPwd) {
     exit 1
 }
 
-$fullImage = "$acrLoginServer/$imageName:$imageTag"
-Write-Host "Full image path: $fullImage"
+# Build full image path safely using $()
+$fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
+Write-Host ("Full image path: {0}" -f $fullImage)
 
 # Update App Service container settings to point to the new image and registry credentials
 Write-Host "Updating App Service container configuration..."
