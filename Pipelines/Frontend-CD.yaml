@@ -1,0 +1,41 @@
+trigger: none   # CD triggers manually or via CI pipeline completion
+
+resources:
+  pipelines:
+    - pipeline: frontend-ci
+      source: frontend-ci   # Replace with your CI pipeline name
+      trigger: true              # Trigger CD when CI completes
+
+variables:
+  RESOURCE_GROUP: "rg-banking-app"
+  APP_NAME: "MyAzureServiceConnection"
+  ACR_NAME: "bankingacr.azurecr.io"
+  IMAGE_NAME: "frontend-ci"
+  IMAGE_TAG: "v$(resources.pipeline.frontend-ci.runId)"  # Comes from CI build
+
+stages:
+  - stage: Deploy
+    displayName: "Deploy to Azure App Service"
+    jobs:
+      - job: DeployJob
+        displayName: "Deploy Docker Container"
+        pool:
+          name: Default
+
+        steps:
+          - checkout: self
+
+
+          - task: AzureCLI@2
+            name: DeployDockerApp
+            inputs:
+              azureSubscription: 'MyAzureServiceConnection'   # Azure service connection
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                $env:RESOURCE_GROUP = "$(RESOURCE_GROUP)"
+                $env:APP_NAME = "$(APP_NAME)"
+                $env:ACR_NAME = "$(ACR_NAME)"
+                $env:IMAGE_NAME = "$(IMAGE_NAME)"
+                $env:IMAGE_TAG = "$(IMAGE_TAG)"
+                ./Pipelines/Frontend-CD.ps1
