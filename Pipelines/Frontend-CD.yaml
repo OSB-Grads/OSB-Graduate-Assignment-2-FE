@@ -1,41 +1,68 @@
-trigger: none   # CD triggers manually or via CI pipeline completion
-
+#frontend-cd.yml
+# Triggered after frontend CI finishes
 resources:
   pipelines:
     - pipeline: frontend-ci
-      source: frontend-ci   # Replace with your CI pipeline name
-      trigger: true              # Trigger CD when CI completes
+      source: frontend-ci         # replace with your actual CI pipeline name
+      trigger:
+        branches:
+          include:
+            - main
+
+pr: none
 
 variables:
-  RESOURCE_GROUP: "rg-banking-app"
-  APP_NAME: "MyAzureServiceConnection"
-  ACR_NAME: "bankingacr.azurecr.io"
-  IMAGE_NAME: "frontend-ci"
-  IMAGE_TAG: "v$(resources.pipeline.frontend-ci.runId)"  # Comes from CI build
+  myServiceConnection: "MyAzureServiceConnection"   # Azure service connection
+  resourceGroup: "rg-banking-app"
+  appServiceName: "frontend-appservice"             # App Service name
+  acrName: "bankingacr"                             # ACR name (without .azurecr.io)
+  imageName: "frontend-ci"
+  imageTag: "v$(resources.pipeline.frontend-ci.runId)"
 
 stages:
   - stage: Deploy
-    displayName: "Deploy to Azure App Service"
+    displayName: "Deploy Frontend to App Service"
     jobs:
-      - job: DeployJob
-        displayName: "Deploy Docker Container"
+      - job: DeployToAppService
         pool:
           name: Default
-
         steps:
           - checkout: self
 
+          # --- DEBUG: show chosen values (remove in production) ---
+          - powershell: |
+              Write-Host "=== Frontend CD DEBUG ==="
+              Write-Host "RESOURCE_GROUP: $(resourceGroup)"
+              Write-Host "APP_SERVICE: $(appServiceName)"
+              Write-Host "ACR_NAME: $(acrName)"
+              Write-Host "IMAGE_NAME: $(imageName)"
+              Write-Host "IMAGE_TAG: $(imageTag)"
+            displayName: "Print chosen variables (DEBUG) - REMOVE AFTER DEBUGGING"
 
+          # Ensure a writable AZURE config dir (helps on self-hosted agents)
+          - powershell: |
+              $azDir = "$(Agent.TempDirectory)\.az"
+              New-Item -ItemType Directory -Force -Path $azDir | Out-Null
+              Write-Host "Ensured AZURE_CONFIG_DIR -> $azDir"
+            displayName: "Prepare AZ config dir"
+
+          # Call the deployment script using AzureCLI so it's run under the service connection
           - task: AzureCLI@2
-            name: DeployDockerApp
+            displayName: "Deploy image to App Service (ACR -> App Service)"
             inputs:
-              azureSubscription: 'MyAzureServiceConnection'   # Azure service connection
+              azureSubscription: "$(myServiceConnection)"
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                $env:RESOURCE_GROUP = "$(RESOURCE_GROUP)"
-                $env:APP_NAME = "$(APP_NAME)"
-                $env:ACR_NAME = "$(ACR_NAME)"
-                $env:IMAGE_NAME = "$(IMAGE_NAME)"
-                $env:IMAGE_TAG = "$(IMAGE_TAG)"
+                # export required env vars for the script to consume
+                $env:RESOURCE_GROUP = "$(resourceGroup)"
+                $env:APP_SERVICE = "$(appServiceName)"
+                $env:ACR_NAME = "$(acrName)"
+                $env:IMAGE_NAME = "$(imageName)"
+                $env:IMAGE_TAG = "$(imageTag)"
+
+                # ensure AZ config dir is used by az cli inside the task
+                $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
+
+                Write-Host "Calling Pipelines/Frontend-CD.ps1..."
                 ./Pipelines/Frontend-CD.ps1
