@@ -30,17 +30,17 @@ stages:
 
           - powershell: |
               Write-Host "=== Frontend CD DEBUG ==="
-              Write-Host "RESOURCE_GROUP: $(resourceGroup)"
-              Write-Host "APP_SERVICE: $(appServiceName)"
-              Write-Host "ACR_NAME: $(acrName)"
-              Write-Host "IMAGE_NAME: $(imageName)"
-              Write-Host "IMAGE_TAG: $(imageTag)"
+              Write-Host ("RESOURCE_GROUP: {0}" -f "$(resourceGroup)")
+              Write-Host ("APP_SERVICE: {0}" -f "$(appServiceName)")
+              Write-Host ("ACR_NAME: {0}" -f "$(acrName)")
+              Write-Host ("IMAGE_NAME: {0}" -f "$(imageName)")
+              Write-Host ("IMAGE_TAG: {0}" -f "$(imageTag)")
             displayName: "Print chosen variables (DEBUG) - REMOVE AFTER DEBUGGING"
 
           - powershell: |
               $azDir = "$(Agent.TempDirectory)\.az"
               New-Item -ItemType Directory -Force -Path $azDir | Out-Null
-              Write-Host "Prepared AZ config dir: $azDir"
+              Write-Host ("Prepared AZ config dir: {0}" -f $azDir)
             displayName: "Prepare AZ config dir"
 
           - task: AzureCLI@2
@@ -50,27 +50,25 @@ stages:
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                set -u  # treat unset vars as errors (optional guard)
-
                 try {
                   Write-Host "=== AzureCLI inline script starting ==="
 
                   # ensure az cli uses a writable config dir
                   $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
                   New-Item -ItemType Directory -Force -Path $env:AZURE_CONFIG_DIR | Out-Null
-                  Write-Host "AZURE_CONFIG_DIR = $env:AZURE_CONFIG_DIR"
+                  Write-Host ("AZURE_CONFIG_DIR = {0}" -f $env:AZURE_CONFIG_DIR)
 
-                  # Read pipeline variables (expand them into env so it's easier)
+                  # Read pipeline variables (expanded into the script by Azure DevOps)
                   $resourceGroup = "$(resourceGroup)"
                   $appService    = "$(appServiceName)"
                   $acrName       = "$(acrName)"
                   $imageName     = "$(imageName)"
                   $imageTag      = "$(imageTag)"
 
-                  Write-Host "ResourceGroup: $resourceGroup"
-                  Write-Host "AppService:    $appService"
-                  Write-Host "ACR (input):   $acrName"
-                  Write-Host "Image (input): $imageName:$imageTag"
+                  Write-Host ("ResourceGroup: {0}" -f $resourceGroup)
+                  Write-Host ("AppService:    {0}" -f $appService)
+                  Write-Host ("ACR (input):   {0}" -f $acrName)
+                  Write-Host ("Image (input): {0}:{1}" -f $imageName, $imageTag)
 
                   # Decide ACR login server
                   if ($acrName -match "\.") {
@@ -78,7 +76,7 @@ stages:
                   } else {
                       $acrLoginServer = "$($acrName).azurecr.io"
                   }
-                  Write-Host "ACR login server: $acrLoginServer"
+                  Write-Host ("ACR login server: {0}" -f $acrLoginServer)
 
                   # THIS runs inside AzureCLI@2 and IS authenticated by the service connection.
                   Write-Host "Fetching ACR credentials (inside authenticated AzureCLI task)..."
@@ -89,11 +87,11 @@ stages:
                       Write-Error "Failed to obtain ACR credentials. Ensure the service connection has permission to access ACR."
                       exit 1
                   }
-                  Write-Host "ACR credentials retrieved (username length: $($acrUser.Length))."
+                  Write-Host ("ACR credentials retrieved (username length: {0})." -f $($acrUser.Length))
 
                   # Build full image
                   $fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
-                  Write-Host "Full image: $fullImage"
+                  Write-Host ("Full image: {0}" -f $fullImage)
 
                   Write-Host "Setting App Service to use image and registry credentials..."
                   az webapp config container set `
@@ -112,7 +110,7 @@ stages:
                   $cfg = az webapp config container show --name $appService --resource-group $resourceGroup -o json | ConvertFrom-Json
                   Write-Host ("Configured image: {0}" -f $cfg.DOCKER_CUSTOM_IMAGE_NAME)
 
-                  Write-Host "Deployment finished successfully: $fullImage -> $appService"
+                  Write-Host (" Deployment finished successfully: {0} -> {1}" -f $fullImage, $appService)
                 } catch {
                   Write-Error "Deployment failed: $_"
                   exit 1
