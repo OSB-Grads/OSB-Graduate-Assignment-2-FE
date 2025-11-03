@@ -14,7 +14,7 @@ pr: none
 variables:
   myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
-  webAppName: "frontend-appservice"       
+  webAppName: "banking-app"       
   acrName: "bankingacr"                    
   imageName: "frontend-ci"                
   imageTag: "v$(resources.pipeline.frontend-ci.runId)" 

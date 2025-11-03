@@ -2,6 +2,10 @@
 
 # Exit on any error
 $ErrorActionPreference = "Stop"
+# Prevent non-critical az CLI warnings (like cryptography warning) from stopping execution
+$ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'Continue'
+
 
 function Log($msg) {
     $ts = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
