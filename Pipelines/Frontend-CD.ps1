@@ -42,7 +42,7 @@ if ($acrName -match "\.") {
     $acrLoginServer = "$($acrName).azurecr.io"
 }
 
-$imageFull = "$acrLoginServer/$imageName:$imageTag"
+$imageFull = "$($acrLoginServer)/$($imageName):$($imageTag)"
 Write-Host "Resolved ACR Login Server : $acrLoginServer"
 Write-Host "Full Container Image      : $imageFull"
 Write-Host "---------------------------------------------------------------"
