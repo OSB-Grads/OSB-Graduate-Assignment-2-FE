@@ -1,8 +1,5 @@
-#trigger:
-#  branches:
-#    include:
-#      - main
-
+# frontend-CD.yaml
+# Trigger on successful completion of frontend CI pipeline
 resources:
   pipelines:
     - pipeline: frontend-ci
@@ -17,29 +14,52 @@ pr: none
 variables:
   myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
-  appServiceName: "frontend-appservice"
-  acrName: "bankingacr"                 
-  imageName: "frontend-ci"
-  imageTag: "v$(resources.pipeline.frontend-ci.runId)"
+  webAppName: "frontend-appservice"       
+  acrName: "bankingacr"                    
+  imageName: "frontend-ci"                
+  imageTag: "v$(resources.pipeline.frontend-ci.runId)" 
+                  
 
 stages:
   - stage: Deploy
     displayName: "Deploy Frontend to Azure App Service"
     jobs:
-      - job: DeployToAppService
-        displayName: "Deploy container to App Service"
+      - job: DeployFrontend
+        displayName: "Deploy Frontend"
         pool:
           name: Default
         steps:
           - checkout: self
 
+          # Login to Azure
           - task: AzureCLI@2
-            name: DeployFrontend
+            displayName: "Login to Azure"
             inputs:
-              azureSubscript+ion: $(myServiceConnection)
-              scriptType: 'ps'    
-              scriptLocation: 'scriptPath'
-              scriptPath: './Pipelines/Frontend-CD.ps1'
-       
-         
-          
+              azureSubscription: "$(myServiceConnection)"
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                az account show
+
+          # Verify ACR and image exist
+          - task: AzureCLI@2
+            displayName: "Verify ACR Image"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                $imagePath = "$(acrName).azurecr.io/$(imageName):$(imageTag)"
+                Write-Host "Checking image existence: $imagePath"
+                az acr repository show-tags --name $(acrName) --repository $(imageName) | Select-String $(imageTag)
+                Write-Host "Image exists, proceeding to deployment..."
+
+          # Deploy using PowerShell script
+          - task: AzurePowerShell@5
+            displayName: "Deploy Frontend to App Service"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              ScriptType: "FilePath"
+              ScriptPath: "./Pipelines/Frontend-CD.ps1"
+              ScriptArguments: "$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag)"
+              azurePowerShellVersion: "LatestVersion"

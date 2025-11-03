@@ -1,36 +1,70 @@
-# ==============================
-# PowerShell Script: Deploy Docker image from ACR to App Service
-# ==============================
+# frontend-CD.ps1
 
-Write-Host "Starting deployment..."
+# Exit on any error
+$ErrorActionPreference = "Stop"
 
-# Variables (same as in YAML)
-$resourceGroup = "rg-banking-app"
-$appServiceName = "frontend-appservice"
-$acrName = "bankingacr"
-$imageName = "frontend-ci"
+function Log($msg) {
+    $ts = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    Write-Host "[$ts] $msg"
+}
 
-# This assumes the pipeline provides a runId variable
-$imageTag = "v$(resources.pipeline.frontend-ci.runId)"
+# ------------------------------
+# Arguments passed from pipeline
+# ------------------------------
+$RESOURCE_GROUP = $args[0]
+$WEBAPP_NAME    = $args[1]
+$ACR_NAME       = $args[2]
+$IMAGE_NAME     = $args[3]
+$IMAGE_TAG      = $args[4]
 
-# Full image name
-$imageFullName = "$acrName.azurecr.io/$imageName:$imageTag"
-Write-Host "Using image: $imageFullName"
+# Construct full image path
+$IMAGE_PATH = "$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
 
-# Check if App Service exists
-$app = az webapp show --resource-group $resourceGroup --name $appServiceName --output none 2>$null
+Log "-------------------------------------------"
+Log "Starting Frontend Deployment"
+Log "Resource Group: $RESOURCE_GROUP"
+Log "Web App: $WEBAPP_NAME"
+Log "Image: $IMAGE_PATH"
+Log "-------------------------------------------"
 
+# ------------------------------
+# Login & Verify App Service
+# ------------------------------
+Log "Verifying if App Service exists..."
+$exists = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "name" -o tsv 2>$null
 
-Write-Host "App Service exists. Updating container image..."
+if (-not $exists) {
+    Log "ERROR: App Service '$WEBAPP_NAME' not found in resource group '$RESOURCE_GROUP'."
+    exit 1
+}
+
+# ------------------------------
+# Update App Service container settings
+# ------------------------------
+Log "Updating App Service to use image: $IMAGE_PATH"
+
 az webapp config container set `
-    --name $appServiceName `
-    --resource-group $resourceGroup `
-    --docker-custom-image-name $imageFullName `
-    --docker-registry-server-url "https://$acrName.azurecr.io"
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP `
+    --docker-custom-image-name $IMAGE_PATH `
+    --docker-registry-server-url "https://$ACR_NAME.azurecr.io" `
+    --output none
 
+Log "Container configuration updated successfully."
 
-# Restart the app to apply changes
-Write-Host "Restarting the app..."
-az webapp restart --name $appServiceName --resource-group $resourceGroup
+# ------------------------------
+# Restart the App Service
+# ------------------------------
+Log "Restarting App Service..."
+az webapp restart --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP
+Log "App Service restarted successfully."
 
-Write-Host "Deployment completed successfully!"
+# ------------------------------
+# Verify Deployment
+# ------------------------------
+Log "Fetching deployment status..."
+$state = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "state" -o tsv
+Log "App Service State: $state"
+
+Log "Frontend deployment completed successfully!"
+Log "-------------------------------------------"
