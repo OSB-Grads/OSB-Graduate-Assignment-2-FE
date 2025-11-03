@@ -35,13 +35,13 @@ Log "-------------------------------------------"
 # ------------------------------
 # Login & Verify App Service
 # ------------------------------
-Log "Verifying if App Service exists..."
-$exists = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "name" -o tsv 2>$null
+# Log "Verifying if App Service exists..."
+# $exists = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "name" -o tsv 2>$null
 
-if (-not $exists) {
-    Log "ERROR: App Service '$WEBAPP_NAME' not found in resource group '$RESOURCE_GROUP'."
-    exit 1
-}
+# if (-not $exists) {
+#     Log "ERROR: App Service '$WEBAPP_NAME' not found in resource group '$RESOURCE_GROUP'."
+#     exit 1
+# }
 
 # ------------------------------
 # Update App Service container settings
