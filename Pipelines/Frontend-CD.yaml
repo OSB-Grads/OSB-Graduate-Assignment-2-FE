@@ -58,7 +58,8 @@ stages:
                     exit 1
                 }
                 Write-Host " Backend LoadBalancer IP: $lbIP"
-                Write-Host "##vso[task.setvariable variable=backendURL;]http://$lbIP:8080"   # or appropriate port
+                Write-Host "##vso[task.setvariable variable=backendURL;]http://$lbIP:80"
+   # or appropriate port
 
           # Verify ACR and image exist
           - task: AzureCLI@2
