@@ -1,9 +1,8 @@
-#frontend-cd.yml
-# Triggered after frontend CI finishes
+# frontend-CD.yaml
 resources:
   pipelines:
     - pipeline: frontend-ci
-      source: frontend-ci         # replace with your actual CI pipeline name
+      source: frontend-ci
       trigger:
         branches:
           include:
@@ -12,57 +11,82 @@ resources:
 pr: none
 
 variables:
-  myServiceConnection: "MyAzureServiceConnection"   # Azure service connection
+  myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
-  appServiceName: "frontend-appservice"             # App Service name
-  acrName: "bankingacr"                             # ACR name (without .azurecr.io)
+  webAppName: "banking-app"
+  acrName: "bankingacr"
   imageName: "frontend-ci"
   imageTag: "v$(resources.pipeline.frontend-ci.runId)"
+  aksResourceGroup: "rg-banking-app"
+  aksClusterName: "bankcluster"
+  backendServiceName: "springboot-backend-service-prod"
 
 stages:
   - stage: Deploy
-    displayName: "Deploy Frontend to App Service"
+    displayName: "Deploy Frontend to Azure App Service"
     jobs:
-      - job: DeployToAppService
+      - job: DeployFrontend
+        displayName: "Deploy Frontend"
         pool:
           name: Default
         steps:
           - checkout: self
 
-          # --- DEBUG: show chosen values (remove in production) ---
-          - powershell: |
-              Write-Host "=== Frontend CD DEBUG ==="
-              Write-Host "RESOURCE_GROUP: $(resourceGroup)"
-              Write-Host "APP_SERVICE: $(appServiceName)"
-              Write-Host "ACR_NAME: $(acrName)"
-              Write-Host "IMAGE_NAME: $(imageName)"
-              Write-Host "IMAGE_TAG: $(imageTag)"
-            displayName: "Print chosen variables (DEBUG) - REMOVE AFTER DEBUGGING"
-
-          # Ensure a writable AZURE config dir (helps on self-hosted agents)
-          - powershell: |
-              $azDir = "$(Agent.TempDirectory)\.az"
-              New-Item -ItemType Directory -Force -Path $azDir | Out-Null
-              Write-Host "Ensured AZURE_CONFIG_DIR -> $azDir"
-            displayName: "Prepare AZ config dir"
-
-          # Call the deployment script using AzureCLI so it's run under the service connection
+          # Login to Azure
           - task: AzureCLI@2
-            displayName: "Deploy image to App Service (ACR -> App Service)"
+            displayName: "Login to Azure"
             inputs:
               azureSubscription: "$(myServiceConnection)"
-              scriptType: 'ps'
-              scriptLocation: 'inlineScript'
+              scriptType: ps
+              scriptLocation: inlineScript
               inlineScript: |
-                # export required env vars for the script to consume
-                $env:RESOURCE_GROUP = "$(resourceGroup)"
-                $env:APP_SERVICE = "$(appServiceName)"
-                $env:ACR_NAME = "$(acrName)"
-                $env:IMAGE_NAME = "$(imageName)"
-                $env:IMAGE_TAG = "$(imageTag)"
+                az account show
 
-                # ensure AZ config dir is used by az cli inside the task
-                $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
+          # Fetch backend LoadBalancer IP and export as VITE_API_BASE_URL
+          - task: AzureCLI@2
+            displayName: "Fetch backend LoadBalancer IP and set as VITE_API_BASE_URL"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                Write-Host "Fetching backend LoadBalancer IP..."
+                $lbIP = az aks command invoke `
+                  --resource-group $(aksResourceGroup) `
+                  --name $(aksClusterName) `
+                  --command "kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'" `
+                  --query "logs" -o tsv
 
-                Write-Host "Calling Pipelines/Frontend-CD.ps1..."
-                ./Pipelines/Frontend-CD.ps1
+                if ([string]::IsNullOrWhiteSpace($lbIP)) {
+                  Write-Host " Failed to fetch backend LoadBalancer IP."
+                  exit 1
+                }
+
+                Write-Host " Backend LoadBalancer IP: $lbIP"
+                $backendURL = "http://$lbIP"
+                Write-Host " Backend API URL: $backendURL"
+                Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
+                Write-Host " Backend URL variable exported for next steps."
+
+          # Verify ACR image exists
+          - task: AzureCLI@2
+            displayName: "Verify ACR Image"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                $imagePath = "$(acrName).azurecr.io/$(imageName):$(imageTag)"
+                Write-Host "Checking image existence: $imagePath"
+                az acr repository show-tags --name $(acrName) --repository $(imageName) | Select-String $(imageTag)
+                Write-Host "Image exists, proceeding to deployment..."
+
+          # Deploy to App Service
+          - task: AzurePowerShell@5
+            displayName: "Deploy Frontend to App Service"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              ScriptType: "FilePath"
+              ScriptPath: "./Pipelines/Frontend-CD.ps1"
+              ScriptArguments: "$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag) $(backendURL)"
+              azurePowerShellVersion: "LatestVersion"

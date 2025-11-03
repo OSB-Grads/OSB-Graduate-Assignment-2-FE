@@ -1,77 +1,69 @@
-# Pipelines/Frontend-CD.ps1
-# This script reads configuration from environment variables (no param() block).
-# Required environment variables set by the pipeline:
-#   RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME, IMAGE_TAG
-# The pipeline runs this script through AzureCLI@2 so az is authenticated.
+# frontend-CD.ps1
 
-Write-Host "=== Frontend-CD.ps1 started ==="
+$ErrorActionPreference = "Stop"
+$ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'Continue'
 
-# Read env vars
-$resourceGroup = $env:RESOURCE_GROUP
-$appService    = $env:APP_SERVICE
-$acrName       = $env:ACR_NAME
-$imageName     = $env:IMAGE_NAME
-$imageTag      = $env:IMAGE_TAG
-
-if (-not $resourceGroup -or -not $appService -or -not $acrName -or -not $imageName -or -not $imageTag) {
-    Write-Error "One or more required environment variables are missing. Ensure RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME and IMAGE_TAG are set."
-    exit 1
+function Log($msg) {
+    $ts = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    Write-Host "[$ts] $msg"
 }
 
-Write-Host "ResourceGroup: $resourceGroup"
-Write-Host "AppService:  $appService"
-Write-Host "ACR Name:    $acrName"
-Write-Host "Image:       $imageName:$imageTag"
+# ------------------------------
+# Arguments passed from pipeline
+# ------------------------------
+$RESOURCE_GROUP = $args[0]
+$WEBAPP_NAME    = $args[1]
+$ACR_NAME       = $args[2]
+$IMAGE_NAME     = $args[3]
+$IMAGE_TAG      = $args[4]
+$BACKEND_URL    = $args[5]   #  new argument
 
-# Determine ACR login server (handle either full login server or short name)
-if ($acrName -match "\.") {
-    $acrLoginServer = $acrName
-} else {
-    $acrLoginServer = "$acrName.azurecr.io"
-}
-Write-Host "ACR login server: $acrLoginServer"
+$IMAGE_PATH = "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
 
-# Get ACR credentials (username & password)
-Write-Host "Retrieving ACR credentials..."
-try {
-    $acrUser = az acr credential show --name $acrName --query "username" -o tsv
-    $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
-} catch {
-    Write-Error "Failed to get ACR credentials: $_"
-    exit 1
-}
+Log "-------------------------------------------"
+Log "Starting Frontend Deployment"
+Log "Resource Group: $RESOURCE_GROUP"
+Log "Web App: $WEBAPP_NAME"
+Log "Image: $IMAGE_PATH"
+Log "Backend API URL: $BACKEND_URL"
+Log "-------------------------------------------"
 
-if (-not $acrUser -or -not $acrPwd) {
-    Write-Error "ACR credentials were empty. Ensure the service principal used by the pipeline has permission to read ACR credentials."
-    exit 1
-}
+# ------------------------------
+# Update App Service container settings
+# ------------------------------
+Log "Updating App Service to use image: $IMAGE_PATH"
 
-$fullImage = "$acrLoginServer/$imageName:$imageTag"
-Write-Host "Full image path: $fullImage"
+az webapp config container set `
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP `
+    --docker-custom-image-name $IMAGE_PATH `
+    --docker-registry-server-url "https://$ACR_NAME.azurecr.io" `
+    --output none
 
-# Update App Service container settings to point to the new image and registry credentials
-Write-Host "Updating App Service container configuration..."
-try {
-    az webapp config container set `
-        --name $appService `
-        --resource-group $resourceGroup `
-        --docker-custom-image-name $fullImage `
-        --docker-registry-server-url "https://$acrLoginServer" `
-        --docker-registry-server-user $acrUser `
-        --docker-registry-server-password $acrPwd | Out-Null
-} catch {
-    Write-Error "Failed to set container config on App Service: $_"
-    exit 1
-}
+#  Inject backend URL as environment variable for the React app
+Log "Setting environment variable VITE_API_BASE_URL=$BACKEND_URL"
+az webapp config appsettings set `
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP `
+    --settings VITE_API_BASE_URL=$BACKEND_URL `
+    --output none
 
-# Restart App Service to pull the new image
-Write-Host "Restarting App Service..."
-try {
-    az webapp restart --name $appService --resource-group $resourceGroup | Out-Null
-} catch {
-    Write-Error "Failed to restart App Service: $_"
-    exit 1
-}
+Log "Container configuration updated successfully."
 
-Write-Host " Frontend successfully deployed: $fullImage -> $appService"
-Write-Host "=== Frontend-CD.ps1 finished ==="
+# ------------------------------
+# Restart App Service
+# ------------------------------
+Log "Restarting App Service..."
+az webapp restart --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP
+Log "App Service restarted successfully."
+
+# ------------------------------
+# Verify Deployment
+# ------------------------------
+Log "Fetching deployment status..."
+$state = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "state" -o tsv
+Log "App Service State: $state"
+
+Log "Frontend deployment completed successfully!"
+Log "-------------------------------------------"
