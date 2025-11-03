@@ -46,7 +46,7 @@ Log "Setting environment variable VITE_API_BASE_URL=$BACKEND_URL"
 az webapp config appsettings set `
     --name $WEBAPP_NAME `
     --resource-group $RESOURCE_GROUP `
-    --settings VITE_API_BASE_URL=$(backendURL)`
+    --settings VITE_API_BASE_URL=$(backendURL) `
     --output none
 
 Log "Container configuration updated successfully."
