@@ -18,7 +18,8 @@ $IMAGE_NAME     = $args[3]
 $IMAGE_TAG      = $args[4]
 
 # Construct full image path
-$IMAGE_PATH = "$ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG"
+$IMAGE_PATH = "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
+
 
 Log "-------------------------------------------"
 Log "Starting Frontend Deployment"
