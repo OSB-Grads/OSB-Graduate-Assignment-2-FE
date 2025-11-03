@@ -1,11 +1,8 @@
 # frontend-CD.ps1
 
-# Exit on any error
 $ErrorActionPreference = "Stop"
-# Prevent non-critical az CLI warnings (like cryptography warning) from stopping execution
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'Continue'
-
 
 function Log($msg) {
     $ts = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
@@ -20,28 +17,17 @@ $WEBAPP_NAME    = $args[1]
 $ACR_NAME       = $args[2]
 $IMAGE_NAME     = $args[3]
 $IMAGE_TAG      = $args[4]
+$BACKEND_URL    = $args[5]   #  new argument
 
-# Construct full image path
 $IMAGE_PATH = "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
-
 
 Log "-------------------------------------------"
 Log "Starting Frontend Deployment"
 Log "Resource Group: $RESOURCE_GROUP"
 Log "Web App: $WEBAPP_NAME"
 Log "Image: $IMAGE_PATH"
+Log "Backend API URL: $BACKEND_URL"
 Log "-------------------------------------------"
-
-# ------------------------------
-# Login & Verify App Service
-# ------------------------------
-# Log "Verifying if App Service exists..."
-# $exists = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "name" -o tsv 2>$null
-
-# if (-not $exists) {
-#     Log "ERROR: App Service '$WEBAPP_NAME' not found in resource group '$RESOURCE_GROUP'."
-#     exit 1
-# }
 
 # ------------------------------
 # Update App Service container settings
@@ -55,10 +41,18 @@ az webapp config container set `
     --docker-registry-server-url "https://$ACR_NAME.azurecr.io" `
     --output none
 
+#  Inject backend URL as environment variable for the React app
+Log "Setting environment variable VITE_API_BASE_URL=$BACKEND_URL"
+az webapp config appsettings set `
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP `
+    --settings VITE_API_BASE_URL=$BACKEND_URL `
+    --output none
+
 Log "Container configuration updated successfully."
 
 # ------------------------------
-# Restart the App Service
+# Restart App Service
 # ------------------------------
 Log "Restarting App Service..."
 az webapp restart --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP

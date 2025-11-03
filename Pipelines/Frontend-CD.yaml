@@ -18,7 +18,9 @@ variables:
   acrName: "bankingacr"                    
   imageName: "frontend-ci"                
   imageTag: "v$(resources.pipeline.frontend-ci.runId)" 
-                  
+  aksResourceGroup: "rg-banking-app"             
+  aksClusterName: "bankcluster"          
+  backendServiceName: "springboot-backend-service-prod"          # name of LoadBalancer service
 
 stages:
   - stage: Deploy
@@ -41,6 +43,23 @@ stages:
               inlineScript: |
                 az account show
 
+          #  Fetch Kubernetes LoadBalancer IP
+          - task: AzureCLI@2
+            displayName: "Fetch Backend LoadBalancer IP"
+            inputs:
+              azureSubscription: "$(myServiceConnection)"
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                az aks get-credentials -n $(aksClusterName) -g $(aksResourceGroup) --overwrite-existing
+                $lbIP = kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+                if (-not $lbIP) {
+                    Write-Error " Failed to fetch LoadBalancer IP for backend service $(backendServiceName)"
+                    exit 1
+                }
+                Write-Host " Backend LoadBalancer IP: $lbIP"
+                Write-Host "##vso[task.setvariable variable=backendURL;]http://$lbIP:8080"   # or appropriate port
+
           # Verify ACR and image exist
           - task: AzureCLI@2
             displayName: "Verify ACR Image"
@@ -61,5 +80,5 @@ stages:
               azureSubscription: "$(myServiceConnection)"
               ScriptType: "FilePath"
               ScriptPath: "./Pipelines/Frontend-CD.ps1"
-              ScriptArguments: "$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag)"
+              ScriptArguments: "$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag) $(backendURL)"
               azurePowerShellVersion: "LatestVersion"
