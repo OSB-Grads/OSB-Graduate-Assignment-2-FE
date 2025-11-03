@@ -1,4 +1,8 @@
-# frontend-cd.yml
+#trigger:
+#  branches:
+#    include:
+#      - main
+
 resources:
   pipelines:
     - pipeline: frontend-ci
@@ -14,122 +18,46 @@ variables:
   myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
   appServiceName: "frontend-appservice"
-  acrName: "bankingacr"                  # short name or full login server OK
+  acrName: "bankingacr"                 
   imageName: "frontend-ci"
   imageTag: "v$(resources.pipeline.frontend-ci.runId)"
 
 stages:
   - stage: Deploy
-    displayName: "Deploy Frontend to App Service"
+    displayName: "Deploy Frontend to Azure App Service (Container)"
     jobs:
       - job: DeployToAppService
+        displayName: "Deploy container to App Service"
         pool:
           name: Default
         steps:
           - checkout: self
 
-          - powershell: |
-              Write-Host "=== Frontend CD DEBUG ==="
-              Write-Host ("RESOURCE_GROUP: {0}" -f "$(resourceGroup)")
-              Write-Host ("APP_SERVICE: {0}" -f "$(appServiceName)")
-              Write-Host ("ACR_NAME: {0}" -f "$(acrName)")
-              Write-Host ("IMAGE_NAME: {0}" -f "$(imageName)")
-              Write-Host ("IMAGE_TAG: {0}" -f "$(imageTag)")
-            displayName: "Print chosen variables (DEBUG) - REMOVE AFTER DEBUGGING"
+          # Resolve ACR login server and full image name, expose as pipeline variables
+          - task: PowerShell@2
+            displayName: "Resolve ACR login server and full image name"
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "Resolving ACR login server..."
+                $rawAcr = "$(acrName)"
+                if ($rawAcr -match "\.") {
+                  $acrLoginServer = $rawAcr
+                } else {
+                  $acrLoginServer = "$($rawAcr).azurecr.io"
+                }
+                $image = "$acrLoginServer/$(imageName):$(imageTag)"
+                Write-Host "ACR login server: $acrLoginServer"
+                Write-Host "Full image name: $image"
+                Write-Host "##vso[task.setvariable variable=acrLoginServer]$acrLoginServer"
+                Write-Host "##vso[task.setvariable variable=fullImageName]$image"
 
-          - powershell: |
-              $azDir = "$(Agent.TempDirectory)\.az"
-              New-Item -ItemType Directory -Force -Path $azDir | Out-Null
-              Write-Host ("Prepared AZ config dir: {0}" -f $azDir)
-            displayName: "Prepare AZ config dir"
-
-          - task: AzureCLI@2
-            displayName: "Deploy image from ACR -> App Service (inside authenticated az context)"
+          # Run the PowerShell deployment script (file stored in repo)
+          - task: AzurePowerShell@5
+            displayName: "Deploy to App Service (call PS script)"
             inputs:
               azureSubscription: "$(myServiceConnection)"
-              scriptType: 'ps'
-              scriptLocation: 'inlineScript'
-              addSpnToEnvironment: true          
-              inlineScript: |
-                try {
-                  Write-Host "=== AzureCLI inline script starting ==="
-
-                  # ensure az cli uses a writable config dir
-                  $env:AZURE_CONFIG_DIR = "$(Agent.TempDirectory)\.az"
-                  New-Item -ItemType Directory -Force -Path $env:AZURE_CONFIG_DIR | Out-Null
-                  Write-Host ("AZURE_CONFIG_DIR = {0}" -f $env:AZURE_CONFIG_DIR)
-
-                  # Read pipeline variables (expanded into the script by Azure DevOps)
-                  $resourceGroup = "$(resourceGroup)"
-                  $appService    = "$(appServiceName)"
-                  $acrName       = "$(acrName)"
-                  $imageName     = "$(imageName)"
-                  $imageTag      = "$(imageTag)"
-
-                  Write-Host ("ResourceGroup: {0}" -f $resourceGroup)
-                  Write-Host ("AppService:    {0}" -f $appService)
-                  Write-Host ("ACR (input):   {0}" -f $acrName)
-                  Write-Host ("Image (input): {0}:{1}" -f $imageName, $imageTag)
-
-                  # Decide ACR login server
-                  if ($acrName -match "\.") {
-                      $acrLoginServer = $acrName
-                  } else {
-                      $acrLoginServer = "$($acrName).azurecr.io"
-                  }
-                  Write-Host ("ACR login server: {0}" -f $acrLoginServer)
-
-                  # --- Authenticate az CLI explicitly using the SPN provided into the environment by the task
-                  if (-not $env:ARM_CLIENT_ID -or -not $env:ARM_CLIENT_SECRET -or -not $env:ARM_TENANT_ID) {
-                      Write-Error "Service principal environment vars are missing (ARM_CLIENT_ID/ARM_CLIENT_SECRET/ARM_TENANT_ID). Ensure addSpnToEnvironment: true and that the service connection is a Service Principal."
-                      exit 1
-                  }
-
-                  Write-Host "Logging in with service principal (environment vars provided by task)..."
-                  az login --service-principal -u $env:ARM_CLIENT_ID -p $env:ARM_CLIENT_SECRET --tenant $env:ARM_TENANT_ID | Out-Null
-
-                  # quick sanity check that az is logged in
-                  $acct = az account show -o json 2>$null | ConvertFrom-Json
-                  if (-not $acct) {
-                      Write-Error "az login did not succeed in this shell. Exiting."
-                      exit 1
-                  }
-                  Write-Host ("Logged into subscription: {0} ({1})" -f $acct.name, $acct.id)
-
-                  # THIS should now succeed (provided SPN has permission on ACR to list credentials)
-                  Write-Host "Fetching ACR credentials (inside authenticated AzureCLI task)..."
-                  $acrUser = az acr credential show --name $acrName --query "username" -o tsv 2>$null
-                  $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv 2>$null
-
-                  if (-not $acrUser -or -not $acrPwd) {
-                      Write-Error "Failed to obtain ACR credentials. Ensure the service connection's SPN has permission to access ACR (e.g. AcrPull/AcrPush or Owner) and that the ACR name is correct."
-                      exit 1
-                  }
-                  Write-Host ("ACR credentials retrieved (username length: {0})." -f $($acrUser.Length))
-
-                  # Build full image
-                  $fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
-                  Write-Host ("Full image: {0}" -f $fullImage)
-
-                  Write-Host "Setting App Service to use image and registry credentials..."
-                  az webapp config container set `
-                    --name $appService `
-                    --resource-group $resourceGroup `
-                    --docker-custom-image-name $fullImage `
-                    --docker-registry-server-url "https://$acrLoginServer" `
-                    --docker-registry-server-user $acrUser `
-                    --docker-registry-server-password $acrPwd | Out-Null
-
-                  Write-Host "Restarting App Service..."
-                  az webapp restart --name $appService --resource-group $resourceGroup | Out-Null
-
-                  # Small verification: show current container config
-                  Write-Host "Verifying container settings..."
-                  $cfg = az webapp config container show --name $appService --resource-group $resourceGroup -o json | ConvertFrom-Json
-                  Write-Host ("Configured image: {0}" -f $cfg.DOCKER_CUSTOM_IMAGE_NAME)
-
-                  Write-Host (" Deployment finished successfully: {0} -> {1}" -f $fullImage, $appService)
-                } catch {
-                  Write-Error "Deployment failed: $_"
-                  exit 1
-                }
+              ScriptType: "FilePath"
+              ScriptPath: "./Pipelines/Deploy-To-AppService.ps1"
+              ScriptArguments: '"$(resourceGroup)" "$(appServiceName)" "$(acrLoginServer)" "$(imageName)" "$(imageTag)"'
+              azurePowerShellVersion: "LatestVersion"

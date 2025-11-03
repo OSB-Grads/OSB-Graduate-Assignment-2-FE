@@ -1,53 +1,96 @@
-# Frontend-CD.ps1
-Write-Host "=== Frontend-CD.ps1 started ==="
+# =====================================================================
+# Deploy-To-AppService.ps1
+# Updates an existing Azure App Service (Linux) to use a new container image from ACR.
+# Expects 5 arguments in order:
+#   1. Resource Group
+#   2. App Service Name
+#   3. ACR Name (short or full login server)
+#   4. Image Name
+#   5. Image Tag
+# =====================================================================
 
-# Read env vars
-$resourceGroup   = $env:RESOURCE_GROUP
-$appService      = $env:APP_SERVICE
-$acrName         = $env:ACR_NAME
-$imageName       = $env:IMAGE_NAME
-$imageTag        = $env:IMAGE_TAG
-$acrUser         = $env:ACR_USER
-$acrPwd          = $env:ACR_PWD
-$acrLoginServer  = $env:ACR_LOGIN_SERVER
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
-if (-not $resourceGroup -or -not $appService -or -not $acrLoginServer -or -not $imageName -or -not $imageTag) {
-    Write-Error "One or more required environment variables are missing. Ensure RESOURCE_GROUP, APP_SERVICE, ACR_LOGIN_SERVER, IMAGE_NAME and IMAGE_TAG are set."
-    exit 1
+# -------------------------------
+# Read arguments (in order)
+# -------------------------------
+$resourceGroup   = $args[0]
+$appServiceName  = $args[1]
+$acrName         = $args[2]
+$imageName       = $args[3]
+$imageTag        = $args[4]
+
+# -------------------------------
+# Log configuration
+# -------------------------------
+Write-Host "==============================================================="
+Write-Host "Starting App Service container deployment..."
+Write-Host "Resource Group : $resourceGroup"
+Write-Host "App Service    : $appServiceName"
+Write-Host "ACR (Input)    : $acrName"
+Write-Host "Image Name     : $imageName"
+Write-Host "Image Tag      : $imageTag"
+Write-Host "==============================================================="
+
+# -------------------------------
+# Resolve ACR login server
+# -------------------------------
+if ($acrName -match "\.") {
+    $acrLoginServer = $acrName
+} else {
+    $acrLoginServer = "$($acrName).azurecr.io"
 }
 
-Write-Host ("ResourceGroup: {0}" -f $resourceGroup)
-Write-Host ("AppService:    {0}" -f $appService)
-Write-Host ("ACR Login:     {0}" -f $acrLoginServer)
-Write-Host ("Image:         {0}:{1}" -f $imageName, $imageTag)
+$imageFull = "$acrLoginServer/$imageName:$imageTag"
+Write-Host "Resolved ACR Login Server : $acrLoginServer"
+Write-Host "Full Container Image      : $imageFull"
+Write-Host "---------------------------------------------------------------"
 
-# Build full image path safely
-$fullImage = "$($acrLoginServer)/$($imageName):$($imageTag)"
-Write-Host ("Full image path: {0}" -f $fullImage)
+# -------------------------------
+# Configure App Service container
+# -------------------------------
+Write-Host "Configuring App Service container settings..."
+$azCmdStatus = & az webapp config container set `
+    --name $appServiceName `
+    --resource-group $resourceGroup `
+    --docker-custom-image-name $imageFull `
+    --docker-registry-server-url "https://$acrLoginServer" `
+    --output none 2>&1
 
-# Update App Service container settings to point to the new image and registry credentials
-Write-Host "Updating App Service container configuration..."
-try {
-    az webapp config container set `
-        --name $appService `
-        --resource-group $resourceGroup `
-        --docker-custom-image-name $fullImage `
-        --docker-registry-server-url "https://$acrLoginServer" `
-        --docker-registry-server-user $acrUser `
-        --docker-registry-server-password $acrPwd | Out-Null
-} catch {
-    Write-Error "Failed to set container config on App Service: $_"
-    exit 1
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to update container settings. Exit Code: $LASTEXITCODE"
+    Write-Error $azCmdStatus
+    exit $LASTEXITCODE
 }
 
-# Restart App Service to pull the new image
-Write-Host "Restarting App Service..."
-try {
-    az webapp restart --name $appService --resource-group $resourceGroup | Out-Null
-} catch {
-    Write-Error "Failed to restart App Service: $_"
-    exit 1
+# -------------------------------
+# Restart the App Service
+# -------------------------------
+Write-Host "Restarting App Service '$appServiceName'..."
+& az webapp restart --name $appServiceName --resource-group $resourceGroup --output none
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Warning "Restart returned non-zero exit code ($LASTEXITCODE). Continuing..."
 }
 
-Write-Host " Frontend successfully deployed: $fullImage -> $appService"
-Write-Host "=== Frontend-CD.ps1 finished ==="
+# -------------------------------
+# Verify container configuration
+# -------------------------------
+Write-Host "Fetching current container configuration..."
+& az webapp config container show `
+    --name $appServiceName `
+    --resource-group $resourceGroup `
+    --output table
+
+Write-Host "---------------------------------------------------------------"
+Write-Host "App Settings (filtered for DOCKER / WEBSITES keys):"
+& az webapp config appsettings list `
+    --name $appServiceName `
+    --resource-group $resourceGroup `
+    --query "[?starts_with(name, 'DOCKER') || starts_with(name, 'WEBSITES_')].{name:name,value:value}" `
+    --output table
+
+Write-Host "---------------------------------------------------------------"
+Write-Host " Deployment completed successfully."
+Write-Host "==============================================================="
