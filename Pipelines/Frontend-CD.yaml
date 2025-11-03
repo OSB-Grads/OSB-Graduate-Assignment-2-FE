@@ -44,11 +44,12 @@ stages:
             displayName: "Prepare AZ config dir"
 
           - task: AzureCLI@2
-            displayName: "Deploy image from ACR -> App Service (all inside authenticated az context)"
+            displayName: "Deploy image from ACR -> App Service (inside authenticated az context)"
             inputs:
               azureSubscription: "$(myServiceConnection)"
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
+              addSpnToEnvironment: true          
               inlineScript: |
                 try {
                   Write-Host "=== AzureCLI inline script starting ==="
@@ -78,13 +79,30 @@ stages:
                   }
                   Write-Host ("ACR login server: {0}" -f $acrLoginServer)
 
-                  # THIS runs inside AzureCLI@2 and IS authenticated by the service connection.
+                  # --- Authenticate az CLI explicitly using the SPN provided into the environment by the task
+                  if (-not $env:ARM_CLIENT_ID -or -not $env:ARM_CLIENT_SECRET -or -not $env:ARM_TENANT_ID) {
+                      Write-Error "Service principal environment vars are missing (ARM_CLIENT_ID/ARM_CLIENT_SECRET/ARM_TENANT_ID). Ensure addSpnToEnvironment: true and that the service connection is a Service Principal."
+                      exit 1
+                  }
+
+                  Write-Host "Logging in with service principal (environment vars provided by task)..."
+                  az login --service-principal -u $env:ARM_CLIENT_ID -p $env:ARM_CLIENT_SECRET --tenant $env:ARM_TENANT_ID | Out-Null
+
+                  # quick sanity check that az is logged in
+                  $acct = az account show -o json 2>$null | ConvertFrom-Json
+                  if (-not $acct) {
+                      Write-Error "az login did not succeed in this shell. Exiting."
+                      exit 1
+                  }
+                  Write-Host ("Logged into subscription: {0} ({1})" -f $acct.name, $acct.id)
+
+                  # THIS should now succeed (provided SPN has permission on ACR to list credentials)
                   Write-Host "Fetching ACR credentials (inside authenticated AzureCLI task)..."
-                  $acrUser = az acr credential show --name $acrName --query "username" -o tsv
-                  $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
+                  $acrUser = az acr credential show --name $acrName --query "username" -o tsv 2>$null
+                  $acrPwd  = az acr credential show --name $acrName --query "passwords[0].value" -o tsv 2>$null
 
                   if (-not $acrUser -or -not $acrPwd) {
-                      Write-Error "Failed to obtain ACR credentials. Ensure the service connection has permission to access ACR."
+                      Write-Error "Failed to obtain ACR credentials. Ensure the service connection's SPN has permission to access ACR (e.g. AcrPull/AcrPush or Owner) and that the ACR name is correct."
                       exit 1
                   }
                   Write-Host ("ACR credentials retrieved (username length: {0})." -f $($acrUser.Length))

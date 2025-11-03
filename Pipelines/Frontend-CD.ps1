@@ -1,9 +1,4 @@
-# Pipelines/Frontend-CD.ps1
-# Reads configuration from environment variables (no param() block).
-# Expected env vars: RESOURCE_GROUP, APP_SERVICE, ACR_NAME, IMAGE_NAME, IMAGE_TAG,
-#                    ACR_USER, ACR_PWD, ACR_LOGIN_SERVER
-# This script assumes it runs inside an AzureCLI@2 task (so 'az' is available & authenticated).
-
+# Frontend-CD.ps1
 Write-Host "=== Frontend-CD.ps1 started ==="
 
 # Read env vars
