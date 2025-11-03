@@ -58,6 +58,6 @@ stages:
             inputs:
               azureSubscription: "$(myServiceConnection)"
               ScriptType: "FilePath"
-              ScriptPath: "./Pipelines/Deploy-To-AppService.ps1"
+              ScriptPath: "./Pipelines/Frontend-CD.ps1" 
               ScriptArguments: '"$(resourceGroup)" "$(appServiceName)" "$(acrLoginServer)" "$(imageName)" "$(imageTag)"'
               azurePowerShellVersion: "LatestVersion"
