@@ -1,5 +1,4 @@
 # frontend-CD.yaml
-# Trigger on successful completion of frontend CI pipeline
 resources:
   pipelines:
     - pipeline: frontend-ci
@@ -14,13 +13,13 @@ pr: none
 variables:
   myServiceConnection: "MyAzureServiceConnection"
   resourceGroup: "rg-banking-app"
-  webAppName: "banking-app"       
-  acrName: "bankingacr"                    
-  imageName: "frontend-ci"                
-  imageTag: "v$(resources.pipeline.frontend-ci.runId)" 
-  aksResourceGroup: "rg-banking-app"             
-  aksClusterName: "bankcluster"          
-  backendServiceName: "springboot-backend-service-prod"          # name of LoadBalancer service
+  webAppName: "banking-app"
+  acrName: "bankingacr"
+  imageName: "frontend-ci"
+  imageTag: "v$(resources.pipeline.frontend-ci.runId)"
+  aksResourceGroup: "rg-banking-app"
+  aksClusterName: "bankcluster"
+  backendServiceName: "springboot-backend-service-prod"
 
 stages:
   - stage: Deploy
@@ -43,25 +42,33 @@ stages:
               inlineScript: |
                 az account show
 
-          #  Fetch Kubernetes LoadBalancer IP
+          # Fetch backend LoadBalancer IP and export as VITE_API_BASE_URL
           - task: AzureCLI@2
-            displayName: "Fetch Backend LoadBalancer IP"
+            displayName: "Fetch backend LoadBalancer IP and set as VITE_API_BASE_URL"
             inputs:
               azureSubscription: "$(myServiceConnection)"
               scriptType: ps
               scriptLocation: inlineScript
               inlineScript: |
-                az aks get-credentials -n $(aksClusterName) -g $(aksResourceGroup) --overwrite-existing
-                $lbIP = kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-                if (-not $lbIP) {
-                    Write-Error " Failed to fetch LoadBalancer IP for backend service $(backendServiceName)"
-                    exit 1
-                }
-                Write-Host " Backend LoadBalancer IP: $lbIP"
-                Write-Host "##vso[task.setvariable variable=backendURL;]http://$lbIP:80"
-   # or appropriate port
+                Write-Host "Fetching backend LoadBalancer IP..."
+                $lbIP = az aks command invoke `
+                  --resource-group $(aksResourceGroup) `
+                  --name $(aksClusterName) `
+                  --command "kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'" `
+                  --query "logs" -o tsv
 
-          # Verify ACR and image exist
+                if ([string]::IsNullOrWhiteSpace($lbIP)) {
+                  Write-Host " Failed to fetch backend LoadBalancer IP."
+                  exit 1
+                }
+
+                Write-Host " Backend LoadBalancer IP: $lbIP"
+                $backendURL = "http://$lbIP"
+                Write-Host " Backend API URL: $backendURL"
+                Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
+                Write-Host " Backend URL variable exported for next steps."
+
+          # Verify ACR image exists
           - task: AzureCLI@2
             displayName: "Verify ACR Image"
             inputs:
@@ -74,7 +81,7 @@ stages:
                 az acr repository show-tags --name $(acrName) --repository $(imageName) | Select-String $(imageTag)
                 Write-Host "Image exists, proceeding to deployment..."
 
-          # Deploy using PowerShell script
+          # Deploy to App Service
           - task: AzurePowerShell@5
             displayName: "Deploy Frontend to App Service"
             inputs:
