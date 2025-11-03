@@ -1,96 +1,36 @@
-# =====================================================================
-# Deploy-To-AppService.ps1
-# Updates an existing Azure App Service (Linux) to use a new container image from ACR.
-# Expects 5 arguments in order:
-#   1. Resource Group
-#   2. App Service Name
-#   3. ACR Name (short or full login server)
-#   4. Image Name
-#   5. Image Tag
-# =====================================================================
+# ==============================
+# PowerShell Script: Deploy Docker image from ACR to App Service
+# ==============================
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
+Write-Host "Starting deployment..."
 
-# -------------------------------
-# Read arguments (in order)
-# -------------------------------
-$resourceGroup   = $args[0]
-$appServiceName  = $args[1]
-$acrName         = $args[2]
-$imageName       = $args[3]
-$imageTag        = $args[4]
+# Variables (same as in YAML)
+$resourceGroup = "rg-banking-app"
+$appServiceName = "frontend-appservice"
+$acrName = "bankingacr"
+$imageName = "frontend-ci"
 
-# -------------------------------
-# Log configuration
-# -------------------------------
-Write-Host "==============================================================="
-Write-Host "Starting App Service container deployment..."
-Write-Host "Resource Group : $resourceGroup"
-Write-Host "App Service    : $appServiceName"
-Write-Host "ACR (Input)    : $acrName"
-Write-Host "Image Name     : $imageName"
-Write-Host "Image Tag      : $imageTag"
-Write-Host "==============================================================="
+# This assumes the pipeline provides a runId variable
+$imageTag = "v$(resources.pipeline.frontend-ci.runId)"
 
-# -------------------------------
-# Resolve ACR login server
-# -------------------------------
-if ($acrName -match "\.") {
-    $acrLoginServer = $acrName
-} else {
-    $acrLoginServer = "$($acrName).azurecr.io"
-}
+# Full image name
+$imageFullName = "$acrName.azurecr.io/$imageName:$imageTag"
+Write-Host "Using image: $imageFullName"
 
-$imageFull = "$($acrLoginServer)/$($imageName):$($imageTag)"
-Write-Host "Resolved ACR Login Server : $acrLoginServer"
-Write-Host "Full Container Image      : $imageFull"
-Write-Host "---------------------------------------------------------------"
+# Check if App Service exists
+$app = az webapp show --resource-group $resourceGroup --name $appServiceName --output none 2>$null
 
-# -------------------------------
-# Configure App Service container
-# -------------------------------
-Write-Host "Configuring App Service container settings..."
-$azCmdStatus = & az webapp config container set `
+
+Write-Host "App Service exists. Updating container image..."
+az webapp config container set `
     --name $appServiceName `
     --resource-group $resourceGroup `
-    --docker-custom-image-name $imageFull `
-    --docker-registry-server-url "https://$acrLoginServer" `
-    --output none 2>&1
+    --docker-custom-image-name $imageFullName `
+    --docker-registry-server-url "https://$acrName.azurecr.io"
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Failed to update container settings. Exit Code: $LASTEXITCODE"
-    Write-Error $azCmdStatus
-    exit $LASTEXITCODE
-}
 
-# -------------------------------
-# Restart the App Service
-# -------------------------------
-Write-Host "Restarting App Service '$appServiceName'..."
-& az webapp restart --name $appServiceName --resource-group $resourceGroup --output none
+# Restart the app to apply changes
+Write-Host "Restarting the app..."
+az webapp restart --name $appServiceName --resource-group $resourceGroup
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Warning "Restart returned non-zero exit code ($LASTEXITCODE). Continuing..."
-}
-
-# -------------------------------
-# Verify container configuration
-# -------------------------------
-Write-Host "Fetching current container configuration..."
-& az webapp config container show `
-    --name $appServiceName `
-    --resource-group $resourceGroup `
-    --output table
-
-Write-Host "---------------------------------------------------------------"
-Write-Host "App Settings (filtered for DOCKER / WEBSITES keys):"
-& az webapp config appsettings list `
-    --name $appServiceName `
-    --resource-group $resourceGroup `
-    --query "[?starts_with(name, 'DOCKER') || starts_with(name, 'WEBSITES_')].{name:name,value:value}" `
-    --output table
-
-Write-Host "---------------------------------------------------------------"
-Write-Host " Deployment completed successfully."
-Write-Host "==============================================================="
+Write-Host "Deployment completed successfully!"

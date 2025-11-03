@@ -24,7 +24,7 @@ variables:
 
 stages:
   - stage: Deploy
-    displayName: "Deploy Frontend to Azure App Service (Container)"
+    displayName: "Deploy Frontend to Azure App Service"
     jobs:
       - job: DeployToAppService
         displayName: "Deploy container to App Service"
@@ -33,31 +33,13 @@ stages:
         steps:
           - checkout: self
 
-          # Resolve ACR login server and full image name, expose as pipeline variables
-          - task: PowerShell@2
-            displayName: "Resolve ACR login server and full image name"
+          - task: AzureCLI@2
+            name: DeployFrontend
             inputs:
-              targetType: 'inline'
-              script: |
-                Write-Host "Resolving ACR login server..."
-                $rawAcr = "$(acrName)"
-                if ($rawAcr -match "\.") {
-                  $acrLoginServer = $rawAcr
-                } else {
-                  $acrLoginServer = "$($rawAcr).azurecr.io"
-                }
-                $image = "$acrLoginServer/$(imageName):$(imageTag)"
-                Write-Host "ACR login server: $acrLoginServer"
-                Write-Host "Full image name: $image"
-                Write-Host "##vso[task.setvariable variable=acrLoginServer]$acrLoginServer"
-                Write-Host "##vso[task.setvariable variable=fullImageName]$image"
-
-          # Run the PowerShell deployment script (file stored in repo)
-          - task: AzurePowerShell@5
-            displayName: "Deploy to App Service (call PS script)"
-            inputs:
-              azureSubscription: "$(myServiceConnection)"
-              ScriptType: "FilePath"
-              ScriptPath: "./Pipelines/Frontend-CD.ps1" 
-              ScriptArguments: '"$(resourceGroup)" "$(appServiceName)" "$(acrLoginServer)" "$(imageName)" "$(imageTag)"'
-              azurePowerShellVersion: "LatestVersion"
+              azureSubscript+ion: $(myServiceConnection)
+              scriptType: 'ps'    
+              scriptLocation: 'scriptPath'
+              scriptPath: './Pipelines/Frontend-CD.ps1'
+       
+         
+          
