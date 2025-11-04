@@ -42,14 +42,19 @@ az webapp config container set `
     --output none
 
 #  Inject backend URL as environment variable for the React app
-Log "Setting environment variable VITE_API_BASE_URL=$BACKEND_URL"
+# Check if backend URL is empty
+if ([string]::IsNullOrWhiteSpace($BACKEND_URL)) {
+    throw "ERROR: BACKEND_URL is empty! Cannot set App Service setting."
+}
+
+# Log safely
+Log "Setting environment variable VITE_API_BASE_URL='$BACKEND_URL'"
+
+# Set the environment variable safely (wrap value in quotes)
 az webapp config appsettings set `
     --name $WEBAPP_NAME `
     --resource-group $RESOURCE_GROUP `
-    --settings VITE_API_BASE_URL=$BACKEND_URL `
-    --output none
-
-Log "Container configuration updated successfully."
+    --settings "VITE_API_BASE_URL=$BACKEND_URL"
 
 # ------------------------------
 # Restart App Service
