@@ -54,7 +54,7 @@ Log "Setting environment variable VITE_API_BASE_URL='$BACKEND_URL'"
 az webapp config appsettings set `
     --name $WEBAPP_NAME `
     --resource-group $RESOURCE_GROUP `
-    # --settings VITE_API_BASE_URL=$BACKEND_URL `
+    --settings VITE_API_BASE_URL=$BACKEND_URL `
     --output none
 
 # ------------------------------

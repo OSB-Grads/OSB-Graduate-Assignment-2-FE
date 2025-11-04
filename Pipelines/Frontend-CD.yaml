@@ -63,7 +63,7 @@ stages:
                 }
 
                 $backendURL = "http://$lbIP"
-                Write-Host "  Backend API URL: $backendURL"
+                Write-Host "  Backend API URL:$backendURL"
                 Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
 
           # Verify Docker image exists in ACR
@@ -88,5 +88,5 @@ stages:
               resourceGroupName: "$(resourceGroup)"
               containers: |
                 $(acrName).azurecr.io/$(imageName):$(imageTag)
-              appSettings: |
-                - VITE_API_BASE_URL=$(backendURL)
+              # appSettings: |
+              VITE_API_BASE_URL: $(backendURL)
