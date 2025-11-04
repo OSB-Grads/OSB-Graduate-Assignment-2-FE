@@ -71,7 +71,7 @@ stages:
           - task: FileTransform@2
             displayName: "Replace VITE_API_BASE_URL in .env"
             inputs:
-              folderPath: 'src/.env'
+              folderPath: '$(System.DefaultWorkingDirectory)/src' 
               fileType: 'env'
               targetFiles: '**/.env'
           # Verify ACR image exists
