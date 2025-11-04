@@ -1,14 +1,11 @@
 import axios from "axios";
 import { notify } from "../components/Toast/Alerts";
 import { ToastTypes } from "../components/Toast/interfaces";
-import { logoutApi } from "../store/AuthStore/authstore.api";
-import { logout } from "../store/AuthStore/authStore.logic";
 import useAuthStore from "../store/AuthStore/authStore";
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-
+    baseURL: import.meta.env.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL,
 })
 
 interface ITokens {

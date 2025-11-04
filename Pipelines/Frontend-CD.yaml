@@ -42,9 +42,9 @@ stages:
               inlineScript: |
                 az account show
 
-          # Fetch backend LoadBalancer IP and export as VITE_API_BASE_URL
+          # Fetch backend LoadBalancer IP
           - task: AzureCLI@2
-            displayName: "Fetch backend LoadBalancer IP and set as VITE_API_BASE_URL"
+            displayName: "Fetch backend LoadBalancer IP"
             inputs:
               azureSubscription: "$(myServiceConnection)"
               scriptType: ps
@@ -58,17 +58,15 @@ stages:
                   --query "logs" -o tsv
 
                 if ([string]::IsNullOrWhiteSpace($lbIP)) {
-                  Write-Host " Failed to fetch backend LoadBalancer IP."
+                  Write-Host "  Failed to fetch backend LoadBalancer IP."
                   exit 1
                 }
 
-                Write-Host " Backend LoadBalancer IP: $lbIP"
                 $backendURL = "http://$lbIP"
-                Write-Host " Backend API URL: $backendURL"
+                Write-Host "  Backend API URL: $backendURL"
                 Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
-                Write-Host " Backend URL variable exported for next steps."
 
-          # Verify ACR image exists
+          # Verify Docker image exists in ACR
           - task: AzureCLI@2
             displayName: "Verify ACR Image"
             inputs:
@@ -79,14 +77,16 @@ stages:
                 $imagePath = "$(acrName).azurecr.io/$(imageName):$(imageTag)"
                 Write-Host "Checking image existence: $imagePath"
                 az acr repository show-tags --name $(acrName) --repository $(imageName) | Select-String $(imageTag)
-                Write-Host "Image exists, proceeding to deployment..."
+                Write-Host " Image exists, proceeding to deployment..."
 
-          # Deploy to App Service
-          - task: AzurePowerShell@5
-            displayName: "Deploy Frontend to App Service"
+          # Deploy Docker image to Linux App Service and inject backend URL as App Setting
+          - task: AzureWebAppContainer@1
+            displayName: "Deploy Frontend to Linux App Service"
             inputs:
               azureSubscription: "$(myServiceConnection)"
-              ScriptType: "FilePath"
-              ScriptPath: "./Pipelines/Frontend-CD.ps1"
-              ScriptArguments: "$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag) $(backendURL)"
-              azurePowerShellVersion: "LatestVersion"
+              appName: "$(webAppName)"
+              resourceGroupName: "$(resourceGroup)"
+              containers: |
+                $(acrName).azurecr.io/$(imageName):$(imageTag)
+              appSettings: |
+                - VITE_API_BASE_URL=$(backendURL)
