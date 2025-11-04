@@ -68,6 +68,12 @@ stages:
                 Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
                 Write-Host " Backend URL variable exported for next steps."
 
+          - task: FileTransform@2
+            displayName: "Replace VITE_API_BASE_URL in .env"
+            inputs:
+              folderPath: 'src/.env'
+              fileType: 'env'
+              targetFiles: '**/.env'
           # Verify ACR image exists
           - task: AzureCLI@2
             displayName: "Verify ACR Image"
