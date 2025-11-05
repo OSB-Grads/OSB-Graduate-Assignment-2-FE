@@ -4,6 +4,9 @@ WORKDIR /frontend/
 # Copying all directories 
 COPY . .
 
+# Accept build-time Vite arg
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 # Installing neccessary dependencies 
 RUN npm install 
