@@ -42,29 +42,29 @@ stages:
               inlineScript: |
                 az account show
 
-          # Fetch backend LoadBalancer IP
-          - task: AzureCLI@2
-            displayName: "Fetch backend LoadBalancer IP"
-            inputs:
-              azureSubscription: "$(myServiceConnection)"
-              scriptType: ps
-              scriptLocation: inlineScript
-              inlineScript: |
-                Write-Host "Fetching backend LoadBalancer IP..."
-                $lbIP = az aks command invoke `
-                  --resource-group $(aksResourceGroup) `
-                  --name $(aksClusterName) `
-                  --command "kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'" `
-                  --query "logs" -o tsv
+          # # Fetch backend LoadBalancer IP
+          # - task: AzureCLI@2
+          #   displayName: "Fetch backend LoadBalancer IP"
+          #   inputs:
+          #     azureSubscription: "$(myServiceConnection)"
+          #     scriptType: ps
+          #     scriptLocation: inlineScript
+          #     inlineScript: |
+          #       Write-Host "Fetching backend LoadBalancer IP..."
+          #       $lbIP = az aks command invoke `
+          #         --resource-group $(aksResourceGroup) `
+          #         --name $(aksClusterName) `
+          #         --command "kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'" `
+          #         --query "logs" -o tsv
 
-                if ([string]::IsNullOrWhiteSpace($lbIP)) {
-                  Write-Host "  Failed to fetch backend LoadBalancer IP."
-                  exit 1
-                }
+          #       if ([string]::IsNullOrWhiteSpace($lbIP)) {
+          #         Write-Host "  Failed to fetch backend LoadBalancer IP."
+          #         exit 1
+          #       }
 
-                $backendURL = "http://$lbIP"
-                Write-Host "  Backend API URL:$backendURL"
-                Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
+          #       $backendURL = "http://$lbIP"
+          #       Write-Host "  Backend API URL:$backendURL"
+          #       Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
 
           # Verify Docker image exists in ACR
           - task: AzureCLI@2
@@ -88,5 +88,5 @@ stages:
               resourceGroupName: "$(resourceGroup)"
               containers: |
                 $(acrName).azurecr.io/$(imageName):$(imageTag)
-              # appSettings: |
-              VITE_API_BASE_URL: $(backendURL)
+              # # appSettings: |
+              # VITE_API_BASE_URL: $(backendURL)

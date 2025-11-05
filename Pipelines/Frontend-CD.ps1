@@ -17,7 +17,7 @@ $WEBAPP_NAME    = $args[1]
 $ACR_NAME       = $args[2]
 $IMAGE_NAME     = $args[3]
 $IMAGE_TAG      = $args[4]
-$BACKEND_URL    = $args[5]   #  new argument
+# $BACKEND_URL    = $args[5]   #  new argument
 
 $IMAGE_PATH = "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -26,7 +26,7 @@ Log "Starting Frontend Deployment"
 Log "Resource Group: $RESOURCE_GROUP"
 Log "Web App: $WEBAPP_NAME"
 Log "Image: $IMAGE_PATH"
-Log "Backend API URL: $BACKEND_URL"
+# Log "Backend API URL: $BACKEND_URL"
 Log "-------------------------------------------"
 
 # ------------------------------
@@ -43,19 +43,19 @@ az webapp config container set `
 
 #  Inject backend URL as environment variable for the React app
 # Check if backend URL is empty
-if ([string]::IsNullOrWhiteSpace($)) {
-    throw "ERROR: BACKEND_URL is empty! Cannot set App Service setting."
-}
+# if ([string]::IsNullOrWhiteSpace($)) {
+#     throw "ERROR: BACKEND_URL is empty! Cannot set App Service setting."
+# }
 
-# Log safely
-Log "Setting environment variable VITE_API_BASE_URL='$BACKEND_URL'"
+# # Log safely
+# Log "Setting environment variable VITE_API_BASE_URL='$BACKEND_URL'"
 
-# Set the environment variable safely (wrap value in quotes)
-az webapp config appsettings set `
-    --name $WEBAPP_NAME `
-    --resource-group $RESOURCE_GROUP `
-    --settings VITE_API_BASE_URL=$BACKEND_URL `
-    --output none
+# # Set the environment variable safely (wrap value in quotes)
+# az webapp config appsettings set `
+#     --name $WEBAPP_NAME `
+#     --resource-group $RESOURCE_GROUP `
+#     --settings VITE_API_BASE_URL=$BACKEND_URL `
+#     --output none
 
 # ------------------------------
 # Restart App Service
