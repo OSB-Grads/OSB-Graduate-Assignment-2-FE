@@ -43,7 +43,7 @@ export default function App() {
   }, [authenticate]);
   
   console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
-  console.log("VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
+  // console.log("VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
 
   return (
     <>
