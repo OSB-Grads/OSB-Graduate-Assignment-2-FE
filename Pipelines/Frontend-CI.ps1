@@ -5,7 +5,7 @@ function Log($message) {
     Start-Sleep -Milliseconds 100
 }
 
-# Args
+# Arguments
 $ACR_NAME = $args[0]
 $IMAGE_NAME = $args[1]
 $DOCKERFILE_PATH = $args[2]
@@ -22,7 +22,6 @@ az acr login --name $ACR_NAME
 
 Log "Building Docker image..."
 docker build `
-  --build-arg VITE_API_BASE_URL=$backendUrl `
   -t "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}" `
   -f $DOCKERFILE_PATH .
 
