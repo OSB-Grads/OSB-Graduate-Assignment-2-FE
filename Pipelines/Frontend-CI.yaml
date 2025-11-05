@@ -63,4 +63,4 @@ stages:
               filePath: './Pipelines/Frontend-CI.ps1'
               arguments: '$(acrName) $(imageName) $(dockerfilePath) $(imageTag)'
               workingDirectory: '$(Build.SourcesDirectory)'
-              failOnStderr: false
+              failOnStderr: true
