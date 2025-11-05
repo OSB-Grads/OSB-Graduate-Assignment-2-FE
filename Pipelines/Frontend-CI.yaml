@@ -60,7 +60,7 @@ stages:
           - task: PowerShell@2
             displayName: "Build & Push Docker Image"
             inputs:
-              filePath: './Pipelines/Frontend-CI.ps1'
+              filePath: '$(Build.SourcesDirectory)/Pipelines/Frontend-CI.ps1'
               arguments: '$(acrName) $(imageName) $(dockerfilePath) $(imageTag)'
               workingDirectory: '$(Build.SourcesDirectory)'
               failOnStderr: false
