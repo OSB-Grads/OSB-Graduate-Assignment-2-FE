@@ -11,13 +11,7 @@ $IMAGE_NAME = $args[1]
 $DOCKERFILE_PATH = $args[2]
 $IMAGE_TAG = $args[3]
 
-# Read backend URL from .env file
-# $envFilePath = "$(Build.SourcesDirectory)\.env"
-# $backendUrl = (Get-Content $envFilePath | Select-String "VITE_API_BASE_URL").ToString().Split("=")[1].Trim()
-
-Log "Backend URL detected: $backendUrl"
-
-Log "Logging into ACR..."
+Log "Logging into Azure Container Registry..."
 az acr login --name $ACR_NAME
 
 Log "Building Docker image..."

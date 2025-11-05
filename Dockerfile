@@ -1,22 +1,23 @@
+# Use Node Alpine image
 FROM node:22.19.0-alpine3.21
-WORKDIR /frontend/
 
-# Copying all directories 
+# Set working directory
+WORKDIR /frontend
+
+# Copy package.json and package-lock.json first for caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the source code
 COPY . .
 
+# Build the application
+RUN npm run build
 
-# Accept build-time Vite arg
-ARG VITE_API_BASE_URL
-ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+# Serve the built app
+CMD ["npx", "serve", "-s", "dist"]
 
-# Installing neccessary dependencies 
-RUN npm install 
-
-
-# Building the application 
-RUN npm run build 
-
-# Deploying the application 
-CMD ["npx","serve","-s","dist"]
-
+# Expose port
 EXPOSE 3000
