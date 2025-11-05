@@ -40,14 +40,16 @@ export default function App() {
     if (accessToken) {
       authenticate(true);
     }
-  }, [authenticate])
-
-
+  }, [authenticate]);
+  
+  console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
 
   return (
     <>
       <Header />
       <Alerts />
+
       <Routes>
         <Route path="/login" element={<ProtectedRoute><LoginPage /></ProtectedRoute>} />
         <Route path="/register" element={<Register />} />
