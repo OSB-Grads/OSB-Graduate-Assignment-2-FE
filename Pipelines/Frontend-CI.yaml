@@ -11,6 +11,10 @@ variables:
   imageName: "frontend-ci"
   dockerfilePath: "Dockerfile"
   imageTag: "v$(Build.BuildId)"
+  aksResourceGroup: "rg-banking-app"
+  aksClusterName: "bankcluster"
+  backendServiceName: "springboot-backend-service-prod"
+  backendPort: "8080"
 
 stages:
   - stage: Build
@@ -25,6 +29,32 @@ stages:
         steps:
           # Checkout code
           - checkout: self
+
+          - task: PowerShell@2
+            displayName: "Fetch Backend IP + Create .env"
+            inputs:
+              scriptType: inlineScript
+              inlineScript: |
+                Write-Host "Fetching backend LoadBalancer IP..."
+
+                $lbIP = az aks command invoke `
+                  --resource-group $(aksResourceGroup) `
+                  --name $(aksClusterName) `
+                  --command "kubectl get svc $(backendServiceName) -o jsonpath='{.status.loadBalancer.ingress[0].ip}'" `
+                  --query "logs" -o tsv
+
+                if ([string]::IsNullOrWhiteSpace($lbIP)) {
+                  Write-Host " Failed to fetch backend LoadBalancer IP"
+                  exit 1
+                }
+
+                $backendUrl = "http://$lbIP:$(backendPort)"
+                Write-Host " Backend URL: $backendUrl"
+
+                $envPath = "$(Build.SourcesDirectory)/.env"
+                "VITE_API_BASE_URL=$backendUrl" | Out-File -FilePath $envPath -Encoding utf8
+
+                Write-Host " .env created at $envPath"
 
           # Run the Bash script
           - task: PowerShell@2
