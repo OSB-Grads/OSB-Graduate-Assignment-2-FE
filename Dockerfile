@@ -12,6 +12,8 @@ COPY . .
 # Install dependencies
 RUN npm install
 
+ENV VITE_API_BASE_URL="http://4.224.75.153"
+
 # Build the application
 RUN npm run build
 
