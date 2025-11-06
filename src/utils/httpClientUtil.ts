@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL,
-    withCredentials: true
+    withCredentials: false
 })
 
 interface ITokens {
