@@ -10,15 +10,17 @@ $ACR_NAME = $args[0]
 $IMAGE_NAME = $args[1]
 $DOCKERFILE_PATH = $args[2]
 $IMAGE_TAG = $args[3]
+$VITE_API_BASE_URL = $args[4]
 
 Log "Logging into Azure Container Registry..."
 az acr login --name $ACR_NAME
 
 Log "Building Docker image..."
 docker build `
+  --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL `
   -t "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}" `
   -f $DOCKERFILE_PATH .
-
+  
 Log "Pushing Docker image..."
 docker push "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
 
