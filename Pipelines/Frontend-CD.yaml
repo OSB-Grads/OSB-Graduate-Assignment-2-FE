@@ -17,9 +17,9 @@ variables:
   acrName: "bankingacr"
   imageName: "frontend-ci"
   imageTag: "v$(resources.pipeline.frontend-ci.runId)"
-  aksResourceGroup: "rg-banking-app"
-  aksClusterName: "bankcluster"
-  backendServiceName: "springboot-backend-service-prod"
+  # aksResourceGroup: "rg-banking-app"
+  # aksClusterName: "bankcluster"
+  # backendServiceName: "springboot-backend-service-prod"
 
 stages:
   - stage: Deploy
@@ -78,16 +78,26 @@ stages:
                 $imagePath = "$(acrName).azurecr.io/$(imageName):$(imageTag)"
                 Write-Host "Checking image existence: $imagePath"
                 az acr repository show-tags --name $(acrName) --repository $(imageName) | Select-String $(imageTag)
-                Write-Host " Image exists, proceeding to deployment..."
+                Write-Host " Image exists, proceeding to deployment...  Image Verified."
 
-          # Deploy Docker image to Linux App Service and inject backend URL as App Setting
-          - task: AzureWebAppContainer@1
-            displayName: "Deploy Frontend to Linux App Service"
+          - task: PowerShell@2
+            displayName: "Deploy Frontend App"
             inputs:
               azureSubscription: "$(myServiceConnection)"
-              appName: "$(webAppName)"
-              resourceGroupName: "$(resourceGroup)"
-              containers: |
-                $(acrName).azurecr.io/$(imageName):$(imageTag)
-              # # appSettings: |
-              VITE_API_BASE_URL: "http://4.224.75.153"
+              filePath: './Pipelines/Frontend-CD.ps1'
+              arguments: '$(resourceGroup) $(webAppName) $(acrName) $(imageName) $(imageTag)'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              failOnStderr: false
+
+          # # Deploy Docker image to Linux App Service and inject backend URL as App Setting
+          # - task: AzureWebAppContainer@1
+          #   displayName: "Deploy Frontend to Linux App Service"
+          #   inputs:
+          #     azureSubscription: "$(myServiceConnection)"
+          #     appName: "$(webAppName)"
+          #     resourceGroupName: "$(resourceGroup)"
+          #     containers: |
+          #       $(acrName).azurecr.io/$(imageName):$(imageTag)
+          #     # # appSettings: |
+          #     VITE_API_BASE_URL: "http://4.224.75.153"
+            

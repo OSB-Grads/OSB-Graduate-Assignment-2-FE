@@ -11,6 +11,7 @@ variables:
   imageName: "frontend-ci"
   dockerfilePath: "Dockerfile"
   imageTag: "v$(Build.BuildId)"
+  VITE_API_BASE_URL: "http://4.224.75.153"
 
 stages:
   - stage: Build
@@ -31,6 +32,6 @@ stages:
             displayName: "Build & Push Docker Image"
             inputs:
               filePath: './Pipelines/Frontend-CI.ps1'
-              arguments: '$(acrName) $(imageName) $(dockerfilePath) $(imageTag)'
+              arguments: '$(acrName) $(imageName) $(dockerfilePath) $(imageTag) $(VITE_API_BASE_URL)'
               workingDirectory: '$(Build.SourcesDirectory)'
               failOnStderr: false

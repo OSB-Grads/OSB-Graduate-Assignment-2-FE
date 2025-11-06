@@ -9,15 +9,14 @@ function Log($msg) {
     Write-Host "[$ts] $msg"
 }
 
-# ------------------------------
-# Arguments passed from pipeline
-# ------------------------------
+
+# Arguments
 $RESOURCE_GROUP = $args[0]
 $WEBAPP_NAME    = $args[1]
 $ACR_NAME       = $args[2]
 $IMAGE_NAME     = $args[3]
 $IMAGE_TAG      = $args[4]
-# $BACKEND_URL    = $args[5]   #  new argument
+
 
 $IMAGE_PATH = "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -31,9 +30,7 @@ Log "-------------------------------------------"
 
 # ------------------------------
 # Update App Service container settings
-# ------------------------------
-Log "Updating App Service to use image: $IMAGE_PATH"
-
+Log "Configuring App Service container settings..."
 az webapp config container set `
     --name $WEBAPP_NAME `
     --resource-group $RESOURCE_GROUP `
@@ -59,17 +56,19 @@ az webapp config container set `
 
 # ------------------------------
 # Restart App Service
-# ------------------------------
 Log "Restarting App Service..."
-az webapp restart --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP
-Log "App Service restarted successfully."
+az webapp restart `
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP
 
 # ------------------------------
 # Verify Deployment
-# ------------------------------
-Log "Fetching deployment status..."
-$state = az webapp show --name $WEBAPP_NAME --resource-group $RESOURCE_GROUP --query "state" -o tsv
-Log "App Service State: $state"
+Log "Validating App Service..."
+$state = az webapp show `
+    --name $WEBAPP_NAME `
+    --resource-group $RESOURCE_GROUP `
+    --query "state" -o tsv
 
-Log "Frontend deployment completed successfully!"
+Log "App Service State: $state"
+Log "Frontend Deployment Completed Successfully"
 Log "-------------------------------------------"
