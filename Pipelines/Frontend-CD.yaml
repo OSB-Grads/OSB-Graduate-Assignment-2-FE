@@ -41,6 +41,7 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az account show
+            
 
           # # Fetch backend LoadBalancer IP
           # - task: AzureCLI@2
@@ -62,7 +63,7 @@ stages:
           #         exit 1
           #       }
 
-          #       $backendURL = "http://$lbIP"
+          #       $backendURL = "http://4.224.75.153"
           #       Write-Host "  Backend API URL:$backendURL"
           #       Write-Host "##vso[task.setvariable variable=backendURL;]$backendURL"
 
@@ -89,4 +90,4 @@ stages:
               containers: |
                 $(acrName).azurecr.io/$(imageName):$(imageTag)
               # # appSettings: |
-              # VITE_API_BASE_URL: $(backendURL)
+              VITE_API_BASE_URL: "http://4.224.75.153"
